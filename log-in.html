@@ -14,8 +14,10 @@
     <nav class="navbar navbar-light navbar-expand-md flex-nowrap clean-navbar" style="background-color: #121a4a;height: 10%;min-height: 50px;color: rgb(255,255,255);padding-right: 0px;width: 100%;padding-top: 10px;padding-bottom: 10px;padding-left: 0px;">
         <div class="container-fluid justify-content-center"><img src="assets/img/Lgo%20Empresa2.png" style="width: 300px;max-height: 85%;"></div>
     </nav>
+
     <div style="width: 100%;height: 90%;">
         <main class="d-flex d-xl-flex justify-content-center align-items-center align-content-center align-self-center flex-nowrap justify-content-xl-center align-items-xl-center page landing-page" style="background-color: #6f1f1f;height: 90%;background-image: url(&quot;assets/img/background.png&quot;);width: 100%;">
+            
             <div class="modal fade" role="dialog" tabindex="-1" id="remember">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -27,13 +29,14 @@
                     </div>
                 </div>
             </div>
+
             <div class="modal fade" role="dialog" tabindex="-1" id="register">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Registro de usuario</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                         <div class="modal-body">
-                            <form style="width: 100%;padding-top: 1%;padding-left: 1%;padding-right: 1%;padding-bottom: 1%;">
+                            <form action="nombreFuncion" method="POST" style="width: 100%;padding-top: 1%;padding-left: 1%;padding-right: 1%;padding-bottom: 1%;">
                                 <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Nombre de usuario</label><input class="form-control" type="text" id="newUsername"></div>
                                 <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Email</label><input class="form-control item" type="email" id="newEmail" name="username" multiple=""></div>
                                 <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="password">Contraseña</label><input class="form-control" type="password" id="newPassword" name="password"></div>
@@ -44,6 +47,7 @@
                     </div>
                 </div>
             </div>
+
             <form style="background-color: #716d73;width: 60%;padding-top: 1%;padding-left: 1%;padding-right: 1%;padding-bottom: 1%;">
                 <div class="form-group" style="background-color: #7E7A80;padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Nombre de usuario / Email</label><input class="form-control item" type="email" id="email" name="username" multiple=""></div>
                 <div class="form-group" style="background-color: #7E7A80;padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="password">Contraseña</label><input class="form-control" type="password" id="password" name="password"></div>
@@ -55,6 +59,7 @@
                         class="d-flex d-xl-flex justify-content-end justify-content-xl-end" style="width: auto;color: rgb(255,255,255);padding-right: 3%;margin-left: auto;" data-toggle="modal" data-target="#register" href="#register">Registrar</a>
                 </div>
             </form>
+
         </main>
         <footer class="page-footer dark" style="width: 100%;height: 10%;background-color: #121a4a;padding-top: 1px;"></footer>
     </div>

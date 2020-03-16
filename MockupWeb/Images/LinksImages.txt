@@ -1,5 +1,8 @@
 -> Index background
+-Dark one
 https://img.freepik.com/vector-gratis/diseno-fondo-ondulado-oscuro_23-2148417507.jpg?size=626&ext=jpg
+-Light one
+https://www.freevector.com/blue-vector-background
 
 -> Carrousel images
 https://image1.masterfile.com/getImage/NjAwLTAzODY1MDczZW4uMDAwMDAwMDA=AJ2ccs/600-03865073en_Masterfile.jpg

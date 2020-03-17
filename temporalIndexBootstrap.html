@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html style="height: 100%;width: 100%;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <script src="identification.js"></script>
+</head>
+
+<body style="display: flex;flex-direction: column;height: 100%;width: 100%;">
+    <nav class="navbar navbar-light navbar-expand-md flex-nowrap clean-navbar" style="background-color: #121a4a;height: 10%;min-height: 50px;color: rgb(255,255,255);padding-right: 0px;width: 100%;padding-top: 10px;padding-bottom: 10px;padding-left: 0px;">
+        <div class="container-fluid justify-content-center"><img src="assets/img/Lgo%20Empresa2.png" style="width: 300px;max-height: 85%;"></div>
+    </nav>
+
+    <div style="width: 100%;height: 90%;">
+        <main class="d-flex d-xl-flex justify-content-center align-items-center align-content-center align-self-center flex-nowrap justify-content-xl-center align-items-xl-center page landing-page" style="background-color: #6f1f1f;height: 90%;background-image: url(&quot;assets/img/background.png&quot;);width: 100%;">
+            
+            <div class="modal fade" role="dialog" tabindex="-1" id="remember">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Recuperar contraseña</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <div class="modal-body">
+                            <p>Introduzca el correo al que quiere que se le envíe el mensaje de recuperación de contraseña.</p><input type="email" id="recoverEmail" style="width: 100%;"></div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button><button class="btn btn-primary" type="submit">Enviar</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" role="dialog" tabindex="-1" id="register">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Registro de usuario</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <div class="modal-body">
+                            <form onsubmit="return validate()" action="home.html" style="width: 100%;padding-top: 1%;padding-left: 1%;padding-right: 1%;padding-bottom: 1%;">
+                                <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Nombre de usuario</label><input class="form-control" type="text" id="username" placeholder="Username" ></div>
+                                <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Email</label><input class="form-control item" type="email" id="email" name="username" placeholder="Email" ></div>
+                                <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="password">Contraseña</label><input class="form-control" type="password" id="password1" name="password" placeholder="Password" ></div>
+                                <div class="form-group" style="padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="password">Repetir la contraseña</label><input class="form-control" type="password" id="password2" name="password" placeholder="Repeat password" ></div>
+                            </form>
+                        </div>
+                        <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Cerrar</button><button class="btn btn-primary" type="submit">Enviar</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <form style="background-color: #716d73;width: 60%;padding-top: 1%;padding-left: 1%;padding-right: 1%;padding-bottom: 1%;">
+                <div class="form-group" style="background-color: #7E7A80;padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="email">Nombre de usuario / Email</label><input class="form-control item" type="email" id="email" name="username" ></div>
+                <div class="form-group" style="background-color: #7E7A80;padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><label for="password">Contraseña</label><input class="form-control" type="password" id="password" name="password"></div>
+                <div class="form-group">
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox"><label class="form-check-label" for="checkbox">Remember me</label></div>
+                </div><button class="btn btn-primary btn-block border rounded border-primary" type="submit" style="background-color: #7E7A80;">Log In</button>
+                <div class="d-flex d-xl-flex justify-content-xl-center" style="height: 10%;padding-top: 1%;padding-right: 1%;padding-bottom: 1%;padding-left: 1%;"><a class="d-flex d-xl-flex justify-content-start justify-content-xl-start" href="#remember" style="width: auto;color: rgb(255,255,255);padding-left: 3%;margin-right: auto;" data-toggle="modal" data-register="#remember">Recordar contraseña</a>
+                    <a
+                        class="d-flex d-xl-flex justify-content-end justify-content-xl-end" style="width: auto;color: rgb(255,255,255);padding-right: 3%;margin-left: auto;" data-toggle="modal" data-target="#register" href="#register">Registrar</a>
+                </div>
+            </form>
+
+        </main>
+        <footer class="page-footer dark" style="width: 100%;height: 10%;background-color: #121a4a;padding-top: 1px;"></footer>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

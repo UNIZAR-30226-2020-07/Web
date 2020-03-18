@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -11,84 +11,64 @@
 
 <body>
 
-    <!--
-    <nav class="nav navbar-inverse navbar-expand-sm flex-nowrap">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                <img src="Lgo Empresa2.png" class="image-navbar">
-            </a>
-          </div>
-          <ul class="nav navbar-nav navbar-right filler">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Download</a></li>
-            <li class="divider"></li>
-            <li class="active"><a href="#">Register/Login</a></li>
-          </ul>
-        </div>
-      </nav>
-    -->
+  <nav class="navbar navbar-dark navbar-custom">
+    <div class="container-fluid navbar-custom">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="Lgo Empresa2.png" class="image-navbar">
+        </a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="navbar-text"><a href="#" class="custom-color-navtext">Home</a></li>
+          <li class="navbar-text"><a href="#" class="custom-color-navtext">Download</a></li>
+          <li class="divider hidden-xs"></li>
+          <li class="custom_active navbar-text"><a href="#" class="custom-color-navtext">Register/Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <nav class="navbar navbar-dark navbar-custom">
-        <div class="container-fluid navbar-custom">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-            <a class="navbar-brand" href="#"><img src="Lgo Empresa2.png" class="image-navbar">
-            </a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="navbar-text"><a href="#" class="custom-color-navtext">Home</a></li>
-                <li class="navbar-text"><a href="#" class="custom-color-navtext">Download</a></li>
-                <li class="divider hidden-xs"></li>
-                <li class="custom_active navbar-text"><a href="#" class="custom-color-navtext">Register/Login</a></li>
-            </ul>
-      
-          </div>
-          <!--/.nav-collapse -->
-        </div>
-        <!--/.container-fluid -->
-      </nav>
-
-    <div class="login-page">
+  <div class="login-page">
     <div class="form">
 
-        <form class="register_form" onsubmit="return validacionRegister()" action="home.html">
-            <input class="input" type="text" id="username" placeholder="Username">
-            <label class="error" id="userError">Error</label>
-            <input class="input" type="text" id="email" placeholder="Email">
-            <label class="error" id="emailError">Error</label>
-            <input class="input" type="password" id="password1" placeholder="Password">
-            <label class="error" id="passError">Error</label>
-            <input class="input" type="password" id="password2" placeholder="Repeat password">
-            <button class="form_button" type="submit">Register</button>
-            <p class="message">Already registered?  <a href="#">Login</a></p>
-        </form>
+      <form class="login_form" onsubmit="return validacionLogin()" action="home.html">
+        <input class="input" type="text" id="usernameEmail" placeholder="Username/Email">
+        <label class="error" id="userError">Invalid username</label>
+        <input class="input" type="password" id="password1" placeholder="Password">
+        <label class="error" id="pass1Error">Invalid username</label>
+        <button class="form_button" type="submit">Login</button>
+        <p class="message">Don't have an account yet?  <a href="#">Create an account here</a></p>
+      </form>
 
-        <form class="login_form" onsubmit="return validacionLogin()" action="home.html">
-            <input class="input" type="text" id="usernameEmail" placeholder="Username/Email">
-            <label class="error" id="userError">Invalid username</label>
-            <input class="input" type="password" id="password1" placeholder="Password">
-            <label class="error" id="pass1Error">Invalid username</label>
-            <button class="form_button" type="submit">Login</button>
-            <p class="message">Don't have an account yet?  <a href="#">Create an account here</a></p>
-        </form>
+      <form class="register_form" onsubmit="return validacionRegister()" action="home.html">
+        <input class="input" type="text" id="username" placeholder="Username">
+        <label class="error" id="userError">Error</label>
+        <input class="input" type="text" id="email" placeholder="Email">
+        <label class="error" id="emailError">Error</label>
+        <input class="input" type="password" id="password1" placeholder="Password">
+        <label class="error" id="passError">Error</label>
+        <input class="input" type="password" id="password2" placeholder="Repeat password">
+        <button class="form_button" type="submit">Register</button>
+        <p class="message">Already registered?  <a href="#">Login</a></p>
+      </form>
 
     </div>
-    </div>
+  </div>
 
-    <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
-    </script>
-    <script>
-        $('.message a').click(function(){
-            $('form').animate({height:"toggle", opacity:"toggle"}, "slow");
-        });
-    </script>
+  <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
+  </script>
+
+  <script>
+    $('.message a').click(function(){
+    $('form').animate({height:"toggle", opacity:"toggle"}, "slow");
+    });
+  </script>
 </body>
 
 </html>

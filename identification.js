@@ -13,7 +13,6 @@ function ValidateEmail(inputText)
     }
 }
 
-
 function validacionRegister() {
     document.getElementById("userError").style.visibility="hidden";
     document.getElementById("emailError").style.visibility="hidden";

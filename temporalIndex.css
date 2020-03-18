@@ -1,5 +1,6 @@
 body{
     background-image: url(MockupWeb/Images/600-03865073en_Masterfile.jpg);
+    height:100hv;
     background-repeat:no-repeat;
     background-position: top;
     background-size: cover;
@@ -27,6 +28,7 @@ body{
 }
 
 .navbar {
+    z-index: 1;
     min-height: 90px;
     height: 90px;
     border: 0;
@@ -64,7 +66,6 @@ body{
     margin-left:10px;
 }
 
-
 .login-page{
     width:460px;
     padding: 10% 0 0;
@@ -73,7 +74,6 @@ body{
 
 .form{
     position:relative;
-    z-index: -1;
     background: #700f969a;
     max-width: 460px;
     margin: 0 auto 80px;

@@ -1,22 +1,82 @@
 body{
-    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.6)),url(MockupWeb/Images/diseno-fondo-ondulado-oscuro_23-2148417507.jpg);
-    height: 100hv;
+    background-image: url(MockupWeb/Images/600-03865073en_Masterfile.jpg);
+    background-repeat:no-repeat;
+    background-position: top;
     background-size: cover;
-    background-position: center;
 }
 
-.register{
-    width:300px;
+.divider {
+    height: 90px;
+    max-height: inherit;
+    width: 1px;
+    overflow: hidden;
+    background-color: #DDD;
+    border-right: 2px solid #FFF;
+}
+
+.custom_active{
+    background-color: #4051af;
+}
+
+.navbar-custom {
+    background-color: #121a4a;
+}
+
+.custom-color-navtext{
+    color: #ffffff;
+}
+
+.navbar {
+    min-height: 90px;
+    height: 90px;
+    border: 0;
+}
+  
+.navbar-brand {
+    height: 90px;
+}
+  
+.navbar-toggle {
+    /* (90px - button height 80px) / 2 = 5px */
+    color: #FFF;
+    background-color: #f2f2f2;
+    margin-top: 5px;
+    padding: 10px 10px !important;
+    height: 60px;
+}
+
+@media (min-width: 768px) {
+.navbar-nav > li > a {
+  /*(90px - line-height of 30px) / 2 = 30px*/
+  padding-top: 30px;
+  padding-bottom: 30px;
+  line-height: 30px;
+}
+}
+
+.navbar-text{
+    font-size: 20px;
+}
+
+.image-navbar{
+    width: 350px;
+    margin-top:-10px;
+    margin-left:10px;
+}
+
+
+.login-page{
+    width:460px;
     padding: 10% 0 0;
     margin: auto;
 }
 
 .form{
     position:relative;
-    z-index: 1;
-    background: #ffffff41;
-    max-width: 400px;
-    margin: 0 auto 100px;
+    z-index: -1;
+    background: #700f969a;
+    max-width: 460px;
+    margin: 0 auto 80px;
     padding: 30px;
     text-align: center;
 
@@ -27,13 +87,13 @@ body{
     background: #f2f2f2;
     width: 100%;
     border: 0;
-    margin: 0 0 15px;
+    margin: 10 0 5px;
     padding: 10px;
     box-sizing: border-box;
     font-size: 16px;
 }
 
-.button_submit{
+.form_button{
     outline: 0;
     background: #2c4de0;
     width: 100%;
@@ -44,7 +104,25 @@ body{
     cursor: pointer;
 }
 
+.form button:hover,.form button:active{
+    background: #4864e0;
+}
+
+.form .message{
+    margin:15px;
+    color:aliceblue;
+    font-size: 16px;
+}
+
+.form .message a{
+    color: #a4a1ce;
+}
+
+.form .register_form{
+    display:none;
+}
+
 .error{
     color:rgb(255, 255, 255);
-    visibility: hidden
+    visibility: hidden;
 }

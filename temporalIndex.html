@@ -11,66 +11,69 @@
 
 <body>
 
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid custom-navbar">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" style="background: #0a1030; border: 1px solid #ccc;">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid custom-navbar">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" style="background: #0a1030; border: 1px solid #ccc;">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="Lgo Empresa2.png" class="image-navbar">
-        </a>
-      </div>
-      <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="navbar-text"><a href="#">Home</a></li>
-          <li class="navbar-text"><a href="#">Download</a></li>
-          <hr class="my-auto flex-grow-1">
-          <li class="custom-active navbar-text"><a href="#">Register/Login</a></li>
-        </ul>
-      </div>
+                <a class="navbar-brand" href="#"><img src="Lgo Empresa2.png" class="image-navbar">
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-text"><a href="#">Home</a></li>
+                    <li class="navbar-text"><a href="#">Download</a></li>
+                    <hr class="my-auto flex-grow-1">
+                    <li class="custom-active navbar-text"><a href="#">Register/Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="login-page">
+        <div class="form">
+
+            <form class="login_form" method="POST" onsubmit="return validacionLogin()" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/" id="login-form">
+                <input class="input" name="username" type="text" id="usernameEmail" placeholder="Username/Email">
+                <label class="error" id="userError">Error</label>
+                <input class="input" name="password" type="password" id="password" placeholder="Password">
+                <label class="error" id="passError">Error</label>
+                <button class="form_button" type="submit">Login</button>
+                <p class="message">Don't have an account yet? <a href="#">Create an account here</a></p>
+            </form>
+
+            <form class="register_form" method="POST" onsubmit="return validacionRegister()" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/" id="register-form">
+                <input class="input" name="username" type="text" id="username" placeholder="Username">
+                <label class="error" id="userRError">Error</label>
+                <input class="input" name="email" type="text" id="email" placeholder="Email">
+                <label class="error" id="emailError">Error</label>
+                <input class="input" name="password1" type="password" id="password1" placeholder="Password">
+                <label class="error" id="pass1Error">Error</label>
+                <input class="input" name="password2" type="password" id="password2" placeholder="Repeat password">
+                <label class="error" id="pass2Error">Error</label>
+                <button class="form_button" type="submit">Register</button>
+                <p class="message">Already registered? <a href="#">Login</a></p>
+            </form>
+
+        </div>
     </div>
-  </nav>
 
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
+    </script>
 
-  <div class="login-page">
-    <div class="form">
-
-      <form class="login_form" onsubmit="return validacionLogin()" action="home.html" id="login-form">
-        <input class="input" type="text" id="usernameEmail" placeholder="Username/Email">
-        <label class="error" id="userError">Error</label>
-        <input class="input" type="password" id="password" placeholder="Password">
-        <label class="error" id="passError">Error</label>
-        <button class="form_button" type="submit">Login</button>
-        <p class="message">Don't have an account yet?  <a href="#">Create an account here</a></p>
-      </form>
-
-      <form class="register_form" onsubmit="return validacionRegister()" action="home.html" id="register-form">
-        <input class="input" type="text" id="username" placeholder="Username">
-        <label class="error" id="userRError">Error</label>
-        <input class="input" type="text" id="email" placeholder="Email">
-        <label class="error" id="emailError">Error</label>
-        <input class="input" type="password" id="password1" placeholder="Password">
-        <label class="error" id="pass1Error">Error</label>
-        <input class="input" type="password" id="password2" placeholder="Repeat password">
-        <label class="error" id="pass2Error">Error</label>
-        <button class="form_button" type="submit">Register</button>
-        <p class="message">Already registered?  <a href="#">Login</a></p>
-      </form>
-
-    </div>
-  </div>
-
-  <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
-  </script>
-
-  <script>
-    $('.message a').click(function(){
-    $('form').animate({height:"toggle", opacity:"toggle"}, "slow");
-    });
-  </script>
+    <script>
+        $('.message a').click(function() {
+            $('form').animate({
+                height: "toggle",
+                opacity: "toggle"
+            }, "slow");
+        });
+    </script>
 </body>
 
 </html>

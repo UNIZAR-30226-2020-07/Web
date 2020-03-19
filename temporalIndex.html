@@ -27,33 +27,35 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="navbar-text"><a href="#">Home</a></li>
           <li class="navbar-text"><a href="#">Download</a></li>
-          <li class="divider hidden-xs"></li>
+          <hr class="my-auto flex-grow-1">
           <li class="custom-active navbar-text"><a href="#">Register/Login</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
+
   <div class="login-page">
     <div class="form">
 
-      <form class="login_form" onsubmit="return validacionLogin()" action="home.html">
+      <form class="login_form" onsubmit="return validacionLogin()" action="home.html" id="login-form">
         <input class="input" type="text" id="usernameEmail" placeholder="Username/Email">
-        <label class="error" id="userError">Invalid username</label>
-        <input class="input" type="password" id="password1" placeholder="Password">
-        <label class="error" id="pass1Error">Invalid username</label>
+        <label class="error" id="userError">Error</label>
+        <input class="input" type="password" id="password" placeholder="Password">
+        <label class="error" id="passError">Error</label>
         <button class="form_button" type="submit">Login</button>
         <p class="message">Don't have an account yet?  <a href="#">Create an account here</a></p>
       </form>
 
-      <form class="register_form" onsubmit="return validacionRegister()" action="home.html">
+      <form class="register_form" onsubmit="return validacionRegister()" action="home.html" id="register-form">
         <input class="input" type="text" id="username" placeholder="Username">
-        <label class="error" id="userError">Error</label>
+        <label class="error" id="userRError">Error</label>
         <input class="input" type="text" id="email" placeholder="Email">
         <label class="error" id="emailError">Error</label>
         <input class="input" type="password" id="password1" placeholder="Password">
-        <label class="error" id="passError">Error</label>
+        <label class="error" id="pass1Error">Error</label>
         <input class="input" type="password" id="password2" placeholder="Repeat password">
+        <label class="error" id="pass2Error">Error</label>
         <button class="form_button" type="submit">Register</button>
         <p class="message">Already registered?  <a href="#">Login</a></p>
       </form>

@@ -1,3 +1,4 @@
+/*Pone el fondo de pantalla, pero falla en html5*/
 body{
     background-image: url(MockupWeb/Images/600-03865073en_Masterfile.jpg);
     height:100hv;
@@ -6,6 +7,7 @@ body{
     background-size: cover;
 }
 
+/*Barra vertical para dividir home y download de login/registro*/
 .divider {
     height: 90px;
     max-height: inherit;
@@ -15,58 +17,61 @@ body{
     border-right: 2px solid #FFF;
 }
 
+/*Se usan para cambiar colores de fondo solamente*/
 .custom-active{
     background-color: #090f30;
 }
-
 .custom-navbar {
     background-color: #121a4a;
 }
 
+/*Aumenta el tamaño de la barra de navegación y borra el borde blanco predeterminado*/
 .navbar {
     z-index: 1;
     min-height: 90px;
     height: 90px;
     border: 0;
 }
-  
 .navbar-brand {
     height: 90px;
 }
-  
+
+/*Formateo del botón de toggle en móvil y de los elementos de la barra de navegación*/
 .navbar-toggle {
-    /*(90px - button height 80px) / 2 = 5px */
+    /*(90px - button height 80px)/2=5px*/
     margin-top: 0px;
     padding: 10px 10px !important;
     height: 70px;
 }
-
 @media (min-width: 768px) {
-.navbar-nav > li > a {
-  /*(90px - line-height of 30px) / 2 = 30px*/
-  padding-top: 30px;
-  padding-bottom: 30px;
-  line-height: 30px;
-}
+    .navbar-nav > li > a {
+    /*(90px - line-height of 30px)/2=30px*/
+    padding-top: 30px;
+    padding-bottom: 30px;
+    line-height: 30px;
+    }
 }
 
+/*Aumenta el tamaño de letra del texto de la barra de navegación*/
 .navbar-text{
     font-size: 18px;
 }
 
-
+/*Aumenta el tamaño de la imagen de logo y la alinea*/
 .image-navbar{
     width: 300px;
     margin-top:-10px;
     margin-right:-10px;
 }
 
+/*Define el tamaño de ambos formularios */
 .login-page{
     width:460px;
     padding: 10% 0 0;
     margin: auto;
 }
 
+/*Modifica valores más concretos dentro de cada formulario*/
 .form{
     position:relative;
     background: #700f969a;
@@ -77,6 +82,7 @@ body{
 
 }
 
+/*Especifica la apariencia de los campos de entrada de datos*/
 .input{
     outline: 1;
     background: #f2f2f2;
@@ -88,6 +94,7 @@ body{
     font-size: 16px;
 }
 
+/*Modifica la apariencia del botón de envío de formularios y el comportamiento al pasar por encima*/ 
 .form_button{
     outline: 0;
     background: #2c4de0;
@@ -98,25 +105,26 @@ body{
     font-size: 16px;
     cursor: pointer;
 }
-
 .form button:hover,.form button:active{
     background: #4864e0;
 }
 
+/*Especifica los colores y tamaño de los mensajes para cambio de formulario*/
 .form .message{
     margin:15px;
     color:aliceblue;
     font-size: 16px;
 }
-
 .form .message a{
     color: #a4a1ce;
 }
 
+/*Inicia uno de los formularios como escondido para su cambio posterior*/
 .form .register_form{
     display:none;
 }
 
+/*Esconde inicialmente los mensajes de error de cada campo del formulario*/
 .error{
     color:rgb(255, 255, 255);
     visibility: hidden;

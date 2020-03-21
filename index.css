@@ -17,6 +17,13 @@ body{
     border-right: 2px solid #FFF;
 }
 
+.hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 3px solid rgb(255, 255, 255);
+  }
+
 /*Se usan para cambiar colores de fondo solamente*/
 .custom-active{
     background-color: #8b95ce;
@@ -82,7 +89,7 @@ body{
 }
 
 /*Inicia uno de los formularios como escondido para su cambio posterior*/
-.form .register_form{
+.form .remember_form{
     display:none;
 }
 

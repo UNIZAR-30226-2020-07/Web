@@ -16,7 +16,7 @@ function ValidateEmail(inputText)
 
 //Función para comprobar que todos los campos del formulario son válidos, y para el registro del usuario
 function validacionRegister() {
-    document.getElementById("userError").style.visibility="hidden";
+    document.getElementById("userRError").style.visibility="hidden";
     document.getElementById("emailError").style.visibility="hidden";
     document.getElementById("pass1Error").style.visibility="hidden"; 
     var User = document.getElementById("username"); 
@@ -51,37 +51,6 @@ function validacionRegister() {
         document.getElementById("pass1Error").style.visibility="visible";
         return false;
     }else{
-        /*
-        alert("Empiezo");
-        var data = {
-            'username': User.value,
-            'email': Email.value,
-            'password1': Password1.value,
-            'password2': Password2.value,
-        };
-
-        var form = new FormData(document.getElementById("register-form"))
-
-        fetch(register_path,{
-            method: "POST",
-            body=form
-        })
-            .then(function(response) {
-            if (response.ok) {
-               // alert(response.json());
-                return response.json();
-            } else {
-                alert("falloApi");
-                throw new Error("Could not reach the API: " + response.statusText);
-            }
-        alert("fetch acaba?");
-        }).then(function(data) {
-            document.getElementById("pass1Error").innerHTML = data.encoded;
-        }).catch(function(error) {
-            document.getElementById("pass1Error").innerHTML = error.message;
-        });
-        alert("Acabo");
-*/
         return false;
     }
 }

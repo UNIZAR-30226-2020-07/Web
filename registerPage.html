@@ -33,11 +33,11 @@
           </li>
         <li class="divider"></li>
         <li class="hr" />
-        <li class="navbar-text active custom-active">
-          <a class="nav-link" href="#" style="color: #000000;">Login</a>
-        </li>
         <li class="navbar-text">
-          <a class="nav-link" href="registerPage.html">Register</a>
+          <a class="nav-link" href="loginPage.html">Login</a>
+        </li>
+        <li class="navbar-text active custom-active">
+          <a class="nav-link" href="#" style="color: #000000;">Register</a>
         </li>
       </ul>
     </div>  
@@ -45,37 +45,23 @@
     
   <div class="login-page">
     <div class="form">
-      <form class="login_form" method="POST" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/" onsubmit="return validacionLogin()"  id="login-form">
-        <h2>Welcome again!</h2>
-        <input class="input" name="username" type="text" id="usernameEmail" placeholder="Username/Email">
-        <label class="error" id="userError">Error</label>
-        <input class="input" name="password" type="password" id="password" placeholder="Password">
-        <label class="error" id="passError">Error</label>
-        <input class="form-check-input" type="checkbox" name="remember" style="margin-left: -35px;">
-        <label style="margin-left: -15px;">Remember me</label>
-        <br/>
-        <button class="form_button" type="submit">Login</button>
-        <p class="message">Don't remember your password? <a href="#">Click here</a></p>
-      </form>
-
-      <form class="remember_form" method="POST" action="" id="recover-form">
-        <h2>We'll send you a password email reset</h2>
-        <input class="input" name="emailRecu" type="text" id="emailRecu" placeholder="Email">
+      <form method="POST" onsubmit="return validacionRegister()" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/" id="register-form">
+        <h2>Just fill this form for us!</h2>
+        <input class="input" name="username" type="text" id="username" placeholder="Username">
         <label class="error" id="userRError">Error</label>
-        <button class="form_button" type="submit" style="margin-left:-30px;">Send email</button>
-        <p class="message"><a href="#">Go back</a></p>
+        <input class="input" name="email" type="text" id="email" placeholder="Email">
+        <label class="error" id="emailError">Error</label>
+        <input class="input" name="password1" type="password" id="password1" placeholder="Password">
+        <label class="error" id="pass1Error">Error</label>
+        <input class="input" name="password2" type="password" id="password2" placeholder="Repeat password">
+        <label class="error" id="pass2Error">Error</label>
+        <input class="form-check-input" type="checkbox" name="remember" required>
+        <label>I have read and accept the <a href="#" style="color: #1100ff;">license terms</a></label>
+        <br/>
+        <button class="form_button" type="submit">Register</button>
       </form>
     </div>
   </div>
-
-  <script>
-    $('.message a').click(function() {
-      $('form').animate({
-        height: "toggle",
-        opacity: "toggle"
-      }, "slow");
-    });
-  </script>
 
 </body>
 

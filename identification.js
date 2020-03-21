@@ -23,10 +23,10 @@ function validacionRegister() {
     var Email = document.getElementById("email"); 
     var Password1 = document.getElementById("password1"); 
     var Password2 = document.getElementById("password2");
-    User.style.border="none"
-    Email.style.border="none"
-    Password1.style.border="none"
-    Password2.style.border="none"
+    User.style.border="solid black 3px"
+    Email.style.border="solid black 3px"
+    Password1.style.border="solid black 3px"
+    Password2.style.border="solid black 3px"
 
     if(User.value.trim() == ""){
         User.style.border="solid 2px red";
@@ -51,8 +51,8 @@ function validacionRegister() {
         document.getElementById("pass1Error").style.visibility="visible";
         return false;
     }else{
+        /*
         alert("Empiezo");
-
         var data = {
             'username': User.value,
             'email': Email.value,
@@ -81,8 +81,7 @@ function validacionRegister() {
             document.getElementById("pass1Error").innerHTML = error.message;
         });
         alert("Acabo");
-
-
+*/
         return false;
     }
 }
@@ -93,11 +92,11 @@ function validacionLogin() {
     document.getElementById("passError").style.visibility="hidden";
     var UserEmail = document.getElementById("usernameEmail"); 
     var Password = document.getElementById("password");
-    UserEmail.style.border="none";
-    Password.style.border="none";
+    UserEmail.style.border="solid black 3px";
+    Password.style.border="solid black 3px";
 
     if (UserEmail.value.trim() == ""){
-        User.style.border="solid 3px red";
+        UserEmail.style.border="solid 3px red";
         document.getElementById("userError").innerHTML="This field can't be an empty parameter";
         document.getElementById("userError").style.visibility="visible";
         return false;

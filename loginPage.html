@@ -3,10 +3,9 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="temporalIndex.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="identification.js"></script>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -24,13 +23,17 @@
     <div class="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
       <ul class="nav navbar-nav" style="border: none;">
         <li class="navbar-text">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="navbar-text">
+          <a class="nav-link" href="#">Help</a>
         </li>
         <li class="navbar-text">
           <a class="nav-link" href="#">Download</a>
         </li>
-        <li class="navbar-text active">
-          <a class="nav-link" href="#">Register/Login</a>
+        <li class="divider"></li>
+        <li class="navbar-text active custom-active">
+          <a class="nav-link" href="#" style="color: #000000;">Login</a>
         </li>
       </ul>
     </div>  
@@ -38,16 +41,21 @@
     
   <div class="login-page">
     <div class="form">
-      <form class="login_form" method="POST" onsubmit="return validacionLogin()" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/" id="login-form">
+      <form class="login_form" method="POST" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/" onsubmit="return validacionLogin()"  id="login-form">
+        <h2>WELCOME AGAIN!</h2>
         <input class="input" name="username" type="text" id="usernameEmail" placeholder="Username/Email">
         <label class="error" id="userError">Error</label>
         <input class="input" name="password" type="password" id="password" placeholder="Password">
         <label class="error" id="passError">Error</label>
+        <input class="form-check-input" type="checkbox" name="remember" style="margin-left: -35px;">
+        <label style="margin-left: -15px;">Remember me</label>
+        <br/>
         <button class="form_button" type="submit">Login</button>
         <p class="message">Don't have an account yet? <a href="#">Create an account here</a></p>
       </form>
 
       <form class="register_form" method="POST" onsubmit="return validacionRegister()" action="https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/" id="register-form">
+        <h2>JUST FILL THIS FORM TO JOIN US!</h2>
         <input class="input" name="username" type="text" id="username" placeholder="Username">
         <label class="error" id="userRError">Error</label>
         <input class="input" name="email" type="text" id="email" placeholder="Email">
@@ -56,6 +64,9 @@
         <label class="error" id="pass1Error">Error</label>
         <input class="input" name="password2" type="password" id="password2" placeholder="Repeat password">
         <label class="error" id="pass2Error">Error</label>
+        <input class="form-check-input" type="checkbox" name="remember" required>
+        <label>I have read and accept the <a href="#" style="color: #1100ff;">license terms</a></label>
+        <br/>
         <button class="form_button" type="submit">Register</button>
         <p class="message">Already registered? <a href="#">Login</a></p>
       </form>
@@ -70,6 +81,7 @@
       }, "slow");
     });
   </script>
+
 </body>
 
 </html>

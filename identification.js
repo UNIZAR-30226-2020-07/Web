@@ -58,9 +58,9 @@ function validacionRegister() {
 //Función para comprobar que todos los campos del formulario son válidos, y para el login del usuario
 function validacionLogin() {
     document.getElementById("userError").style.visibility="hidden";
-    document.getElementById("passError").style.visibility="hidden";
+    document.getElementById("passLoginError").style.visibility="hidden";
     var UserEmail = document.getElementById("usernameEmail"); 
-    var Password = document.getElementById("password");
+    var Password = document.getElementById("passwordLogin");
     UserEmail.style.border="solid black 3px";
     Password.style.border="solid black 3px";
 
@@ -70,15 +70,34 @@ function validacionLogin() {
         document.getElementById("userError").style.visibility="visible";
         return false;
     }else if(Password.value.trim()  == ""){
-        User.style.border="solid 3px red";
-        document.getElementById("passError").innerHTML="The password can't be empty";
-        document.getElementById("passError").style.visibility="visible";
+        Password.style.border="solid 3px red";
+        document.getElementById("passLoginError").innerHTML="The password can't be empty";
+        document.getElementById("passLoginError").style.visibility="visible";
         return false;
     }else if(ValidateEmail(UserEmail)){
         //El usuario introduce un email
         return false;
     }else{
         //El usuario introduce un nombre de usuario
+        return false;
+    }
+}
+
+
+
+function recover(){
+    document.getElementById("recover-feedback").style.visibility="hidden";
+    var recEmail=document.getElementById("emailRecu");
+    recEmail.style.border="solid black 3px";
+    if (ValidateEmail(recEmail)===false){
+        recEmail.style.border="solid 3px red";
+        document.getElementById("recover-feedback").innerHTML="Please insert a valir email";
+        document.getElementById("recover-feedback").style.visibility="visible";
+        return false;
+    }else{
+        //Funcion de recuperacion de email
+        document.getElementById("recover-feedback").innerHTML="A recovery email has been successfully sent to the given email address";
+        document.getElementById("recover-feedback").style.visibility="visible";
         return false;
     }
 }

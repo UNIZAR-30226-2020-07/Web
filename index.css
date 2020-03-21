@@ -1,6 +1,6 @@
 /*Pone el fondo de pantalla, pero falla en html5*/
 body{
-    background-image: url(MockupWeb/Images/Free-Blue-Vector-Background.jpg); 
+    background-image: url(MockupWeb/Images/diseno-fondo-ondulado-oscuro_23-2148417507.jpg); 
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -95,6 +95,11 @@ body{
 
 /*Esconde inicialmente los mensajes de error de cada campo del formulario*/
 .error{
+    color:rgb(0, 0, 0);
+    visibility: hidden;
+}
+
+.recover-feedback{
     color:rgb(0, 0, 0);
     visibility: hidden;
 }

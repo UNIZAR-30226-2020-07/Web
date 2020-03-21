@@ -49,21 +49,25 @@
         <h2>Welcome again!</h2>
         <input class="input" name="username" type="text" id="usernameEmail" placeholder="Username/Email">
         <label class="error" id="userError">Error</label>
-        <input class="input" name="password" type="password" id="password" placeholder="Password">
-        <label class="error" id="passError">Error</label>
-        <input class="form-check-input" type="checkbox" name="remember" style="margin-left: -35px;">
-        <label style="margin-left: -15px;">Remember me</label>
+        <input class="input" name="password" type="password" id="passwordLogin" placeholder="Password">
+        <label class="error" id="passLoginError">Error</label>
+        <br/>
+        <input class="form-check-input" type="checkbox" name="remember" style="margin-left: -15px;">
+        <label>Remember me</label>
         <br/>
         <button class="form_button" type="submit">Login</button>
         <p class="message">Don't remember your password? <a href="#">Click here</a></p>
       </form>
 
-      <form class="remember_form" method="POST" action="" id="recover-form">
+
+      <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+      <form class="remember_form" method="POST" onsubmit="recover()" target="dummyframe">
         <h2>We'll send you a password email reset</h2>
         <input class="input" name="emailRecu" type="text" id="emailRecu" placeholder="Email">
-        <label class="error" id="userRError">Error</label>
+        <label class="recover-feedback" id="recover-feedback">Error</label>
+        <br/>
         <button class="form_button" type="submit" style="margin-left:-30px;">Send email</button>
-        <p class="message"><a href="#">Go back</a></p>
+        <p class="message" style="margin-left: -20px;">Click <a href="#">here</a> to return to login page</p>
       </form>
     </div>
   </div>

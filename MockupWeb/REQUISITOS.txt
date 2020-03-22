@@ -1,0 +1,88 @@
+RF-1
+El usuario podrá registrarse y hacer login.
+El login de usuarios se podrá realizar con un correo o nombre de usuario registrados en la base de datos y su contraseña. El registro se realizará solicitando email o nombre de usuario y contraseña, además, se pedirá confirmar contraseña y no se podrá repetir email en el sistema. También se dispondrá de una función de recuperar contraseña vía email.
+##########################################################################################################################
+RF-2
+El usuario podrá reproducir canciones y podcast.
+Se podrá seleccionar una canción o podcast, ya sea buscándolo previamente o desde una playlist, y reproducirlo.
+##########################################################################################################################
+RF-3
+El usuario podrá crear playlists.
+El usuario podrá crear playlists vacías, con un nombre y autor de la misma, siendo el autor quien crea la playlist.
+##########################################################################################################################
+RF-4
+El usuario podrá añadir y eliminar canciones de una playlist, y cambiar su orden.
+En una playlist existente, el usuario podrá añadir y quitar canciones de ella, o cambiar el orden en el que se reproducirian. Siempre y cuando sea su creador.
+##########################################################################################################################
+RF-5
+El usuario podrá añadir a amigos otros usuarios para poder acceder a sus playlist 
+Los usuarios podrán añadirse entre ellos como amigos y ver las playlist creadas por aquellos a los que tengan agregados.
+##########################################################################################################################
+RF-6
+El usuario podrá eliminar usuarios de su lista de amigos.
+El usuario podrá eliminar usuarios de su lista de amigos desde la interfaz de amigos.
+##########################################################################################################################
+RF-7
+El usuario podrá eliminar las playlists.
+Las playlist creadas por cada usuario podrán ser eliminadas por el creador de la misma.
+##########################################################################################################################
+RF-8
+El usuario podrá buscar canciones, artistas, categorías y álbumes.
+En la pantalla de búsqueda el usuario podrá seleccionar si quiere buscar por nombre de canción, artista, categoría o álbum y obtendrá una lista de canciones que cumplan dicha búsqueda. También podrá buscar álbumes por su nombre.
+##########################################################################################################################
+RF-9
+El usuario podrá buscar podcasts y escuchar sus episodios
+El usuario podrá buscar los distintos podcasts disponibles y al seleccionarlos, acceder y escuchar sus episodios. Se diferenciará la búsqueda de podcasts de la de álbumes.
+##########################################################################################################################
+RF-10
+El usuario podrá pausar y parar una canción o podcast.
+En la reproducción de una canción o un episodio de un podcast se podrá detener y seguir cuando el usuario lo desee.
+##########################################################################################################################
+RF-11
+El usuario podrá ordenar las canciones de una playlist por nombre, o por categoría, o por  artista.
+En la interfaz de playlist el usuario podrá seleccionar si quiere ver las canciones ordenadas ,alfabéticamente, por nombre, categoría o artista
+##########################################################################################################################
+RF-12
+El usuario podrá ordenar los episodios de un podcast por fecha de creación o emisión.
+En la interfaz de podcasts el usuario podrá elegir si quiere ver los episodios ordenados de más reciente a menos o viceversa. De forma predeterminada estarán ordenados de más reciente a menos.
+##########################################################################################################################
+RF-13
+El usuario podrá valorar con hasta 5 estrellas una canción.
+Desde la interfaz de cada canción el usuario dispondrá de un botón o varios para indicar su valoración de esa canción, que irá desde 0 hasta 5 y será única por usuario.
+##########################################################################################################################
+RF-14
+El usuario podrá reproducir canciones de una playlist aleatoriamente.
+Desde la interfaz de playlist el usuario podrá seleccionar si quiere que la reproducción de canciones sea aleatoria. En el caso de una sola canción, al terminar la reproducción de la misma, se reproducirá una canción aleatoria de la base de datos.
+##########################################################################################################################
+RF-15
+El usuario podrá reproducir las canciones en bucle.
+Tanto desde la interfaz de canción como la de una playlist el usuario podrá seleccionar si quiere una reproducción en bucle. En el caso de una sola canción, al terminar la reproducción de la misma, se reproducirá de nuevo, y en el caso de la playlist, se comenzará a reproducir la primera canción de la lista, según el orden en el que fueron añadidas.
+##########################################################################################################################
+RF-16
+El usuario podrá descargar canciones desde el terminal móvil.
+La app móvil deberá permitir descargar y almacenar canciones en el móvil del usuario, mediante un botón localizado en la interfaz de canción.
+##########################################################################################################################
+RF-17
+El usuario podrá reproducir localmente las canciones descargadas en la aplicación móvil.
+El usuario podrá reproducir localmente, sin necesidad de conexión a internet, las canciones que haya descargado previamente en su dispositivo.
+##########################################################################################################################
+RF-18
+Un super-usuario podrá añadir canciones, artistas y álbumes al sistema
+El administrador del sistema podrá añadir canciones, artista y álbumes a la base de datos…..
+##########################################################################################################################
+RF-19
+El sistema guardará la reproducción de la última canción.
+El servidor guardará la reproducción de la última canción si el usuario cierra la app, al volver a abrirla si no reproduce otra canción antes y reproduce esa ultima cancion el sistema seguirá la reproducción por donde se quedó.
+##########################################################################################################################
+##########################################################################################################################
+RNF-1
+La aplicación funcionará en dispositivos Android 4.0 o posteriores. 
+El código funciona para apis superiores o iguales a 19 y la interfaz se visualiza correctamente para móviles similares al Píxel 2 de Google.
+##########################################################################################################################
+RNF-2
+El sistema tendrá una interfaz de usuario simple y accesible.
+El diseño de la interfaz es simple, plano, limpio y fácil de manejar para la mayoría de usuarios. Sigue unos colores y tamaños de ventana orientativos para la navegación del usuario.
+##########################################################################################################################
+RNF-3
+La aplicación web deberá poder ser utilizada en dos navegadores web (Firefox y Chrome)
+Se ha decidido que se asegurará el correcto funcionamiento de la página web en estos dos navegadores ya que son aquellos con mayor cantidad de usuarios.

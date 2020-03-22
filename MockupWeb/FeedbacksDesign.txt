@@ -1,0 +1,27 @@
+>> Se preguntó a 3 personas relacionadas en mayor o menor medida con artes gráficas y desarrollo web sobre el diseño, y se obtuvieron los siguientes feedbacks: 
+
+Parece una página de los 90
+
+Botones planos y sin bordes; el que tengan relieve da una sensación rara
+
+El login translúcido queda bien
+
+Que la página no quede tan recargada en su conjunto, hay demasiadas cosas para funcionalidades simples
+
+La barra de navegación tiene demasiadas cosas
+
+La idea de dividir logueo y registro de las demas opciones está muy bien
+
+|Que el fondo sea más simple y mantenerlo de color claro (ante la disyuntiva de fondo negro, ya que en éste no resalta el contenido)
+|El fondo oscuro con formulario en fucsia queda más moderno, pero se ven peor las cosas, mejor con un color de letra claro
+|Con fondo oscuro no se resaltan las cosas
+|Mezclar el fondo claro con elementos que se superponían en el fondo oscuro (formulario en fucsia sobre fondo claro) empeora el contraste
+|=> Queda por decidir imágen de background (azul claro y muy simple) y color de formulario (oscuro pero sin decidir gama), ya que el color de letra es blanco
+
+Unificar los colores del texto de la página a uno único, ante la alternancia de blanco y negro (pero en el login si no se ve tiene sentido para que haya contraste)
+
+Es que a ver tampoco esta mal, pero no sé, no sé si es por el conjunto o por lo saturada que está la foto de fondo
+
+Cambiar "Help, Home, ..." por iconos, que todo sean iconos; el botón que resalta es muy grande: se podría resaltar el que esta seleccionado con el color, por ejemplo, todo en negro y la seleccionada en blanco y cuando vayas a seleccionar otra esa pasa a estar en blanco y la otra en negro, dejando incluso el recuadro, pero no tan grande
+
+Espaciar más el logo hacia la izquierda unos pixeles, porque al menos en las fotos esta pegado a la esquina

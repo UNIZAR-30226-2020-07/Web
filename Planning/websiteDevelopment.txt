@@ -1,0 +1,25 @@
+>>FRAMEWORKS AND LIBRARIES
+
+> STYLE
+Bootstrap	-> CSS libraries to avoid writing it, making website responsive automatically
+
+> JAVASCRIPT FUNCTIONS
+| << only one of them must be chosen
+|jQuery		-> general tasks to be done using JavaScript are alredy done and given with their libraries
+|W3.js		-> another library written by W3C to simplify JavaScript programming on websites
+|=> JQuery is finally used because it's better documentated
+
+> ONE PAGE'S WEB APPLICATION
+| << only one of them must be chosen
+|React		-> single page website (useful for user's home); is a framework that uses libraries
+|AngularJS	-> single page website (useful for user's home); is a framework
+|Vue.js		-> single page website (useful for user's home); is a framework
+|=> React is finally used because it's learning curve is minor and it's better documented
+
+##########################################################################################################################
+
+>>BASIC NOTIONS
+HTML
+CSS
+JavaScript & JSON & AJAX & WebSockets
+API WEB (REST)

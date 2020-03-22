@@ -1,6 +1,6 @@
 /*Pone el fondo de pantalla, pero falla en html5*/
 body{
-    background-image: url(MockupWeb/Images/diseno-fondo-ondulado-oscuro_23-2148417507.jpg); 
+    background-image: url(MockupWeb/Images/Free-Blue-Vector-Background.jpg); 
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -29,7 +29,7 @@ body{
     background-color: #8b95ce;
 }
 .custom-navbar {
-    background-color: #202e7c;
+    background-color: #152686;
 }
 
 /*Define el tamaño de ambos formularios */
@@ -47,7 +47,7 @@ body{
     position:relative;
     margin: 0 auto 80px;
     background: #cb9dddc0;
-    padding: 30px 15% 30px 15%;
+    padding: 30px 10% 30px 10%;
     border-radius: 40px;
 }
 
@@ -109,6 +109,6 @@ body{
 }
 
 .readable{
-    background-color: #202e7c81;
-    color:white;
+    background-color: #8691cec0;
+    color:rgb(0, 0, 0);
 }

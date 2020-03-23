@@ -1,8 +1,12 @@
 -Poner pantalla de ejemplo de búsqueda
 
 -Poner símbolo de stop en el reproductor, y que play y pause se alternen
+=> HECHO
 
 -Poner barra al listar los audios que indique título/autor/categoría
+=> AVANZADO
+
+-Poner barra al listar las listas de audios que indique título/autor
 
 -Preguntar por monocolor/varios colores en las listas y audios del home
 

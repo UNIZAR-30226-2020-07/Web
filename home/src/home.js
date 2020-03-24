@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './home.css';
 import NavBar from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <NavBar />
-  </React.StrictMode>,
-  document.getElementById('root')
+ReactDOM.render(<NavBar />,document.getElementById('root')
+);
+ReactDOM.render(<NavBar />,document.getElementById('root2')
 );
 
 // If you want your app to work offline and load faster, you can change

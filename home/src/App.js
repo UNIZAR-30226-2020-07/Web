@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import logo from './Lgo Empresa2.png'
 import './App.css';
+import './index.css';
 
 class NavBar extends Component{
   constructor(props){
@@ -11,18 +12,39 @@ class NavBar extends Component{
     }
   }
 
-  render(){
-    return(
-      <div id="loginContainer">
-        <form id="loginForm" onSubmit={this.login}>
-          <h1 className="form-title">Login</h1>
-          <input type='text' name="username" id="usernameInput" placeholder="username" value={this.state.username} onChange={this.handleChange}></input>
-          <input type='password' name="password" id="passwordInput" placeholder="password" value={this.state.password} onChange={this.handleChange}></input>
-          <button type="submit">Login</button>
-        </form>
-      </div>
-    );
-  }
+ render(){
+  return(
+    <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
+            <div className="col-xl-4 navbar-header">
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <img className="img-fluid mx-auto" src={logo} alt="logo"></img>
+            </div>
+            <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+                <ul className="nav navbar-nav">
+                    <li className="navbar-text active custom-active">
+                    <a className="nav-link">Home</a>
+                    </li>
+                    <li className="navbar-text">
+                    <a className="nav-link">Help</a>
+                    </li>
+                    <li className="navbar-text">
+                    <a className="nav-link">Download</a>
+                    </li>
+                    <li className="divider"></li>
+                    <li className="hr" />
+                    <li className="navbar-text">
+                    <a className="nav-link">Login</a>
+                    </li>
+                    <li className="navbar-text">
+                      <a className="nav-link">Register</a>
+                    </li>
+                </ul>
+            </div> 
+    </nav>
+  );
+}
 
   login = (e) => {
     e.preventDefault();

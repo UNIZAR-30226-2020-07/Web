@@ -1,4 +1,4 @@
-var register_path = "https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration";
+var register_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration';
 
 //Comprueba mediante una expresión regular que el mensaje por parámetro sea un email
 function ValidateEmail(inputText)
@@ -12,6 +12,15 @@ function ValidateEmail(inputText)
     {
         return false;
     }
+}
+
+function reqListener() {
+    var data = JSON.parse(this.responseText);
+    console.log(data);
+}
+  
+function reqError(err) {
+    console.log('Fetch Error :-S', err);
 }
 
 //Función para comprobar que todos los campos del formulario son válidos, y para el registro del usuario
@@ -51,7 +60,7 @@ function validacionRegister() {
         document.getElementById("pass1Error").style.visibility="visible";
         return false;
     }else{
-        return false;
+        //return false;
     }
 }
 
@@ -82,8 +91,6 @@ function validacionLogin() {
         return false;
     }
 }
-
-
 
 function recover(){
     document.getElementById("recover-feedback").style.visibility="hidden";

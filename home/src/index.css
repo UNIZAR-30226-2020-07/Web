@@ -111,3 +111,9 @@ body{
     background-color: #8691cec0;
     color:rgb(0, 0, 0);
 }
+
+.button-toggle{
+    background: #0a1030; 
+    border: 1px solid #ccc;
+    width:100%
+}

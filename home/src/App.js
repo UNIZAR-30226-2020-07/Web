@@ -16,29 +16,15 @@ class NavBar extends Component{
   return(
     <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
             <div className="col-xl-4 navbar-header">
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                    <span className="navbar-toggler-icon"></span>
+                <img class="img-fluid mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
+                <button class="navbar-toggler button-toggle" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                  <span class="navbar-toggler-icon"></span>
                 </button>
-                <img className="img-fluid mx-auto" src={logo} alt="logo"></img>
             </div>
             <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
                 <ul className="nav navbar-nav">
                     <li className="navbar-text active custom-active">
-                    <a className="nav-link">Home</a>
-                    </li>
-                    <li className="navbar-text">
-                    <a className="nav-link">Help</a>
-                    </li>
-                    <li className="navbar-text">
-                    <a className="nav-link">Download</a>
-                    </li>
-                    <li className="divider"></li>
-                    <li className="hr" />
-                    <li className="navbar-text">
-                    <a className="nav-link">Login</a>
-                    </li>
-                    <li className="navbar-text">
-                      <a className="nav-link">Register</a>
+                    Texto
                     </li>
                 </ul>
             </div> 

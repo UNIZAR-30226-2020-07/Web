@@ -2,18 +2,29 @@ import React, {Component} from 'react';
 import logo from './Lgo Empresa2.png'
 import './App.css';
 import './index.css';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
-class NavBar extends Component{
+
+class App extends Component{
   constructor(props){
     super(props);
     this.state={
-      username: '',
-      password: ''
+      txt: 'preba',
+      src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
     }
   }
+  /*
+  var Player = () => (
+    <AudioPlayer
+      //autoPlay
+      src="https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD"
+    />
+  );*/
 
  render(){
   return(
+    <div>
     <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
             <div className="col-xl-4 navbar-header">
                 <img class="img-fluid mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
@@ -23,25 +34,26 @@ class NavBar extends Component{
             </div>
             <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
                 <ul className="nav navbar-nav">
-                    <li className="navbar-text active custom-active">
-                    Texto
+                    <li className="navbar-text active custom-active" value={this.state.txt}>
+                      Prueba
                     </li>
+                    <button onClick={this.login}>
+                    Texto
+                    </button>
                 </ul>
             </div> 
     </nav>
+    <AudioPlayer src={this.state.src}></AudioPlayer>
+    </div>
   );
 }
 
-  login = (e) => {
-    e.preventDefault();
-    console.log("Funciona");
-  }
-
-  handleChange = (e) => {
-    let newState = {}
-    newState[e.target.name] = e.target.value
-    this.setState(newState)
+  login = () => {
+    alert(this.state.src);
+    this.setState({
+      src: ''
+    });
   }
 }
 
-export default NavBar;
+export default App;

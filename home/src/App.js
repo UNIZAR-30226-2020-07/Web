@@ -14,13 +14,6 @@ class App extends Component{
       src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
     }
   }
-  /*
-  var Player = () => (
-    <AudioPlayer
-      //autoPlay
-      src="https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD"
-    />
-  );*/
 
  render(){
   return(

@@ -1,4 +1,6 @@
-var register_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration';
+const register_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/';
+const login_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/';
+
 
 //Comprueba mediante una expresión regular que el mensaje por parámetro sea un email
 function ValidateEmail(inputText)
@@ -14,14 +16,6 @@ function ValidateEmail(inputText)
     }
 }
 
-function reqListener() {
-    var data = JSON.parse(this.responseText);
-    console.log(data);
-}
-  
-function reqError(err) {
-    console.log('Fetch Error :-S', err);
-}
 
 //Función para comprobar que todos los campos del formulario son válidos, y para el registro del usuario
 function validacionRegister() {
@@ -60,12 +54,50 @@ function validacionRegister() {
         document.getElementById("pass1Error").style.visibility="visible";
         return false;
     }else{
-        //return false;
+        fetch(register_path, {
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            method: 'POST',
+            body: JSON.stringify ({
+                "username": User.value,
+                "email": Email.value,
+                "password1": Password1.value,
+                "password2": Password2.value
+            })  
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.key) {
+                window.location.replace("http://localhost:3000/");
+            }else{
+                if(response.username){
+                    User.style.border="solid 2px red";
+                    document.getElementById("userRError").innerHTML=response.username;
+                    document.getElementById("userRError").style.visibility="visible";
+                }
+                if(response.email){
+                    Email.style.border="solid 2px red";
+                    document.getElementById("emailError").innerHTML=response.email;
+                    document.getElementById("emailError").style.visibility="visible";
+                }
+                if(response.password1){
+                    Password1.style.border="solid 2px red";
+                    Password2.style.border="solid 2px red";
+                    document.getElementById("pass1Error").innerHTML=response.password1;
+                    document.getElementById("pass1Error").style.visibility="visible";
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        return false;
     }
 }
 
+
 //Función para comprobar que todos los campos del formulario son válidos, y para el login del usuario
 function validacionLogin() {
+    var exito=0;
     document.getElementById("userError").style.visibility="hidden";
     document.getElementById("passLoginError").style.visibility="hidden";
     var UserEmail = document.getElementById("usernameEmail"); 
@@ -84,13 +116,56 @@ function validacionLogin() {
         document.getElementById("passLoginError").style.visibility="visible";
         return false;
     }else if(ValidateEmail(UserEmail)){
-        //El usuario introduce un email
+        fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify ({
+                "username": '',
+                "email": UserEmail.value,
+                "password": Password.value
+            })     
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.key) {
+                window.location.replace("http://localhost:3000/");
+            }else{
+                Password.style.border="solid 2px red";
+                document.getElementById("passLoginError").innerHTML="Email or password invalid.";
+                document.getElementById("passLoginError").style.visibility="visible";
+            }
+        })
+        .catch(error => console.error('Error:', error));
         return false;
     }else{
-        //El usuario introduce un nombre de usuario
+        fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            method: 'POST',
+            body: JSON.stringify ({
+                "username": UserEmail.value,
+                "email": '',
+                "password": Password.value
+            })     
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.key) {
+                window.location.replace("http://localhost:3000/");
+            }else{
+                Password.style.border="solid 2px red";
+                document.getElementById("passLoginError").innerHTML="Username or password invalid.";
+                document.getElementById("passLoginError").style.visibility="visible";
+            }
+        })
+        .catch(error => console.error('Error:', error));
         return false;
-    }
+    }    
 }
+
 
 function recover(){
     document.getElementById("recover-feedback").style.visibility="hidden";

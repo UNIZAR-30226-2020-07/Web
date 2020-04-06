@@ -154,7 +154,18 @@ function validacionLogin() {
         .then(res => res.json())
         .then(response => {
             if (response.key) {
-                window.location.replace("http://localhost:3000/");
+                if (typeof(localStorage) !== "undefined") {
+                    //localStorage.keyMusicApp=response.key;
+                    window.localStorage.setItem('keyMusicApp',response.key);
+                    window.sessionStorage.setItem('keyMusicApp',response.key);
+
+                    
+
+                    //window.location.replace("http://localhost:3000/");
+                    window.location.href="home.html";
+                } else {
+                    alert("El navegador no permite la funcionalidad");
+                }
             }else{
                 Password.style.border="solid 2px red";
                 document.getElementById("passLoginError").innerHTML="Username or password invalid.";

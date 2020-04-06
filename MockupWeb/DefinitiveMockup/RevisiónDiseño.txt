@@ -1,15 +1,18 @@
 -Poner pantalla de ejemplo de búsqueda
+=> HECHO
 
 -Poner símbolo de stop en el reproductor, y que play y pause se alternen
 => HECHO
 
 -Poner barra al listar los audios que indique título/autor/categoría
-=> AVANZADO
+=> HECHO
 
 -Poner barra al listar las listas de audios que indique título/autor
+=> HECHO
 
 -Preguntar por monocolor/varios colores en las listas y audios del home
 
 -Y si que la pantalla de dentro de la playlist me parece que nos costará menos crear las funciones si los botones de borrar están en cada canción, además de que el botón de añadir sería como forzar una búsqueda, es la única pantalla que no me gusta personalemnte.=> lo puse y queda bastante mal, además que es peligroso a la hora de pulsar para reproducir o mover si no le das bien. El plan es que al darle al menos, ese botón pase a ser un tick y que en vez de play salgan las papeleras; hay que hacer la pantalla del borrado activo
+=> HECHO
 
 -Hay que ponerlo, aclarar y simplificar fondo en las páginas sin estar loggeado

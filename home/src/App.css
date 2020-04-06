@@ -28,6 +28,15 @@
   color: #61dafb;
 }
 
+.full-height{
+  min-height: 100%;
+}
+
+#yellow {
+  height: 100%;
+  background: yellow;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

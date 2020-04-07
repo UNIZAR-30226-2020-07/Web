@@ -29,12 +29,11 @@
 }
 
 .full-height{
-  min-height: 100%;
+  height: 100%;
 }
 
-#yellow {
-  height: 100%;
-  background: yellow;
+.flex-fill {
+  flex:1;
 }
 
 @keyframes App-logo-spin {
@@ -45,3 +44,25 @@
     transform: rotate(360deg);
   }
 }
+
+html, body {
+  height: 100%;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.header {
+  flex: 0 1 auto;
+}
+
+.content {
+  flex: 1 1 auto;
+}
+
+.footer {
+  flex: 0 1 40px;
+} 

@@ -30,6 +30,21 @@ body{
 .custom-navbar {
     background-color: #152686;
 }
+.darker-bar {
+    background-color: #0c1755;
+}
+.menu-appearance {
+    background-color: #5d75ff;
+    border: black;
+}
+.distance{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.readable-text{
+    color:white;
+    font-weight: 900;
+}
 
 /*Define el tamaño de ambos formularios */
 .login-page{

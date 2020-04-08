@@ -25,7 +25,11 @@ body{
 
 /*Se usan para cambiar colores de fondo solamente*/
 .custom-active{
-    background-color: #8b95ce;
+    background-color: #3e5bff;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    padding:5px;
 }
 .custom-navbar {
     background-color: #152686;
@@ -35,7 +39,12 @@ body{
 }
 .menu-appearance {
     background-color: #5d75ff;
-    border: black;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    border-top-style: none;
+    border-left-style: none;
+    border-bottom-style: none;
 }
 .distance{
     padding-top: 10px;

@@ -69,7 +69,7 @@ function validacionRegister() {
         .then(res => res.json())
         .then(response => {
             if (response.key) {
-                window.location.replace("http://localhost:3000/");
+                window.location.replace("http://localhost:8080/app4/");
             }else{
                 if(response.username){
                     User.style.border="solid 2px red";
@@ -155,7 +155,6 @@ function validacionLogin() {
         .then(response => {
             if (response.key) {
                 if (typeof(localStorage) !== "undefined") {
-                    //localStorage.keyMusicApp=response.key;
                     window.localStorage.setItem('keyMusicApp',response.key);
                     window.sessionStorage.setItem('keyMusicApp',response.key);
 

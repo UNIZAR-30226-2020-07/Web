@@ -4,7 +4,9 @@ import './App.css';
 import './index.css';
 import AudioPlayer from 'react-h5-audio-player';
 import classnames from 'classnames';
+import onClickOutside from 'react-onclickoutside';
 import 'react-h5-audio-player/lib/styles.css';
+import Dropdown from './dropdownMenu/dropdown';
 
 
 class App extends Component{
@@ -12,6 +14,8 @@ class App extends Component{
     super(props);
     this.state={
       key: '',
+      searchType : [''], //Se usarán más adelante para realizar las peticiones de búsqueda a la api
+      activeSearch : ' Look for... ',
       active: [1,'','',''],
       current_active: 0,
       src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
@@ -47,8 +51,8 @@ class App extends Component{
           <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
             <ul className="nav navbar-nav">
               <form className="form-inline">
-                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-                <p className="readable-text">Dropdown por poner</p>
+                <input className="form-control" type="search" placeholder="Search" aria-label="Search"></input>
+                <Dropdown title={this.state.activeSearch} cambiaTipo={this.cambiaSearch}/>
                 <button className="form_button" type="submit">Search</button>
               </form>
               <button onClick={this.cambiaSource}>
@@ -59,8 +63,8 @@ class App extends Component{
         </nav>
         
         <div className="container-fluid content">
-          <div class="row content full-height">
-            <div class="col-sm-2 menu-appearance"  style={{paddingTop:10}}>
+          <div className="row content full-height">
+            <div className="col-sm-2 menu-appearance"  style={{paddingTop:10}}>
               <ul style={{listStyleType:'none',padding: 0}}>
                 <li className={playlistClass} onClick={() => this.cambiaActive(0)}>Playlists</li>
                 <li className={podcastClass} onClick={() => this.cambiaActive(1)}>Podcasts</li>
@@ -71,14 +75,14 @@ class App extends Component{
                 <li className="distance readable-text">Log out</li>
               </ul>
             </div>
-            <div class="col-sm-10 full-height">{this.state.current_active}
+            <div className="col-sm-10 full-height">{this.state.current_active}{this.state.activeSearch}
             </div>
           </div>
         </div>
         
         <footer className="footer fixed-bottom custom-navbar">
             <div className="row">
-              <div className="col-sm-1 readable-text">Aquí imagen</div>
+              <div className="col-sm-1 readable-text d-none d-sm-block">Aquí imagen</div>
               <div className="col-sm-3 justify-content-center text-center">
                 <div className="readable-text">{this.state.title}</div>
                 <div className="readable-text">{this.state.author}</div>
@@ -95,13 +99,20 @@ class App extends Component{
     );
   }
 
-  cambiaActive = (posa) => {
+  //Tipo codificado con números, 0=Songs, 1=Artists, 2=Categories, 3=Albums, 4=Podcasts, 5=Usernames
+  cambiaSearch = (tipo) => {
+    this.setState({
+      activeSearch: tipo
+    });
+  }
+
+  cambiaActive = (posicion) => {
     var actives = [this.state.active];
     actives = ['','','',''];
-    actives[posa]='1';
+    actives[posicion]='1';
     this.setState({ 
       active:actives,
-      current_active:posa
+      current_active:posicion
     });
   }
 
@@ -110,6 +121,7 @@ class App extends Component{
       src: ''
     });
   }
+
 }
 
 export default App;

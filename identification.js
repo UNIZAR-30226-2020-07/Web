@@ -69,7 +69,9 @@ function validacionRegister() {
         .then(res => res.json())
         .then(response => {
             if (response.key) {
-                window.location.replace("http://localhost:8080/app4/");
+                window.localStorage.setItem('keyMusicApp',response.key);
+                window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
                 if(response.username){
                     User.style.border="solid 2px red";
@@ -130,7 +132,9 @@ function validacionLogin() {
         .then(res => res.json())
         .then(response => {
             if (response.key) {
-                window.location.replace("http://localhost:3000/");
+                window.localStorage.setItem('keyMusicApp',response.key);
+                window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
                 Password.style.border="solid 2px red";
                 document.getElementById("passLoginError").innerHTML="Email or password invalid.";
@@ -156,12 +160,8 @@ function validacionLogin() {
             if (response.key) {
                 if (typeof(localStorage) !== "undefined") {
                     window.localStorage.setItem('keyMusicApp',response.key);
-                    window.sessionStorage.setItem('keyMusicApp',response.key);
-
-                    
-
-                    //window.location.replace("http://localhost:3000/");
-                    window.location.href="home.html";
+                    window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                    //window.location.href="home.html"; //redirige permitiendo retroceder
                 } else {
                     alert("El navegador no permite la funcionalidad");
                 }

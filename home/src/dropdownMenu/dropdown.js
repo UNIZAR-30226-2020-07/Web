@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './dropdown.css';
 
 
-class Dropdown extends React.Component {
+class Dropdown extends Component {
   constructor(props){
     super(props);
     this.state = {

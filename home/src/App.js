@@ -4,7 +4,6 @@ import './App.css';
 import './index.css';
 import AudioPlayer from 'react-h5-audio-player';
 import classnames from 'classnames';
-import onClickOutside from 'react-onclickoutside';
 import 'react-h5-audio-player/lib/styles.css';
 import Dropdown from './dropdownMenu/dropdown';
 
@@ -13,9 +12,10 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state={
-      key: '',
+      key: window.localStorage.keyMusicApp,
       searchType : [''], //Se usarán más adelante para realizar las peticiones de búsqueda a la api
       activeSearch : ' Look for... ',
+      busqueda : '',
       active: [1,'','',''],
       current_active: 0,
       src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
@@ -23,7 +23,12 @@ class App extends Component{
       author: 'Autor Provisional',
       album: 'Album Provisional',
       rating: 'Rating Provisional',
+      userAux: '',
+      passAux:'',
+      username:'',
+      debug:'0',
     }
+    this.getUser();
   }
 
   render(){
@@ -50,11 +55,11 @@ class App extends Component{
           </div>
           <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
             <ul className="nav navbar-nav">
-              <form className="form-inline">
-                <input className="form-control" type="search" placeholder="Search" aria-label="Search"></input>
+              <div className="form-inline">
+                <input className="form-control" type="search" placeholder="Search" value={this.state.busqueda} onChange={this.getSearch} aria-label="Search"></input>
                 <Dropdown title={this.state.activeSearch} cambiaTipo={this.cambiaSearch}/>
-                <button className="form_button" type="submit">Search</button>
-              </form>
+                <button className="form_button">Search</button>
+              </div>
               <button onClick={this.cambiaSource}>
                 Clear audio player
               </button>
@@ -73,9 +78,17 @@ class App extends Component{
                 <li className="hr"></li>
                 <li className={settingsClass} onClick={() => this.cambiaActive(3)}>My account</li>
                 <li className="distance readable-text">Log out</li>
+                {this.state.debug === '1'
+                  ? <><input className="form-control" type="search" placeholder="User/Email" value={this.state.userAux} onChange={this.getUserAux} aria-label="Search"></input><input className="form-control" type="search" placeholder="Password" value={this.state.passAux} onChange={this.getPassAux} aria-label="Search"></input><button onClick={this.loginTest}>Search</button></>
+                  : <p></p>
+                }
+                <p>{this.state.username}</p>
               </ul>
             </div>
-            <div className="col-sm-10 full-height">{this.state.current_active}{this.state.activeSearch}
+            <div className="col-sm-10 full-height">
+              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1qUDPUvQxX8am5OMk99Clfn3dAIjUFD6R'}) }>Primera cancion de prueba</button></div>
+              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1PbDXj4OK6adtZSey3EsCRBqWGzEwylKX'}) }>Segunda cancion de prueba</button></div>
+              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1DArTjmAm9NgwmsvxZipF1FESovOXsNt0'}) }>Tercera cancion de prueba</button></div>
             </div>
           </div>
         </div>
@@ -90,7 +103,7 @@ class App extends Component{
                 <div className="readable-text">{this.state.rating}</div>
               </div>
               <div className="col-sm-8">
-                <AudioPlayer className="full-height" src={this.state.src}></AudioPlayer>  
+                <AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>  
               </div>
             </div>
             <div className="darker-bar" style={{height:25}}></div>
@@ -104,6 +117,74 @@ class App extends Component{
     this.setState({
       activeSearch: tipo
     });
+  }
+
+  getSearch = (string) =>{
+    this.setState({
+      busqueda: string.target.value
+    });
+  }
+
+  getUser = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+this.state.key
+      },
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(response => {
+      if(response.id){
+        this.setState({
+          username:response.username,
+        })
+      }else{
+        alert("Error "+response.detail);
+      }
+    })
+  }
+
+  getUserAux = (string) =>{
+    this.setState({
+      userAux: string.target.value
+    });
+  }
+  getPassAux = (string) =>{
+    this.setState({
+      passAux: string.target.value
+    });
+  }
+
+  loginTest = (email,password) =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify ({
+        "username": '',
+        "email":this.state.userAux,
+        "password": this.state.passAux
+      })     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.key) {
+        window.localStorage.setItem('keyMusicApp',response.key);
+        alert(response.key);
+      }else{
+        if(response.username){
+          alert(response.username);
+        }
+        if(response.email){
+          alert(response.email);
+        }
+        if(response.password){
+          alert(response.password);
+        }
+      }
+    })
   }
 
   cambiaActive = (posicion) => {

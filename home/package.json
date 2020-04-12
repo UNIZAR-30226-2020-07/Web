@@ -2,7 +2,7 @@
   "name": "myfirstreact",
   "version": "0.1.0",
   "private": false,
-  "homepage": "http://localhost:8080/app4",
+  "homepage": "http://localhost:8080/",
   "dependencies": {
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",

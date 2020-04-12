@@ -70,7 +70,7 @@ function validacionRegister() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
-                window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
                 if(response.username){
@@ -133,7 +133,7 @@ function validacionLogin() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
-                window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
                 Password.style.border="solid 2px red";
@@ -160,7 +160,7 @@ function validacionLogin() {
             if (response.key) {
                 if (typeof(localStorage) !== "undefined") {
                     window.localStorage.setItem('keyMusicApp',response.key);
-                    window.location.replace("http://localhost:8080/app4/"); //redirige sin permitir retroceder
+                    window.location.replace("/"); //redirige sin permitir retroceder
                     //window.location.href="home.html"; //redirige permitiendo retroceder
                 } else {
                     alert("El navegador no permite la funcionalidad");

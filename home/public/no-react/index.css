@@ -111,3 +111,13 @@ body{
     background-color: #8691cec0;
     color:rgb(0, 0, 0);
 }
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+footer {
+  bottom: 0;
+  width: 100%;
+}

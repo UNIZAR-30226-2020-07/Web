@@ -1,0 +1,31 @@
+.content-internal {
+    overflow: auto;
+}
+
+.list-element{
+    font-weight:bold;
+    padding: 10px;
+}
+
+.the-fine-printing{
+    background-color: #7f7a88;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.separador {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 3px solid black;
+}
+
+.disguised-button{
+    background-color: #a5a2aa;
+    border: solid;
+    border-width: 3px;
+    border-color: black;
+    border-radius: 15px 15px 15px 15px;
+}

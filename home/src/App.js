@@ -6,6 +6,7 @@ import AudioPlayer from 'react-h5-audio-player';
 import classnames from 'classnames';
 import 'react-h5-audio-player/lib/styles.css';
 import Dropdown from './dropdownMenu/dropdown';
+import Content from './content/content';
 
 
 class App extends Component{
@@ -13,9 +14,20 @@ class App extends Component{
     super(props);
     this.state={
       key: window.localStorage.keyMusicApp,
-      searchType : [''], //Se usarán más adelante para realizar las peticiones de búsqueda a la api
+      tipoContent: '', //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends")
+      listaContent:['1'],
+      modifyContent: '', //Dejar vacío para que no muestre nada
+
       activeSearch : ' Look for... ',
       busqueda : '',
+      busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
+      busquedaPreviousPage: '',
+      busquedaNextPage: '',
+      busquedaCount: '',
+      busquedaList: '',
+      busquedaActive: '',
+      busquedaSearch: '',
+
       active: [1,'','',''],
       current_active: 0,
       src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
@@ -26,7 +38,7 @@ class App extends Component{
       userAux: '',
       passAux:'',
       username:'',
-      debug:'0',
+      debug:'1',
     }
     this.getUser();
   }
@@ -57,8 +69,8 @@ class App extends Component{
             <ul className="nav navbar-nav">
               <div className="form-inline">
                 <input className="form-control" type="search" placeholder="Search" value={this.state.busqueda} onChange={this.getSearch} aria-label="Search"></input>
-                <Dropdown title={this.state.activeSearch} cambiaTipo={this.cambiaSearch}/>
-                <button className="form_button">Search</button>
+                <Dropdown title={this.state.activeSearch} prueba={this.state.busqueda} cambiaTipo={this.cambiaSearch}/>
+                <button className="form_button" onClick={this.searchSong}>Search</button>
               </div>
               <button onClick={this.cambiaSource}>
                 Clear audio player
@@ -85,15 +97,13 @@ class App extends Component{
                 <p>{this.state.username}</p>
               </ul>
             </div>
-            <div className="col-sm-10 full-height">
-              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1qUDPUvQxX8am5OMk99Clfn3dAIjUFD6R'}) }>Primera cancion de prueba</button></div>
-              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1PbDXj4OK6adtZSey3EsCRBqWGzEwylKX'}) }>Segunda cancion de prueba</button></div>
-              <div><button onClick={()=>this.setState({src: 'https://docs.google.com/uc?id=1DArTjmAm9NgwmsvxZipF1FESovOXsNt0'}) }>Tercera cancion de prueba</button></div>
+            <div className="col-sm-10 full-height scrollable">
+              <Content tipo={this.state.tipoContent} lista={this.state.busquedaList} change={this.state.modifyContent} cambiaCancion={this.cambiaSource}/>
             </div>
           </div>
         </div>
         
-        <footer className="footer fixed-bottom custom-navbar">
+        <footer className="footer custom-navbar">
             <div className="row">
               <div className="col-sm-1 readable-text d-none d-sm-block">Aquí imagen</div>
               <div className="col-sm-3 justify-content-center text-center">
@@ -125,6 +135,61 @@ class App extends Component{
     });
   }
 
+  searchSong = () =>{
+    var urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/songs/';
+    var searchStatement='?search='+this.state.busqueda;
+    switch(this.state.activeSearch){
+      case 0: //Buscamos canciones por X título
+        searchStatement = searchStatement+'&episode=false';
+        break;
+      case 1: //Buscamos canciones de X artista
+        searchStatement = searchStatement+'&search_for=artist&episode=false';
+        break;
+      case 2: //Buscamos canciones de X categoría
+        searchStatement = searchStatement+'&search_for=genre&episode=false';
+        break;
+      case 3: //Buscamos canciones de X álbum
+        searchStatement = searchStatement+'&search_for=album&episode=false';
+        break;
+      case 4: //Buscamos podcasts de X título
+        //Tocará cambiar también la urlLocal
+        searchStatement = searchStatement+'&episode=true';
+        break;
+      case 5: //Buscamos usuarios con X username
+        //Completar
+        break;
+      default:
+        return 0;
+    }
+
+    urlLocal=urlLocal+searchStatement;
+
+    fetch(urlLocal,{
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(response => {
+      if(response.results){
+        this.setState({
+          busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
+          busquedaPreviousPage: response.previous,
+          busquedaNextPage: response.next,
+          busquedaCount: response.count,
+          busquedaList: response.results,
+          busquedaActive: this.state.activeSearch,
+          busquedaSearch: this.state.busqueda,
+          tipoContent: "search",
+          modifyContent: '0',
+        });
+      }else{
+        alert("Error "+response.detail);
+      }
+    })
+  }
+
+
+
   getUser = () =>{
     fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
       headers: {
@@ -140,7 +205,7 @@ class App extends Component{
           username:response.username,
         })
       }else{
-        alert("Error "+response.detail);
+        //alert("Error "+response.detail);
       }
     })
   }
@@ -197,9 +262,9 @@ class App extends Component{
     });
   }
 
-  cambiaSource = () => {
+  cambiaSource = (newSrc) => {
     this.setState({
-      src: ''
+      src: newSrc.stream_url,
     });
   }
 

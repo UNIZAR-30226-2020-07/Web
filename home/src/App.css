@@ -53,6 +53,8 @@ html, body {
   display: flex;
   flex-flow: column;
   height: 100%;
+  overflow: hidden;
+  padding:0px;
 }
 
 .header {
@@ -61,8 +63,19 @@ html, body {
 
 .content {
   flex: 1 1 auto;
+  overflow: auto;
+}
+
+.scrollable{
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
 .footer {
   flex: 0 1 40px;
+  margin-top: auto;
 } 

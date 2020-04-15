@@ -3,12 +3,18 @@
 <html>
 
 <head>
+  <!-- Web page metadata -->
+  <title>Instant Music</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Libraries and external files -->
   <script src="identification.js"></script>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
 
 <body>
@@ -83,6 +89,86 @@
             </div>
         </div>
     </div>
+
+    <!-- Pie de página -->
+	<footer class="page-footer custom-navbar text-light container-fluid">
+		<!-- 1st row in footer: main text -->
+		<div class="h4 text-center mt-2 mb-2">
+			Developed by Instant Music's Team
+		</div> 
+
+		<!-- 2nd row in footer: contact's buttons -->
+		<div class="row">
+			<!-- Github's contact button -->
+            <div class="container col-md-6">
+				<button type="button" onclick="location.href='https://github.com/UNIZAR-30226-2020-07/';" class="btn btn-block btn-outline-light">
+                    <div class="d-inline-flex justify-content-center">
+					   <i class="p-2 fab fa-github fa-2x"></i>
+					   <p class="p-2"> Follow us on GitHub </p>
+                    </div>
+				</button>
+            </div>
+			<!-- Formulario's contact button -->
+            <div class="container col-md-6">
+				<button type="button" class="btn btn-block btn-outline-light" data-toggle="modal" data-target="#myModal">
+                    <div class="d-inline-flex justify-content-center">
+					   <p class="p-2"> Contact us </p>
+                       <i class="p-2 fas fa-envelope fa-2x"></i>
+                    </div>
+				</button>
+                <!-- The Modal -->
+                <div class="modal fade text-dark" id="myModal">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                      
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <h4 class="modal-title">Send us an email</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                          Send us an email to instantmusic@gmail.com
+                        </div>
+                        
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        
+                      </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<!-- 3rd wor in footer: other links -->
+		<div class="row text-center">
+			<!-- Responsive subrow with links -->
+			<div class="col-sm-8 row">
+				<!-- License terms link -->
+				<div class="col-6">
+                    <u>
+                    	<a class="text-light" href="">License terms</a>
+                    </u>
+				</div>
+
+				<!-- Cookies link -->
+				<div class="col-6">
+					<u>
+                    	<a class="text-light" href="">Cookies</a>
+                	</u>
+				</div>
+			</div>
+
+			<!-- Responsive subrow with copyright -->
+			<div class="col-sm-4 text-center">
+					©2020 Copyright Instant Music's Team
+			</div>
+		</div>
+	</footer>
+
 </body>
 
 </html>

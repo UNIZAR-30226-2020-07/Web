@@ -49,7 +49,7 @@
     </div>  
   </nav>
     
-  <div class="login-page">
+  <div id="page-container" class="login-page">
     <div class="form">
       <form class="login_form" method="POST" action="home.html" onsubmit="return validacionLogin()"  id="login-form">
         <h2>Welcome again!</h2>
@@ -161,7 +161,7 @@
 
       <!-- Responsive subrow with copyright -->
       <div class="col-sm-4 text-center">
-          ©2020 Copyright Instant Music's Team
+        <p>&copy;<script>document.write(new Date().getFullYear());</script> Copyright Instant Music's Team</p>
       </div>
     </div>
   </footer>

@@ -4,7 +4,9 @@ import './App.css';
 import './index.css';
 import AudioPlayer from 'react-h5-audio-player';
 import classnames from 'classnames';
+import Rating from 'react-rating';
 import 'react-h5-audio-player/lib/styles.css';
+import 'font-awesome/css/font-awesome.min.css';
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 
@@ -98,7 +100,7 @@ class App extends Component{
               </ul>
             </div>
             <div className="col-sm-10 full-height scrollable">
-              <Content tipo={this.state.tipoContent} lista={this.state.busquedaList} change={this.state.modifyContent} cambiaCancion={this.cambiaSource}/>
+              <Content tipo={this.state.tipoContent} lista={this.state.busquedaList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -110,7 +112,7 @@ class App extends Component{
                 <div className="readable-text">{this.state.title}</div>
                 <div className="readable-text">{this.state.author}</div>
                 <div className="readable-text">{this.state.album}</div>
-                <div className="readable-text">{this.state.rating}</div>
+                <div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.rating} onChange={(rate) => this.userRating(rate)}/></div>
               </div>
               <div className="col-sm-8">
                 <AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>  
@@ -188,7 +190,67 @@ class App extends Component{
     })
   }
 
+  cambiaPage = (page) =>{
+    if(page === 0){//Previous page
 
+      var urlLocal=this.state.busquedaPreviousPage;
+
+      fetch(urlLocal,{
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(response => {
+        if(response.results){
+          this.setState({
+            busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
+            busquedaPreviousPage: response.previous,
+            busquedaNextPage: response.next,
+            busquedaCount: response.count,
+            busquedaList: response.results,
+            busquedaActive: this.state.activeSearch,
+            busquedaSearch: this.state.busqueda,
+            tipoContent: "search",
+            modifyContent: '0',
+          });
+        }else{
+          alert("Error "+response.detail);
+        }
+      })
+
+    }else{//Next page
+
+      urlLocal=this.state.busquedaNextPage;
+
+      fetch(urlLocal,{
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(response => {
+        if(response.results){
+          this.setState({
+            busquedaPreviousPage: response.previous,
+            busquedaNextPage: response.next,
+            busquedaCount: response.count,
+            busquedaList: response.results,
+            busquedaActive: this.state.activeSearch,
+            busquedaSearch: this.state.busqueda,
+            tipoContent: "search",
+            modifyContent: '0',
+          });
+        }else{
+          alert("Error "+response.detail);
+        }
+      })
+
+    }
+  }
+
+  userRating = (rate) =>{
+    alert(rate);
+    //Por implementar
+  }
 
   getUser = () =>{
     fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
@@ -265,6 +327,10 @@ class App extends Component{
   cambiaSource = (newSrc) => {
     this.setState({
       src: newSrc.stream_url,
+      title: newSrc.title,
+      author: newSrc.album.artist.name,
+      album: newSrc.album.name,
+      rating: newSrc.avg_valoration,
     });
   }
 

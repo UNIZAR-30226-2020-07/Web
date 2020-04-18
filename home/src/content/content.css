@@ -5,10 +5,19 @@
 .list-element{
     font-weight:bold;
     padding: 10px;
+    margin: auto;
 }
 
 .the-fine-printing{
     background-color: #7f7a88;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.print-playlist{
+    background-color: #c5c5c5;
     margin-top: 10px;
     margin-bottom: 10px;
     border: 2px solid black;

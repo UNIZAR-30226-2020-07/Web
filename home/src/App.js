@@ -16,7 +16,7 @@ class App extends Component{
     super(props);
     this.state={
       key: window.localStorage.keyMusicApp,
-      tipoContent: '', //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends")
+      tipoContent: '', //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends", "settings")
       listaContent:['1'],
       modifyContent: '', //Dejar vacío para que no muestre nada
 
@@ -32,14 +32,17 @@ class App extends Component{
 
       active: [1,'','',''],
       current_active: 0,
-      src: 'https://docs.google.com/uc?export=download&id=1MMJ1YWAxcs-7pVszRCZLGn9-SFReXqsD',
-      title: 'Título Provisional',
-      author: 'Autor Provisional',
-      album: 'Album Provisional',
-      rating: 'Rating Provisional',
+      src: '',
+      title: '',
+      author: '',
+      album: '',
+      rating: '',
       userAux: '',
       passAux:'',
+
       username:'',
+      userPlaylist:'',
+
       debug:'1',
     }
     this.getUser();
@@ -125,9 +128,9 @@ class App extends Component{
   }
 
   //Tipo codificado con números, 0=Songs, 1=Artists, 2=Categories, 3=Albums, 4=Podcasts, 5=Usernames
-  cambiaSearch = (tipo) => {
+  cambiaSearch = (tipoSearch) => {
     this.setState({
-      activeSearch: tipo
+      activeSearch: tipoSearch
     });
   }
 
@@ -265,6 +268,7 @@ class App extends Component{
       if(response.id){
         this.setState({
           username:response.username,
+          userPlaylist:response.playlists,
         })
       }else{
         //alert("Error "+response.detail);
@@ -315,12 +319,16 @@ class App extends Component{
   }
 
   cambiaActive = (posicion) => {
+    var tipos = ["playlists","podcasts","friends","settings"]
+    var tipoEspecifico = tipos[posicion];
     var actives = [this.state.active];
     actives = ['','','',''];
     actives[posicion]='1';
     this.setState({ 
+      tipoContent:tipoEspecifico,
       active:actives,
-      current_active:posicion
+      current_active:posicion,
+      modifyContent: '0',
     });
   }
 

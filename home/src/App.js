@@ -17,8 +17,10 @@ class App extends Component{
     this.state={
       key: window.localStorage.keyMusicApp,
       tipoContent: '', //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends", "settings")
-      listaContent:['1'],
+
+      contentList:'',
       modifyContent: '', //Dejar vacío para que no muestre nada
+      contentName:'',
 
       activeSearch : ' Look for... ',
       busqueda : '',
@@ -41,6 +43,7 @@ class App extends Component{
       passAux:'',
 
       username:'',
+      userId:'',
       userPlaylist:'',
 
       debug:'1',
@@ -103,7 +106,11 @@ class App extends Component{
               </ul>
             </div>
             <div className="col-sm-10 full-height scrollable">
-              <Content tipo={this.state.tipoContent} lista={this.state.busquedaList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <div className="d-flex flex-row-reverse">
+              <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
+              <button onClick={this.fetchPlaylists}>test prueba</button>
+              </div>
+              <Content user={this.state.contentName} tipo={this.state.tipoContent} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -182,6 +189,7 @@ class App extends Component{
           busquedaNextPage: response.next,
           busquedaCount: response.count,
           busquedaList: response.results,
+          contentList: response.results,
           busquedaActive: this.state.activeSearch,
           busquedaSearch: this.state.busqueda,
           tipoContent: "search",
@@ -211,6 +219,7 @@ class App extends Component{
             busquedaNextPage: response.next,
             busquedaCount: response.count,
             busquedaList: response.results,
+            contentList: response.results,
             busquedaActive: this.state.activeSearch,
             busquedaSearch: this.state.busqueda,
             tipoContent: "search",
@@ -237,6 +246,7 @@ class App extends Component{
             busquedaNextPage: response.next,
             busquedaCount: response.count,
             busquedaList: response.results,
+            contentList: response.results,
             busquedaActive: this.state.activeSearch,
             busquedaSearch: this.state.busqueda,
             tipoContent: "search",
@@ -247,6 +257,72 @@ class App extends Component{
         }
       })
 
+    }
+  }
+
+
+  createNewPlaylist = (name) =>{
+    var playlist={
+      "name":name,
+      "songs":[],
+    };
+
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/', {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'POST',
+      body: JSON.stringify (
+        playlist
+      )     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.id) {
+        this.fetchPlaylists();
+      }else{
+        alert("There was an error");
+      }
+    })
+  }
+
+  fetchPlaylists = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(response => {
+      if(response.id){
+        this.setState({
+          userPlaylist:response.playlists,
+          contentList: response.playlists,
+          
+          tipoContent:"playlists",
+          modifyContent: '0',
+        })
+      }else{
+        alert("There was an error fetching");
+      }
+    })
+  }
+
+  deletePlaylists = (list) =>{
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/';
+    var i=0;
+    var countRefresh = 1;
+    while (list[i]!=undefined){
+      var Auxurl=url+list[i]+"/";
+      fetch(Auxurl, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'DELETE',
+      })
+      .then(res => {
+        if(list[countRefresh]==undefined){
+          this.fetchPlaylists();
+        }else{
+          countRefresh++;
+        }
+      })
+      i++;
     }
   }
 
@@ -268,6 +344,8 @@ class App extends Component{
       if(response.id){
         this.setState({
           username:response.username,
+          contentName:response.username,
+          userId:response.id,
           userPlaylist:response.playlists,
         })
       }else{
@@ -325,11 +403,20 @@ class App extends Component{
     actives = ['','','',''];
     actives[posicion]='1';
     this.setState({ 
-      tipoContent:tipoEspecifico,
+      current_active: posicion,
       active:actives,
-      current_active:posicion,
       modifyContent: '0',
     });
+    switch(tipoEspecifico){
+      case "playlists":
+        this.fetchPlaylists();
+        break;
+      default:
+        this.setState({ 
+          tipoContent:tipoEspecifico,
+        });
+        break;
+    }
   }
 
   cambiaSource = (newSrc) => {

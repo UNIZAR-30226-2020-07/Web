@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 import Rating from 'react-rating';
 import 'font-awesome/css/font-awesome.min.css';
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashRestore } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,8 +26,11 @@ class Content extends Component {
       next: this.props.hayNext,
       previous: this.props.hayPrev,
 
+      username:this.props.user,
       showAddPlaylist:'',
       newTitle:'',
+      deleting:'',
+      delList:[],
 
 
     };
@@ -34,6 +42,7 @@ class Content extends Component {
         contenido: nextProps.lista,
         cantidad: nextProps.cantidad,
         tipo: nextProps.tipo,
+        username: nextProps.user,
         show: '1',
         busqueda: nextProps.busqueda,
         next: nextProps.hayNext,
@@ -48,6 +57,37 @@ class Content extends Component {
     });
   }
 
+  selectDelPlaylist = () =>{
+    this.setState({
+      deleting:'0',
+    });
+  }
+
+  addDelList = (id) =>{
+    var oldDelete = this.state.delList;
+    oldDelete.push(id);
+    this.setState({
+      delList:oldDelete,
+    });
+  }
+
+  extractDelList = (id) =>{
+    var oldDelete = this.state.delList;
+    var posId = oldDelete.indexOf(id);
+    oldDelete.splice(posId,1);
+    this.setState({
+      delList:oldDelete,
+    });
+  }
+
+  confirmDelPlaylist = () =>{
+    this.props.deletePlaylist(this.state.delList);
+    this.setState({
+      deleting:'',
+      delList:[],
+    });
+  }
+
   getTitle = (string) =>{
     this.setState({
       newTitle: string.target.value,
@@ -56,6 +96,7 @@ class Content extends Component {
 
   confirmNewPlaylist = () =>{
     if(this.state.newTitle){
+      this.props.createPlaylist(this.state.newTitle);
       this.setState({
         showAddPlaylist:'',
         newTitle:'',
@@ -121,6 +162,11 @@ class Content extends Component {
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
             <div className="d-flex flex-row-reverse">
               <button onClick={this.addPlaylist}><FontAwesomeIcon icon={faPlus}/></button>
+              {this.state.deleting
+                ?<><button onClick={this.confirmDelPlaylist}><FontAwesomeIcon icon={faCheck}/></button></>
+                :<button onClick={this.selectDelPlaylist}><FontAwesomeIcon icon={faMinus}/></button>
+              }
+              
             </div>
             <div className="row print-playlist" style={{marginBottom:35}}>
               <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
@@ -136,6 +182,33 @@ class Content extends Component {
               </>
               : <div></div>
             }
+            {this.state.contenido
+              ?<>{this.state.contenido.map((item,index)=>(
+                <div className="row the-fine-printing" key={index} item={item}>                              
+                  <div className="col-lg-1 list-element d-flex justify-content-center">Icono</div>
+                  <div className="col-lg-5 list-element d-flex justify-content-center">{item.name}</div>
+                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center">{this.state.username}</div>
+                  {this.state.deleting
+                    ?<>{this.state.delList.includes(item.id)
+                      ?<>
+                        <div className="col-lg-1 list-element d-flex justify-content-center"></div>
+                        <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon icon={faTrashRestore}/></div>
+                      </>
+                      :<>
+                       <div className="col-lg-1 list-element d-flex justify-content-center"></div>
+                       <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon icon={faTrash}/></div>
+                      </>
+                      }
+                    </>
+                    :<><div className="col-lg-1 list-element disguised-button d-flex justify-content-center"><FontAwesomeIcon icon={faRedoAlt}/></div>
+                      <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" ><FontAwesomeIcon icon={faPlay}/></div></>
+                  }
+                  
+                </div>
+              ))}</>
+              :<div></div>
+            }
+            
           </div>
         );
       case "playlistContent":

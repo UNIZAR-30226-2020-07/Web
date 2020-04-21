@@ -12,13 +12,17 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './content.css';
+import 'react-responsive-modal/styles.css';
+import Modal from 'react-responsive-modal';
 
 
 class Content extends Component {
   constructor(props){
     super(props);
     this.state = {
+      key:this.props.token,
       contenido: '',
+      playlists:this.props.playlists, //Se necesitan tener separadas para su uso en búsquedas
       tipo: this.props.tipo,
       cantidad: '0',
       show: '0',
@@ -32,6 +36,8 @@ class Content extends Component {
       deleting:'',
       delList:[],
 
+      showAddSong: false,
+      songToAdd:'',
 
     };
   };
@@ -40,6 +46,7 @@ class Content extends Component {
     if(nextProps.change){
       this.setState({
         contenido: nextProps.lista,
+        playlists:nextProps.playlists,
         cantidad: nextProps.cantidad,
         tipo: nextProps.tipo,
         username: nextProps.user,
@@ -49,6 +56,43 @@ class Content extends Component {
         previous: nextProps.hayPrev,
       })
     }
+  }
+
+  closeModal = () => {
+    this.setState({  
+      showAddSong: false,
+      songToAdd:'',
+    });
+  };
+
+  openModal = (id) => {
+    this.setState({
+      showAddSong: true,
+      songToAdd:id,
+    });
+  };
+
+  addSongToPlaylist = (Playlist) =>{
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+Playlist.id+'/';
+    alert(url);
+    var newSongs=Playlist.songs.map(v=>v.id);
+    newSongs.push(this.state.songToAdd);
+
+    var Newplaylist={
+      "name":Playlist.name,
+      "songs":newSongs,
+    };
+
+    fetch(url, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'PUT',
+      body: JSON.stringify (
+        Newplaylist
+      )     
+    })
+    .then(() => {
+      this.closeModal();
+    })
   }
 
   addPlaylist = () =>{
@@ -133,8 +177,8 @@ class Content extends Component {
                               <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
                               <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
                               <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
-                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center"><FontAwesomeIcon icon={faPlus}/></div>
-                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center"  onClick={() => this.props.cambiaCancion(item)}><FontAwesomeIcon icon={faPlay}/></div>
+                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon icon={faPlus}/></div>
+                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item)}><FontAwesomeIcon icon={faPlay}/></div>
                             </div>
                           ))}
                           <div className="d-flex justify-content-center">
@@ -154,6 +198,21 @@ class Content extends Component {
                   </>
                 : <div className="row readable-text">No se han encontrado resultados</div>
               }
+            
+            <Modal open={this.state.showAddSong} onClose={this.closeModal} showCloseIcon={false} center>
+              <div className="custom-modal">
+              <p className="readable-text">Your playlists: </p>
+                {this.state.playlists
+                  ?<>{this.state.playlists.map((item,index)=>(
+                      <div className="row d-flex justify-content-between print-modal" key={index} item={item}>
+                        <div className="col-lg-9 list-element">{item.name}</div>
+                        <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addSongToPlaylist(item)}><FontAwesomeIcon icon={faPlus}/></div>                 
+                      </div>
+                    ))}</>
+                    :<div></div>
+                }
+              </div>
+            </Modal>
           </div>
         );
 
@@ -217,7 +276,7 @@ class Content extends Component {
         );
       case "podcasts":
         return(
-          <div className="d-flex justify-content-center readable-text">Podcast</div>
+          <div className="d-flex justify-content-center readable-text"><p>Podcast</p></div>
         );
       case "podcastContent":
         return(
@@ -236,8 +295,7 @@ class Content extends Component {
           <div className="d-flex justify-content-center readable-text">ERROR</div>
         );
     }
-    
   }
+
 }
-    
 export default Content;

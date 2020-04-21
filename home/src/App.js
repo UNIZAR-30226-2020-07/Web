@@ -110,7 +110,7 @@ class App extends Component{
               <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
               <button onClick={this.fetchPlaylists}>test prueba</button>
               </div>
-              <Content user={this.state.contentName} tipo={this.state.tipoContent} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -122,7 +122,10 @@ class App extends Component{
                 <div className="readable-text">{this.state.title}</div>
                 <div className="readable-text">{this.state.author}</div>
                 <div className="readable-text">{this.state.album}</div>
-                <div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.rating} onChange={(rate) => this.userRating(rate)}/></div>
+                {this.state.title
+                  ?<div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.rating} onChange={(rate) => this.userRating(rate)}/></div>
+                  :<div></div>
+                }
               </div>
               <div className="col-sm-8">
                 <AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>  
@@ -309,14 +312,15 @@ class App extends Component{
     var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/';
     var i=0;
     var countRefresh = 1;
-    while (list[i]!=undefined){
+    while (list[i]!==undefined){
       var Auxurl=url+list[i]+"/";
       fetch(Auxurl, {
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
         method: 'DELETE',
-      })
-      .then(res => {
-        if(list[countRefresh]==undefined){
+      })// El comentario de abajo elimina un warning innecesario
+      // eslint-disable-next-line
+      .then(res => { 
+        if(list[countRefresh]===undefined){
           this.fetchPlaylists();
         }else{
           countRefresh++;

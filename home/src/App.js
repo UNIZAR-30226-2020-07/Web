@@ -45,7 +45,11 @@ class App extends Component{
       username:'',
       userId:'',
       userPlaylist:'',
+      openPlaylist:[],
+      openPlaylistId:'',
+      openPlaylistName:'',
 
+      forceAutoplay:'',
       debug:'1',
     }
     this.getUser();
@@ -110,7 +114,7 @@ class App extends Component{
               <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
               <button onClick={this.fetchPlaylists}>test prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -128,7 +132,11 @@ class App extends Component{
                 }
               </div>
               <div className="col-sm-8">
-                <AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>  
+                {this.state.forceAutoplay
+                  ?<><AudioPlayer autoPlay className="full-height" src={this.state.src}></AudioPlayer></>
+                  :<AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>
+                }
+                
               </div>
             </div>
             <div className="darker-bar" style={{height:25}}></div>
@@ -330,6 +338,37 @@ class App extends Component{
     }
   }
 
+
+  deleteSongs = (list) =>{
+    var currentSongs = this.state.openPlaylist;
+    var idSongs = currentSongs.map(v=>v.id);
+    list.forEach(element =>{
+      var posId = idSongs.indexOf(element);
+      idSongs.splice(posId,1);
+    });
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+this.state.openPlaylistId+'/';
+    var playlist={
+      "name":this.state.openPlaylistName,
+      "songs":idSongs,
+    };
+
+    fetch(url, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'PUT',
+      body: JSON.stringify (
+        playlist
+      )     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.id) {
+        this.cambiaMode("playlistContent",this.state.openPlaylistId);
+      }else{
+        alert("There was an error");
+      }
+    })
+  }
+
   userRating = (rate) =>{
     alert(rate);
     //Por implementar
@@ -351,7 +390,16 @@ class App extends Component{
           contentName:response.username,
           userId:response.id,
           userPlaylist:response.playlists,
-        })
+        });
+        if(response.pause_song){
+          this.setState({
+            forceAutoplay:'',
+          });
+        }else{
+          this.setState({
+            forceAutoplay:'1',
+          });
+        }
       }else{
         //alert("Error "+response.detail);
       }
@@ -420,6 +468,36 @@ class App extends Component{
           tipoContent:tipoEspecifico,
         });
         break;
+    }
+  }
+
+  cambiaMode = (tipo,playlistId) =>{
+    switch(tipo){
+      case "playlists":
+        this.fetchPlaylists();
+        break;
+      case "playlistContent":
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.id) {
+          this.setState({
+            openPlaylist:response.songs,
+            openPlaylistId:response.id,
+            openPlaylistName:response.name,
+            tipoContent:tipo,
+            contentList:response.songs,
+          });
+        }else{
+          alert("There was an error");
+        }
+      });
+      break;
     }
   }
 

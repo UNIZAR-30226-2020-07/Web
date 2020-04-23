@@ -49,6 +49,10 @@ class App extends Component{
       openPlaylistId:'',
       openPlaylistName:'',
 
+      idActiveSong:'',
+      playingPlaylist:'',
+      playingPlaylistLoop:'',
+
       forceAutoplay:'',
       debug:'1',
     }
@@ -84,8 +88,8 @@ class App extends Component{
                 <Dropdown title={this.state.activeSearch} prueba={this.state.busqueda} cambiaTipo={this.cambiaSearch}/>
                 <button className="form_button" onClick={this.searchSong}>Search</button>
               </div>
-              <button onClick={this.cambiaSource}>
-                Clear audio player
+              <button onClick={this.emptySource}>
+                Stop
               </button>
             </ul>
           </div> 
@@ -112,9 +116,8 @@ class App extends Component{
             <div className="col-sm-10 full-height scrollable">
               <div className="d-flex flex-row-reverse">
               <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
-              <button onClick={this.fetchPlaylists}>test prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -133,8 +136,8 @@ class App extends Component{
               </div>
               <div className="col-sm-8">
                 {this.state.forceAutoplay
-                  ?<><AudioPlayer autoPlay className="full-height" src={this.state.src}></AudioPlayer></>
-                  :<AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src}></AudioPlayer>
+                  ?<><AudioPlayer autoPlay className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong}  onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
+                  :<AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
                 }
                 
               </div>
@@ -144,6 +147,99 @@ class App extends Component{
       </div>
     );
   }
+
+  finishedSong = () =>{
+    if(this.state.playingPlaylist){
+      var currentSongs = this.state.openPlaylist;
+      var idSongs = currentSongs.map(v=>v.id);
+      var finishedSong = idSongs.indexOf(this.state.idActiveSong);
+      if(currentSongs[finishedSong+1]==undefined){
+        if(this.state.playingPlaylistLoop)this.cambiaSource(currentSongs[0]);
+      }else{
+        this.cambiaSource(currentSongs[finishedSong+1]);
+      }
+    }
+  }
+
+  setPlaylistLoop = () =>{
+    if(this.state.playingPlaylistLoop){
+      if(this.state.playingPlaylistLoop==this.state.openPlaylistId){
+        this.setState({
+          playingPlaylistLoop:'',
+        });
+      }else{
+        this.setState({
+          playingPlaylistLoop:this.state.openPlaylistId,
+        });
+      }
+    }else{
+      this.setState({
+        playingPlaylistLoop:this.state.openPlaylistId,
+      });
+    }
+  }
+
+  playPlaylist = () =>{
+    if(this.state.openPlaylist[0]!=undefined){
+      this.setState({
+        playingPlaylist:1,
+      });
+      this.cambiaSource(this.state.openPlaylist[0]);
+    }
+  }
+
+  sortPlaylist = (mode) =>{
+    switch(mode){
+      case 0: //title
+        var Songs = this.state.openPlaylist;
+        var sortedSongs = Songs.sort(function(a,b){
+          return (a.title).localeCompare(b.title);
+        });
+        this.setState({
+          openPlaylist:sortedSongs,
+        });
+        break;
+      case 1: //artist
+        var Songs = this.state.openPlaylist;
+        var sortedSongs = Songs.sort(function(a,b){
+          return (a.album.artist.name).localeCompare(b.album.artist.name);
+        });
+        this.setState({
+          openPlaylist:sortedSongs,
+        });
+        break;
+      case 2: //genre
+        var Songs = this.state.openPlaylist;
+        var sortedSongs = Songs.sort(function(a,b){
+          return (a.genre).localeCompare(b.genre);
+        });
+        this.setState({
+          openPlaylist:sortedSongs,
+        });
+        break;
+      default:break;
+    }
+    this.emptySource();
+  }
+
+  nextSong= () =>{
+    var currentSongs = this.state.openPlaylist;
+    var idSongs = currentSongs.map(v=>v.id);
+    var currentSong = idSongs.indexOf(this.state.idActiveSong);
+    if(currentSongs[currentSong+1]!=undefined){
+      this.cambiaSource(currentSongs[currentSong+1]);
+    }
+  }
+
+  previousSong = () =>{
+    var currentSongs = this.state.openPlaylist;
+    var idSongs = currentSongs.map(v=>v.id);
+    var currentSong = idSongs.indexOf(this.state.idActiveSong);
+    if(currentSong-1>=0){
+      this.cambiaSource(currentSongs[currentSong-1]);
+    }
+  }
+
 
   //Tipo codificado con números, 0=Songs, 1=Artists, 2=Categories, 3=Albums, 4=Podcasts, 5=Usernames
   cambiaSearch = (tipoSearch) => {
@@ -205,6 +301,7 @@ class App extends Component{
           busquedaSearch: this.state.busqueda,
           tipoContent: "search",
           modifyContent: '0',
+          openPlaylistId:'',
         });
       }else{
         alert("Error "+response.detail);
@@ -458,6 +555,7 @@ class App extends Component{
       current_active: posicion,
       active:actives,
       modifyContent: '0',
+      openPlaylistId:'',
     });
     switch(tipoEspecifico){
       case "playlists":
@@ -477,8 +575,68 @@ class App extends Component{
         this.fetchPlaylists();
         break;
       case "playlistContent":
-      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        fetch(url, {
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+          method: 'GET',
+        })
+        .then(res => res.json())
+        .then(response => {
+          if (response.id) {
+            var Songs = response.songs;
+            var sortedSongs = Songs.sort(function(a,b){
+              return (a.title).localeCompare(b.title);
+            });
+            this.setState({
+              openPlaylist:sortedSongs,
+              openPlaylistId:response.id,
+              openPlaylistName:response.name,
+              tipoContent:tipo,
+              contentList:response.songs,
+            });
+          }else{
+            alert("There was an error");
+          }
+        });
+        break;
+      default:
+        break;
+    }
+  }
 
+  cambiaSource = (newSrc) => {
+    this.setState({
+      src: '',
+    });
+    this.setState({
+      idActiveSong:newSrc.id,
+      src: newSrc.stream_url,
+      title: newSrc.title,
+      author: newSrc.album.artist.name,
+      album: newSrc.album.name,
+      rating: newSrc.avg_valoration,
+    });
+  }
+
+  cambiaSourcePlaylist = (newSrc,idPL) =>{
+    if(idPL<0){
+      this.setState({
+        src: '',
+      });
+      this.setState({
+        idActiveSong:newSrc.id,
+        src: newSrc.stream_url,
+        title: newSrc.title,
+        author: newSrc.album.artist.name,
+        album: newSrc.album.name,
+        rating: newSrc.avg_valoration,
+        playingPlaylist:1,
+      });
+    }else{
+      this.setState({
+        src: '',
+      });
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+idPL+'/';
       fetch(url, {
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
         method: 'GET',
@@ -486,28 +644,34 @@ class App extends Component{
       .then(res => res.json())
       .then(response => {
         if (response.id) {
+          var Songs = response.songs;
+          var sortedSongs = Songs.sort(function(a,b){
+            return (a.title).localeCompare(b.title);
+          });
           this.setState({
-            openPlaylist:response.songs,
-            openPlaylistId:response.id,
-            openPlaylistName:response.name,
-            tipoContent:tipo,
-            contentList:response.songs,
+            openPlaylist:sortedSongs,
+            idActiveSong:sortedSongs[0].id,
+            src: sortedSongs[0].stream_url,
+            title: sortedSongs[0].title,
+            author: sortedSongs[0].album.artist.name,
+            album: sortedSongs[0].album.name,
+            rating: sortedSongs[0].avg_valoration,
+            playingPlaylist:1,
           });
         }else{
           alert("There was an error");
         }
       });
-      break;
     }
   }
 
-  cambiaSource = (newSrc) => {
+  emptySource = () => {
     this.setState({
-      src: newSrc.stream_url,
-      title: newSrc.title,
-      author: newSrc.album.artist.name,
-      album: newSrc.album.name,
-      rating: newSrc.avg_valoration,
+      src: '',
+      title: '',
+      author: '',
+      album: '',
+      rating: '',
     });
   }
 

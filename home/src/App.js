@@ -10,6 +10,10 @@ import 'font-awesome/css/font-awesome.min.css';
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 
+//Sleep function from "https://flaviocopes.com/javascript-sleep/"
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
 class App extends Component{
   constructor(props){
@@ -52,10 +56,12 @@ class App extends Component{
       idActiveSong:'',
       playingPlaylist:'',
       playingPlaylistLoop:'',
+      playingPlaylistShuffled:'',
 
       forceAutoplay:'',
       debug:'1',
     }
+    this.player=React.createRef();
     this.getUser();
   }
 
@@ -117,7 +123,7 @@ class App extends Component{
               <div className="d-flex flex-row-reverse">
               <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -136,8 +142,8 @@ class App extends Component{
               </div>
               <div className="col-sm-8">
                 {this.state.forceAutoplay
-                  ?<><AudioPlayer autoPlay className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong}  onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
-                  :<AudioPlayer autoPlayAfterSrcChange className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
+                  ?<><AudioPlayer id="audioplayer" ref={this.player} autoPlay className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong}  onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
+                  :<AudioPlayer id="audioplayer" ref={this.player} autoPlayAfterSrcChange className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
                 }
                 
               </div>
@@ -153,17 +159,17 @@ class App extends Component{
       var currentSongs = this.state.openPlaylist;
       var idSongs = currentSongs.map(v=>v.id);
       var finishedSong = idSongs.indexOf(this.state.idActiveSong);
-      if(currentSongs[finishedSong+1]==undefined){
-        if(this.state.playingPlaylistLoop)this.cambiaSource(currentSongs[0]);
+      if(currentSongs[finishedSong+1]===undefined){
+        if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSource(currentSongs[0],1);
       }else{
-        this.cambiaSource(currentSongs[finishedSong+1]);
+        this.cambiaSource(currentSongs[finishedSong+1],1);
       }
     }
   }
 
   setPlaylistLoop = () =>{
     if(this.state.playingPlaylistLoop){
-      if(this.state.playingPlaylistLoop==this.state.openPlaylistId){
+      if(this.state.playingPlaylistLoop===this.state.openPlaylistId){
         this.setState({
           playingPlaylistLoop:'',
         });
@@ -179,20 +185,51 @@ class App extends Component{
     }
   }
 
+  shufflePlaylist = () =>{
+    var Songs,sortedSongs;
+    if(this.state.playingPlaylistShuffled){
+      if(this.state.playingPlaylistShuffled===this.state.openPlaylistId){
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.title).localeCompare(b.title);
+        });
+        this.setState({
+          openPlaylist:sortedSongs,
+          playingPlaylistShuffled:'',
+        });
+      }else{
+        var oldPlaylist = this.state.openPlaylist;
+        var newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+        this.setState({
+          playingPlaylistShuffled: this.state.openPlaylistId,
+          openPlaylist:newShuffledPlaylist,
+        });
+      }
+    }else{
+      var oldPlaylist = this.state.openPlaylist;
+      var newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+      this.setState({
+        playingPlaylistShuffled:this.state.openPlaylistId,
+        openPlaylist:newShuffledPlaylist,
+      });
+    }
+  }
+
   playPlaylist = () =>{
-    if(this.state.openPlaylist[0]!=undefined){
+    if(this.state.openPlaylist[0]!==undefined){
       this.setState({
         playingPlaylist:1,
       });
-      this.cambiaSource(this.state.openPlaylist[0]);
+      this.cambiaSource(this.state.openPlaylist[0],1);
     }
   }
 
   sortPlaylist = (mode) =>{
+    var Songs,sortedSongs;
     switch(mode){
       case 0: //title
-        var Songs = this.state.openPlaylist;
-        var sortedSongs = Songs.sort(function(a,b){
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
           return (a.title).localeCompare(b.title);
         });
         this.setState({
@@ -200,8 +237,8 @@ class App extends Component{
         });
         break;
       case 1: //artist
-        var Songs = this.state.openPlaylist;
-        var sortedSongs = Songs.sort(function(a,b){
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
           return (a.album.artist.name).localeCompare(b.album.artist.name);
         });
         this.setState({
@@ -209,8 +246,8 @@ class App extends Component{
         });
         break;
       case 2: //genre
-        var Songs = this.state.openPlaylist;
-        var sortedSongs = Songs.sort(function(a,b){
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
           return (a.genre).localeCompare(b.genre);
         });
         this.setState({
@@ -226,8 +263,8 @@ class App extends Component{
     var currentSongs = this.state.openPlaylist;
     var idSongs = currentSongs.map(v=>v.id);
     var currentSong = idSongs.indexOf(this.state.idActiveSong);
-    if(currentSongs[currentSong+1]!=undefined){
-      this.cambiaSource(currentSongs[currentSong+1]);
+    if(currentSongs[currentSong+1]!==undefined){
+      this.cambiaSource(currentSongs[currentSong+1],1);
     }
   }
 
@@ -236,7 +273,7 @@ class App extends Component{
     var idSongs = currentSongs.map(v=>v.id);
     var currentSong = idSongs.indexOf(this.state.idActiveSong);
     if(currentSong-1>=0){
-      this.cambiaSource(currentSongs[currentSong-1]);
+      this.cambiaSource(currentSongs[currentSong-1],1);
     }
   }
 
@@ -467,8 +504,33 @@ class App extends Component{
   }
 
   userRating = (rate) =>{
-    alert(rate);
-    //Por implementar
+    var song={
+      "user_valoration":rate,
+    };
+
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/songs/'+this.state.idActiveSong+'/', {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'PUT',
+      body: JSON.stringify (
+        song
+      )     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.id) {
+      
+        var currentSongs = this.state.openPlaylist;
+        var idSongs = currentSongs.map(v=>v.id);
+        var posId = idSongs.indexOf(response.id);
+        currentSongs[posId]=response;
+        this.setState({
+          openPlaylist:currentSongs,
+          rating: response.avg_valoration,
+        });
+      }else{
+        alert("There was an error");
+      }
+    })
   }
 
   getUser = () =>{
@@ -588,6 +650,7 @@ class App extends Component{
               return (a.title).localeCompare(b.title);
             });
             this.setState({
+              shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
               openPlaylistId:response.id,
               openPlaylistName:response.name,
@@ -604,18 +667,34 @@ class App extends Component{
     }
   }
 
-  cambiaSource = (newSrc) => {
+  cambiaSource = (newSrc,isPlaylist) => {
     this.setState({
       src: '',
     });
-    this.setState({
-      idActiveSong:newSrc.id,
-      src: newSrc.stream_url,
-      title: newSrc.title,
-      author: newSrc.album.artist.name,
-      album: newSrc.album.name,
-      rating: newSrc.avg_valoration,
-    });
+    if(isPlaylist<0){
+      sleep(5).then(() => {
+        this.setState({
+          idActiveSong:newSrc.id,
+          src: newSrc.stream_url,
+          title: newSrc.title,
+          author: newSrc.album.artist.name,
+          album: newSrc.album.name,
+          rating: newSrc.avg_valoration,
+          playingPlaylist:0,
+        })
+      })
+    }else{
+      sleep(5).then(() => {
+        this.setState({
+          idActiveSong:newSrc.id,
+          src: newSrc.stream_url,
+          title: newSrc.title,
+          author: newSrc.album.artist.name,
+          album: newSrc.album.name,
+          rating: newSrc.avg_valoration,
+        });
+      })
+    }
   }
 
   cambiaSourcePlaylist = (newSrc,idPL) =>{
@@ -623,15 +702,35 @@ class App extends Component{
       this.setState({
         src: '',
       });
-      this.setState({
-        idActiveSong:newSrc.id,
-        src: newSrc.stream_url,
-        title: newSrc.title,
-        author: newSrc.album.artist.name,
-        album: newSrc.album.name,
-        rating: newSrc.avg_valoration,
-        playingPlaylist:1,
-      });
+      if(newSrc.id){
+        sleep(5).then(() => {
+          this.setState({
+            idActiveSong:newSrc.id,
+            src: newSrc.stream_url,
+            title: newSrc.title,
+            author: newSrc.album.artist.name,
+            album: newSrc.album.name,
+            rating: newSrc.avg_valoration,
+            playingPlaylist:1,
+          });
+        });
+      }else{
+        if(newSrc<0){
+          ;
+        }else{
+          sleep(5).then(() => {
+            this.setState({
+              idActiveSong:this.state.openPlaylist[0].id,
+              src: this.state.openPlaylist[0].stream_url,
+              title: this.state.openPlaylist[0].title,
+              author: this.state.openPlaylist[0].album.artist.name,
+              album: this.state.openPlaylist[0].album.name,
+              rating: this.state.openPlaylist[0].avg_valoration,
+              playingPlaylist:1,
+            });
+          });
+        }
+      }
     }else{
       this.setState({
         src: '',
@@ -644,20 +743,22 @@ class App extends Component{
       .then(res => res.json())
       .then(response => {
         if (response.id) {
-          var Songs = response.songs;
-          var sortedSongs = Songs.sort(function(a,b){
-            return (a.title).localeCompare(b.title);
-          });
-          this.setState({
-            openPlaylist:sortedSongs,
-            idActiveSong:sortedSongs[0].id,
-            src: sortedSongs[0].stream_url,
-            title: sortedSongs[0].title,
-            author: sortedSongs[0].album.artist.name,
-            album: sortedSongs[0].album.name,
-            rating: sortedSongs[0].avg_valoration,
-            playingPlaylist:1,
-          });
+          if(response.songs[0]!==undefined){
+            var Songs = response.songs;
+            var sortedSongs = Songs.sort(function(a,b){
+              return (a.title).localeCompare(b.title);
+            });
+            this.setState({
+              openPlaylist:sortedSongs,
+              idActiveSong:sortedSongs[0].id,
+              src: sortedSongs[0].stream_url,
+              title: sortedSongs[0].title,
+              author: sortedSongs[0].album.artist.name,
+              album: sortedSongs[0].album.name,
+              rating: sortedSongs[0].avg_valoration,
+              playingPlaylist:1,
+            });
+          }
         }else{
           alert("There was an error");
         }

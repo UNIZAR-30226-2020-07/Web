@@ -5,9 +5,9 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faSortAlphaDown } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faTrashRestore } from "@fortawesome/free-solid-svg-icons";
+import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -43,6 +43,7 @@ class Content extends Component {
 
       currentPL:this.props.currentPlaylist,
       loopingPL:this.props.loopingPlaylist,
+      shuffledPL:this.props.shuffledPlaylist,
 
     };
   };
@@ -61,6 +62,7 @@ class Content extends Component {
         previous: nextProps.hayPrev,
         currentPL:nextProps.currentPlaylist,
         loopingPL:nextProps.loopingPlaylist,
+        shuffledPL:nextProps.shuffledPlaylist,
       })
     }
   }
@@ -191,7 +193,7 @@ class Content extends Component {
                               <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
                               <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
                               <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon icon={faPlus}/></div>
-                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item)}><FontAwesomeIcon icon={faPlay}/></div>
+                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item,-1)}><FontAwesomeIcon icon={faPlay}/></div>
                             </div>
                           ))}
                           <div className="d-flex justify-content-center">
@@ -286,16 +288,21 @@ class Content extends Component {
             <div className="row d-flex justify-content-between" >
               <div className="readable-text" onClick={() => this.props.cambiaModo("playlists",1)}>Go back</div>
               <div className="d-flex flex-row-reverse">
-                <button onClick={this.props.playPlaylist}><FontAwesomeIcon icon={faPlay}/></button>
+                <button onClick={() => this.props.cambiaCancionPlaylist(-1,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.deleting
                   ?<><button onClick={this.confirmDelSongs}><FontAwesomeIcon icon={faCheck}/></button></>
                   :<button onClick={this.selectDelPlaylist}><FontAwesomeIcon icon={faMinus}/></button>
                 }
-                {this.state.currentPL == this.state.loopingPL
+                {this.state.currentPL === this.state.loopingPL
                   ?<><button className="toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
                 <button><DropdownSort cambiaOrden={this.props.cambiaOrden}/></button>
+                
+                {this.state.currentPL === this.state.shuffledPL
+                  ?<><button className="toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
+                  :<button onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button>
+                }
               </div>
             </div>
 

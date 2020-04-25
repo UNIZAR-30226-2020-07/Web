@@ -58,6 +58,8 @@ class App extends Component{
       playingPlaylist:'',
       playingPlaylistLoop:'',
       playingPlaylistShuffled:'',
+      nuevo_nombre:'',
+      playlist_editar:'',
 
       forceAutoplay:'',
       debug:'1',
@@ -122,9 +124,9 @@ class App extends Component{
             </div>
             <div className="col-sm-10 full-height scrollable">
               <div className="d-flex flex-row-reverse">
-              <button onClick={() => this.createNewPlaylist("prueba")}>add prueba</button>
+              <button onClick={() => this.createNewPlaylist("prueba",0)}>add prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -406,27 +408,54 @@ class App extends Component{
     }
   }
 
+  //  Option = 1 -> change name
+  //  Option = 0 -> create
+  createNewPlaylist = (name,option) =>{
+    switch(option){
+      case 0:
+        var playlist={
+          "name":name,
+          "songs":[],
+        };
+    
+        fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/', {
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+          method: 'POST',
+          body: JSON.stringify (
+            playlist
+          )     
+        })
+        .then(res => res.json())
+        .then(response => {
+          if (response.id) {
+            this.fetchPlaylists();
+          }else{
+            alert("There was an error");
+          }
+        })
+        break;
 
-  createNewPlaylist = (name) =>{
-    var playlist={
-      "name":name,
-      "songs":[],
-    };
+      case 1:
+        var url = 'https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'
+        url = url + this.state.playlist_aeditar+'/'
+        fetch(url, {
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+          method: 'PATCH',
+          body: JSON.stringify (
+            {"name":name}
+          )     
+        })
+        break;
 
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/', {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-      method: 'POST',
-      body: JSON.stringify (
-        playlist
-      )     
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.id) {
-        this.fetchPlaylists();
-      }else{
-        alert("There was an error");
-      }
+      default:
+        break;
+    }
+    
+  }
+
+  setEditingPlaylist = (p_editar) =>{
+    this.setState({
+      playlist_editar: p_editar,
     })
   }
 

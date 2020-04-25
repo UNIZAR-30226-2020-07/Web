@@ -7,6 +7,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faTrashRestore } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -44,7 +45,7 @@ class Content extends Component {
       currentPL:this.props.currentPlaylist,
       loopingPL:this.props.loopingPlaylist,
       shuffledPL:this.props.shuffledPlaylist,
-
+      id_edited_playlist:this.props.editing_playlist,
     };
   };
 
@@ -63,6 +64,7 @@ class Content extends Component {
         currentPL:nextProps.currentPlaylist,
         loopingPL:nextProps.loopingPlaylist,
         shuffledPL:nextProps.shuffledPlaylist,
+        id_edited_playlist:nextProps.editing_playlist,
       })
     }
   }
@@ -155,7 +157,7 @@ class Content extends Component {
 
   confirmNewPlaylist = () =>{
     if(this.state.newTitle){
-      this.props.createPlaylist(this.state.newTitle);
+      this.props.createPlaylist(this.state.newTitle,0);
       this.setState({
         showAddPlaylist:'',
         newTitle:'',
@@ -246,6 +248,11 @@ class Content extends Component {
               <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
               <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
             </div>
+
+            {/* ESTA FUNCION LO QUE HACE ES VER SI TENEMOS EN EL ESTADO "showAddPlaylist" Y SI ES ASI
+                LO QUE HACE ES IMPRIMIR POR ROWS LOS CAMPOS PARA CREAR UNA PLAYLIST NUEVA
+                
+                ? ES EL TRUE Y LOS : ES EL FALSE*/}
             {this.state.showAddPlaylist
               ?<> <div className="row print-playlist" style={{marginBottom:35}}>
                     <div className="col-lg-1 list-element d-flex justify-content-center">Playlist</div>
@@ -258,10 +265,12 @@ class Content extends Component {
             }
             {this.state.contenido
               ?<>{this.state.contenido.map((item,index)=>(
-                <div className="row the-fine-printing" key={index} item={item}>                              
-                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>Icono</div>
-                  <div className="col-lg-5 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
-                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{this.state.username}</div>
+                <div className="row the-fine-printing" key={index} item={item}> 
+                {item.id===this.state.id_edited_playlist
+                ? <><div>HE FUSILAO</div></>
+                :<> <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>Icono</div>
+<div className="col-lg-4 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
+                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.editNamePlaylist(item.id)}><FontAwesomeIcon icon={faEdit}/></div>                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{this.state.username}</div>
                   {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
                       ?<>
@@ -273,9 +282,8 @@ class Content extends Component {
                       }
                     </>
                     :<><div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(0,item.id)}><FontAwesomeIcon icon={faPlay}/></div></>
-                  }
-                  
-                </div>
+                  } </>                                           
+                }</div>
               ))}</>
               :<div></div>
             }

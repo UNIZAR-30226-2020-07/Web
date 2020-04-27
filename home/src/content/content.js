@@ -10,6 +10,10 @@ import { faTrashRestore } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faMusic } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -65,7 +69,14 @@ class Content extends Component {
         loopingPL:nextProps.loopingPlaylist,
         shuffledPL:nextProps.shuffledPlaylist,
         id_edited_playlist:nextProps.editing_playlist,
-      })
+      });
+      if(nextProps.tipo != "playlists"){
+        this.setState({
+          showAddPlaylist:'',
+          newTitle:'',
+          id_edited_playlist:'',
+        });
+      }
     }
   }
 
@@ -84,24 +95,28 @@ class Content extends Component {
   };
 
   addSongToPlaylist = (Playlist) =>{
-    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+Playlist.id+'/';
-    Playlist.songs.push(this.state.songToAdd);
-
-    var Newplaylist={
-      "name":Playlist.name,
-      "songs":Playlist.songs,
-    };
-
-    fetch(url, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-      method: 'PUT',
-      body: JSON.stringify (
-        Newplaylist
-      )     
-    })
-    .then(() => {
-      this.closeModal();
-    })
+    if(Playlist.songs.indexOf(this.state.songToAdd)==-1){
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+Playlist.id+'/';
+      Playlist.songs.push(this.state.songToAdd);
+  
+      var Newplaylist={
+        "name":Playlist.name,
+        "songs":Playlist.songs,
+      };
+  
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'PUT',
+        body: JSON.stringify (
+          Newplaylist
+        )     
+      })
+      .then(() => {
+        this.closeModal();
+      })
+    }else{
+      document.getElementById("textoError").textContent = "This song already exists in this playlist";
+    }
   }
 
   addPlaylist = () =>{
@@ -162,6 +177,11 @@ class Content extends Component {
         showAddPlaylist:'',
         newTitle:'',
       });
+    }else{
+      this.setState({
+        showAddPlaylist:'',
+        newTitle:'',
+      });
     }
   }
 
@@ -186,16 +206,16 @@ class Content extends Component {
                           {this.state.contenido.map((item,index)=>(
                             <div className="row the-fine-printing" key={index} item={item}>
                               {item.episode
-                                ?<><div className="col-lg-1 list-element d-flex justify-content-center">Podcast</div></>
-                                :<div className="col-lg-1 list-element d-flex justify-content-center">Song</div>
+                                ?<><div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div></>
+                                :<div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
                               }
                               
                               <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
                               <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
                               <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
                               <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
-                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon icon={faPlus}/></div>
-                              <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item,-1)}><FontAwesomeIcon icon={faPlay}/></div>
+                              <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
+                              <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
                             </div>
                           ))}
                           <div className="d-flex justify-content-center">
@@ -218,14 +238,15 @@ class Content extends Component {
             
             <Modal open={this.state.showAddSong} onClose={this.closeModal} showCloseIcon={false} center>
               <div className="custom-modal">
-              <p className="readable-text">Your playlists: </p>
+              <div className="row d-flex justify-content-between" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Your playlists: </p><FontAwesomeIcon className="visible-icon fa-2x" icon={faTimes} onClick={this.closeModal}/></div>
                 {this.state.playlists
                   ?<>{this.state.playlists.map((item,index)=>(
                       <div className="row d-flex justify-content-between print-modal" key={index} item={item}>
                         <div className="col-lg-9 list-element">{item.name}</div>
-                        <div className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addSongToPlaylist(item)}><FontAwesomeIcon icon={faPlus}/></div>                 
+                        <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addSongToPlaylist(item)}><FontAwesomeIcon icon={faPlus}/></button>                 
                       </div>
-                    ))}</>
+                    ))}
+                    <div id="textoError" className="readable-text d-flex justify-content-center"></div></>
                     :<div></div>
                 }
               </div>
@@ -268,20 +289,20 @@ class Content extends Component {
                 <div className="row the-fine-printing" key={index} item={item}> 
                 {item.id===this.state.id_edited_playlist
                 ? <><div>HE FUSILAO</div></>
-                :<> <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>Icono</div>
-<div className="col-lg-4 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
-                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.editNamePlaylist(item.id)}><FontAwesomeIcon icon={faEdit}/></div>                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{this.state.username}</div>
+                :<> <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
+                  <div className="col-lg-4 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
+                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.editNamePlaylist(item.id)}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></div>                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{this.state.username}</div>
                   {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
                       ?<>
-                        <div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon icon={faTrashRestore}/></div>
+                        <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button>
                       </>
                       :<>
-                       <div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon icon={faTrash}/></div>
+                       <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button>
                       </>
                       }
                     </>
-                    :<><div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(0,item.id)}><FontAwesomeIcon icon={faPlay}/></div></>
+                    :<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(0,item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></>
                   } </>                                           
                 }</div>
               ))}</>
@@ -325,8 +346,8 @@ class Content extends Component {
             {this.state.contenido.map((item,index)=>(
               <div className="row the-fine-printing" key={index} item={item}>
                 {item.episode
-                  ?<><div className="col-lg-1 list-element d-flex justify-content-center">Podcast</div></>
-                  :<div className="col-lg-1 list-element d-flex justify-content-center">Song</div>
+                  ?<><div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div></>
+                  :<div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
                 }           
                 <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
                 <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
@@ -335,15 +356,15 @@ class Content extends Component {
                 {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
                       ?<>
-                        <div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon icon={faTrashRestore}/></div>
+                        <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button>
                       </>
                       :<>
-                       <div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon icon={faTrash}/></div>
+                       <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button>
                       </>
                       }
                     </>
                     :<>
-                    <div className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(item,-1)}><FontAwesomeIcon icon={faPlay}/></div>
+                    <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(item,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
                 </>
                 }
               </div>

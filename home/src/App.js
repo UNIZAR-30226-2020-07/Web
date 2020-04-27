@@ -44,8 +44,7 @@ class App extends Component{
       author: '',
       album: '',
       rating: '',
-      userAux: '',
-      passAux:'',
+      userRated: '',
 
       username:'',
       userId:'',
@@ -116,7 +115,7 @@ class App extends Component{
                 <li className={settingsClass} onClick={() => this.cambiaActive(3)}>My account</li>
                 <li className="distance readable-text">Log out</li>
                 {this.state.debug === '1'
-                  ? <><input className="form-control" type="search" placeholder="User/Email" value={this.state.userAux} onChange={this.getUserAux} aria-label="Search"></input><input className="form-control" type="search" placeholder="Password" value={this.state.passAux} onChange={this.getPassAux} aria-label="Search"></input><button onClick={this.loginTest}>Search</button></>
+                  ? <><button onClick={this.registerDebug}>Registro automático</button><button onClick={this.loginDebug}>Login automático</button></>
                   : <p></p>
                 }
                 <p>{this.state.username}</p>
@@ -124,9 +123,9 @@ class App extends Component{
             </div>
             <div className="col-sm-10 full-height scrollable">
               <div className="d-flex flex-row-reverse">
-              <button onClick={() => this.createNewPlaylist("prueba",0)}>add prueba</button>
+              <button onClick={() => this.createPlaylist("prueba",0)}>add prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createNewPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -138,9 +137,15 @@ class App extends Component{
                 <div className="readable-text">{this.state.title}</div>
                 <div className="readable-text">{this.state.author}</div>
                 <div className="readable-text">{this.state.album}</div>
-                {this.state.title
-                  ?<div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.rating} onChange={(rate) => this.userRating(rate)}/></div>
-                  :<div></div>
+                {this.state.userRated
+                  ?<>{this.state.title
+                    ?<div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.userRated} onChange={(rate) => this.userRating(rate)}/></div>
+                    :<div></div>
+                  }</>
+                  :<>{this.state.title
+                    ?<div className="readable-text"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={this.state.rating} onChange={(rate) => this.userRating(rate)}/></div>
+                    :<div></div>
+                  }</>
                 }
               </div>
               <div className="col-sm-8">
@@ -410,7 +415,7 @@ class App extends Component{
 
   //  Option = 1 -> change name
   //  Option = 0 -> create
-  createNewPlaylist = (name,option) =>{
+  createPlaylist = (name,option) =>{
     switch(option){
       case 0:
         var playlist={
@@ -437,13 +442,21 @@ class App extends Component{
 
       case 1:
         var url = 'https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'
-        url = url + this.state.playlist_aeditar+'/'
+        url = url + this.state.playlist_editar+'/'
         fetch(url, {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
           method: 'PATCH',
           body: JSON.stringify (
             {"name":name}
           )     
+        })
+        .then(res => res.json())
+        .then(response => {
+          if (response.id) {
+            this.fetchPlaylists();
+          }else{
+            alert("There was an error");
+          }
         })
         break;
 
@@ -556,6 +569,7 @@ class App extends Component{
         this.setState({
           openPlaylist:currentSongs,
           rating: response.avg_valoration,
+          userRated:rate,
         });
       }else{
         alert("There was an error");
@@ -595,46 +609,43 @@ class App extends Component{
     })
   }
 
-  getUserAux = (string) =>{
-    this.setState({
-      userAux: string.target.value
-    });
-  }
-  getPassAux = (string) =>{
-    this.setState({
-      passAux: string.target.value
-    });
-  }
-
-  loginTest = (email,password) =>{
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
+  registerDebug = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/', {
+      headers: {'Content-Type': 'application/json'},
       method: 'POST',
       body: JSON.stringify ({
-        "username": '',
-        "email":this.state.userAux,
-        "password": this.state.passAux
-      })     
+          "username": "prueba",
+          "email": "rogerjunior1999@yahoo.com",
+          "password1": "Contraseña1",
+          "password2": "Contraseña1"
+      })  
     })
     .then(res => res.json())
     .then(response => {
       if (response.key) {
         window.localStorage.setItem('keyMusicApp',response.key);
-        alert(response.key);
-      }else{
-        if(response.username){
-          alert(response.username);
-        }
-        if(response.email){
-          alert(response.email);
-        }
-        if(response.password){
-          alert(response.password);
-        }
+        window.location.reload();
       }
+    });
+  }
+
+  loginDebug = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify ({
+        "username": "prueba",
+        "email": '',
+        "password": "Contraseña1"
+      })  
     })
+    .then(res => res.json())
+    .then(response => {
+      if (response.key) {
+        window.localStorage.setItem('keyMusicApp',response.key);
+        window.location.reload();
+      }
+    });
   }
 
   cambiaActive = (posicion) => {
@@ -686,6 +697,7 @@ class App extends Component{
               openPlaylistName:response.name,
               tipoContent:tipo,
               contentList:response.songs,
+              playlist_editar:'', 
             });
           }else{
             alert("There was an error");
@@ -710,6 +722,7 @@ class App extends Component{
           author: newSrc.album.artist.name,
           album: newSrc.album.name,
           rating: newSrc.avg_valoration,
+          userRated: newSrc.user_valoration,
           playingPlaylist:0,
         })
       })
@@ -722,13 +735,16 @@ class App extends Component{
           author: newSrc.album.artist.name,
           album: newSrc.album.name,
           rating: newSrc.avg_valoration,
+          userRated: newSrc.user_valoration,
         });
       })
     }
   }
 
   cambiaSourcePlaylist = (newSrc,idPL) =>{
-    if(idPL<0){
+    if(newSrc<0){
+      ;
+    }else if(idPL<0){
       this.setState({
         src: '',
       });
@@ -741,6 +757,7 @@ class App extends Component{
             author: newSrc.album.artist.name,
             album: newSrc.album.name,
             rating: newSrc.avg_valoration,
+            userRated: newSrc.user_valoration,
             playingPlaylist:1,
           });
         });
@@ -756,15 +773,13 @@ class App extends Component{
               author: this.state.openPlaylist[0].album.artist.name,
               album: this.state.openPlaylist[0].album.name,
               rating: this.state.openPlaylist[0].avg_valoration,
+              userRated: this.state.openPlaylist[0].user_valoration,
               playingPlaylist:1,
             });
           });
         }
       }
     }else{
-      this.setState({
-        src: '',
-      });
       var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+idPL+'/';
       fetch(url, {
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
@@ -774,6 +789,9 @@ class App extends Component{
       .then(response => {
         if (response.id) {
           if(response.songs[0]!==undefined){
+            this.setState({
+              src: '',
+            });
             var Songs = response.songs;
             var sortedSongs = Songs.sort(function(a,b){
               return (a.title).localeCompare(b.title);
@@ -786,6 +804,7 @@ class App extends Component{
               author: sortedSongs[0].album.artist.name,
               album: sortedSongs[0].album.name,
               rating: sortedSongs[0].avg_valoration,
+              userRated: sortedSongs[0].user_valoration,
               playingPlaylist:1,
             });
           }
@@ -806,6 +825,9 @@ class App extends Component{
     });
   }
 
+
+
+  
 }
 
 export default App;

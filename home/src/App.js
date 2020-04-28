@@ -16,15 +16,29 @@ const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
+/*
+window.onbeforeunload = function (event) {
+  this.updatePausedSong();
+  var message = 'Important: Please click on \'Save\' button to leave this page.';
+  if (typeof event == 'undefined') {
+      event = window.event;
+  }
+  if (event) {
+      event.returnValue = message;
+  }
+  return message;
+};
+*/
+
 class App extends Component{
   constructor(props){
     super(props);
     this.state={
       key: window.localStorage.keyMusicApp,
-      tipoContent: '', //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends", "settings")
+      tipoContent: "playlists", //Se asigna el tipo de lista ("search", "playlists", "playlistContent", "podcasts", "podcastContent", "friends", "settings")
 
       contentList:'',
-      modifyContent: '', //Dejar vacío para que no muestre nada
+      modifyContent: 1, //Dejar vacío para que no muestre nada
       contentName:'',
 
       activeSearch : ' Look for... ',
@@ -46,9 +60,12 @@ class App extends Component{
       rating: '',
       userRated: '',
 
+      firstLoad:'1',
+      pausedSong:'',
+      pausedSecond:'',
       username:'',
       userId:'',
-      userPlaylist:'',
+      userPlaylist:[],
       openPlaylist:[],
       openPlaylistId:'',
       openPlaylistName:'',
@@ -61,10 +78,12 @@ class App extends Component{
       playlist_editar:'',
 
       forceAutoplay:'',
+      update:'',
       debug:'1',
     }
     this.player=React.createRef();
     this.getUser();
+    this.fetchPlaylists();
   }
 
   render(){
@@ -149,9 +168,9 @@ class App extends Component{
                 }
               </div>
               <div className="col-sm-8">
-                {this.state.forceAutoplay
-                  ?<><AudioPlayer id="audioplayer" ref={this.player} autoPlay className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong}  onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
-                  :<AudioPlayer id="audioplayer" ref={this.player} autoPlayAfterSrcChange className="full-height" src={this.state.src} showSkipControls={true} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
+                {this.state.firstLoad
+                  ?<><AudioPlayer id="audioplayer" ref={this.player} autoPlayAfterSrcChange className="full-height" src={this.state.src} showSkipControls={true} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong}  onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
+                  :<AudioPlayer id="audioplayer" ref={this.player} autoPlay className="full-height" src={this.state.src} showSkipControls={true} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
                 }
                 
               </div>
@@ -194,7 +213,7 @@ class App extends Component{
   }
 
   shufflePlaylist = () =>{
-    var Songs,sortedSongs;
+    var Songs,sortedSongs,oldPlaylist,newShuffledPlaylist;
     if(this.state.playingPlaylistShuffled){
       if(this.state.playingPlaylistShuffled===this.state.openPlaylistId){
         Songs = this.state.openPlaylist;
@@ -206,16 +225,16 @@ class App extends Component{
           playingPlaylistShuffled:'',
         });
       }else{
-        var oldPlaylist = this.state.openPlaylist;
-        var newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+        oldPlaylist = this.state.openPlaylist;
+        newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
         this.setState({
           playingPlaylistShuffled: this.state.openPlaylistId,
           openPlaylist:newShuffledPlaylist,
         });
       }
     }else{
-      var oldPlaylist = this.state.openPlaylist;
-      var newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+      oldPlaylist = this.state.openPlaylist;
+      newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
       this.setState({
         playingPlaylistShuffled:this.state.openPlaylistId,
         openPlaylist:newShuffledPlaylist,
@@ -594,10 +613,12 @@ class App extends Component{
           userId:response.id,
           userPlaylist:response.playlists,
         });
-        if(response.pause_song){
+        if(response.pause_song && this.state.firstLoad){
           this.setState({
+            pausedSecond:response.pause_second,
             forceAutoplay:'',
           });
+          this.cambiaSource(response.pause_song);
         }else{
           this.setState({
             forceAutoplay:'1',
@@ -814,9 +835,41 @@ class App extends Component{
       });
     }
   }
+  
+  updatePausedSong = () =>{
+    if(this.state.update){
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+      var currentSecond= Math.trunc(this.player.current.audio.current.currentTime);
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'PATCH',
+        body: JSON.stringify({
+          "pause_song":this.state.idActiveSong,
+          "pause_second":currentSecond,
+        })
+      });
+    }
+  }
+
+  setLastSong = () =>{
+    if(this.state.firstLoad){
+      this.player.current.audio.current.currentTime=this.state.pausedSecond;
+      this.setState({
+        firstLoad:'',
+        update:'',
+      });
+      this.player.current.audio.current.pause();
+      sleep(40).then(() => {
+        this.setState({
+          update:'1',
+        });
+      });
+    }
+  }
 
   emptySource = () => {
     this.setState({
+      idActiveSong:'',
       src: '',
       title: '',
       author: '',

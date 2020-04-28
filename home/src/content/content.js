@@ -70,7 +70,7 @@ class Content extends Component {
         shuffledPL:nextProps.shuffledPlaylist,
         id_edited_playlist:nextProps.editing_playlist,
       });
-      if(nextProps.tipo != "playlists"){
+      if(nextProps.tipo !== "playlists"){
         this.setState({
           showAddPlaylist:'',
           newTitle:'',
@@ -95,7 +95,7 @@ class Content extends Component {
   };
 
   addSongToPlaylist = (Playlist) =>{
-    if(Playlist.songs.indexOf(this.state.songToAdd)==-1){
+    if(Playlist.songs.indexOf(this.state.songToAdd)===-1){
       var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+Playlist.id+'/';
       Playlist.songs.push(this.state.songToAdd);
   

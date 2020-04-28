@@ -10,27 +10,19 @@ import 'font-awesome/css/font-awesome.min.css';
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 
-//HOLA RUGELIO BON GIORNOOOOOOOOOOOOOOOOOO
 //Sleep function from "https://flaviocopes.com/javascript-sleep/"
 const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-/*
-window.onbeforeunload = function (event) {
-  this.updatePausedSong();
-  var message = 'Important: Please click on \'Save\' button to leave this page.';
-  if (typeof event == 'undefined') {
-      event = window.event;
-  }
-  if (event) {
-      event.returnValue = message;
-  }
-  return message;
-};
-*/
-
 class App extends Component{
+
+  // Código de https://codesandbox.io/s/nw6x70xn7l?file=/src/index.js
+  onUnload = e => {
+    e.preventDefault();
+    this.updatePausedSong();
+  };
+
   constructor(props){
     super(props);
     this.state={
@@ -84,6 +76,11 @@ class App extends Component{
     this.player=React.createRef();
     this.getUser();
     this.fetchPlaylists();
+  }
+
+  // Código de https://codesandbox.io/s/nw6x70xn7l?file=/src/index.js
+  componentDidMount() {
+    window.addEventListener("beforeunload", this.onUnload);
   }
 
   render(){

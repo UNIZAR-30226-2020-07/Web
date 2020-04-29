@@ -35,7 +35,6 @@ class App extends Component{
 
       activeSearch : ' Look for... ',
       busqueda : '',
-      busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
       busquedaPreviousPage: '',
       busquedaNextPage: '',
       busquedaCount: '',
@@ -57,6 +56,7 @@ class App extends Component{
       pausedSecond:'',
       username:'',
       userId:'',
+      userFriends:[],
       userPlaylist:[],
       openPlaylist:[],
       openPlaylistId:'',
@@ -141,7 +141,7 @@ class App extends Component{
               <div className="d-flex flex-row-reverse">
               <button onClick={() => this.createPlaylist("prueba",0)}>add prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.activeSearch} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} addUser={this.addUser} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -336,7 +336,7 @@ class App extends Component{
         searchStatement = searchStatement+'&episode=true';
         break;
       case 5: //Buscamos usuarios con X username
-        //Completar
+        urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/users/';
         break;
       default:
         return 0;
@@ -352,7 +352,6 @@ class App extends Component{
     .then(response => {
       if(response.results){
         this.setState({
-          busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
           busquedaPreviousPage: response.previous,
           busquedaNextPage: response.next,
           busquedaCount: response.count,
@@ -383,7 +382,6 @@ class App extends Component{
       .then(response => {
         if(response.results){
           this.setState({
-            busquedaCurrentPage: 'https://ps-20-server-django-app.herokuapp.com/api/v1/songs/',
             busquedaPreviousPage: response.previous,
             busquedaNextPage: response.next,
             busquedaCount: response.count,
@@ -609,6 +607,7 @@ class App extends Component{
           contentName:response.username,
           userId:response.id,
           userPlaylist:response.playlists,
+          userFriends: response.friends,
         });
         if(response.pause_song && this.state.firstLoad){
           this.setState({
@@ -636,7 +635,7 @@ class App extends Component{
           "email": "rogerjunior1999@yahoo.com",
           "password1": "Contraseña1",
           "password2": "Contraseña1"
-      })  
+      })
     })
     .then(res => res.json())
     .then(response => {
@@ -666,6 +665,32 @@ class App extends Component{
     });
   }
 
+  addUser = (user) =>{
+    if(user.id===this.state.userId){
+      alert("You can't be your own friend");
+    }else{
+      var actualFriends= this.state.userFriends;
+      var idActualFriends = actualFriends.map(v=>v.id);
+      idActualFriends.push(user.id);
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'PATCH',
+        body: JSON.stringify({
+          "friends":idActualFriends,
+        })
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.id) {
+          this.setState({
+            userFriends:response.friends,
+          });
+        }
+      })
+    }
+  }
+
   cambiaActive = (posicion) => {
     var tipos = ["playlists","podcasts","friends","settings"]
     var tipoEspecifico = tipos[posicion];
@@ -681,6 +706,9 @@ class App extends Component{
     switch(tipoEspecifico){
       case "playlists":
         this.fetchPlaylists();
+        break;
+      case "friends":
+        this.cambiaMode("friends",0);
         break;
       default:
         this.setState({ 
@@ -721,6 +749,12 @@ class App extends Component{
             alert("There was an error");
           }
         });
+        break;
+      case "friends":
+          this.setState({
+              contentList:this.state.userFriends,
+              tipoContent:tipo,
+          });
         break;
       default:
         break;

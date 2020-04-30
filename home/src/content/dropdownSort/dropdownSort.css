@@ -1,0 +1,28 @@
+.dropdownSort {
+    position: relative;
+    display: inline-block;
+    background: #0a1a63;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 5px;
+    padding-left: 20px;
+    width:50px;
+    height:100%;
+}
+.custom-ul-sort {
+    list-style-type: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    right:40px;
+    width: 150px;
+    background-color: #0a1a63;
+    font-weight:bold;
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+}
+.custom-li:hover {
+    background-color: #e5e5e5;
+    color: black;
+}

@@ -173,13 +173,24 @@ class Content extends Component {
     });
   }
 
-  confirmNewPlaylist = () =>{
+  confirmNewPlaylist = (create) =>{
     if(this.state.newTitle){
-      this.props.createPlaylist(this.state.newTitle,0);
-      this.setState({
-        showAddPlaylist:'',
-        newTitle:'',
-      });
+      //Create == 1 -> crear playlist // create == 0 -> editar playlist
+      if(create === 1){
+        this.props.createPlaylist(this.state.newTitle,0);
+        this.setState({
+          showAddPlaylist:'',
+          newTitle:'',
+        });
+      }
+      else{
+        this.props.createPlaylist(this.state.newTitle,1);
+        this.props.editNamePlaylist('');
+        this.setState({
+          showAddPlaylist:'',
+          newTitle:'',
+        });
+      }
     }else{
       this.setState({
         showAddPlaylist:'',
@@ -325,7 +336,7 @@ class Content extends Component {
                     <div className="col-lg-1 list-element d-flex justify-content-center">Playlist</div>
                     <div className="col-lg-5 list-element d-flex justify-content-center">Insert new title:</div>
                     <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
-                    <div className="col-lg-2 list-element d-flex justify-content-center" onClick={this.confirmNewPlaylist}>Confirmar</div>
+                    <div className="col-lg-2 list-element d-flex justify-content-center" onClick={()=>this.confirmNewPlaylist(1)}>Confirmar</div>
                   </div>
               </>
               : <div></div>
@@ -334,7 +345,12 @@ class Content extends Component {
               ?<>{this.state.contenido.map((item,index)=>(
                 <div className="row the-fine-printing" key={index} item={item}> 
                 {item.id===this.state.id_edited_playlist
-                ? <><div>HE FUSILAO</div></>
+                ? <>
+                <div className="col-lg-1 list-element d-flex justify-content-center">Playlist</div>
+                <div className="col-lg-5 list-element d-flex justify-content-center">Insert new title:</div>
+                <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
+                <div className="col-lg-2 list-element d-flex justify-content-center" onClick={()=>this.confirmNewPlaylist(0)}>Confirmar</div>
+              </>
                 :<> <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                   <div className="col-lg-4 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
                   <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.editNamePlaylist(item.id)}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></div>                  <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{this.state.username}</div>

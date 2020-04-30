@@ -320,7 +320,7 @@ class App extends Component{
     var searchStatement='?search='+this.state.busqueda;
     switch(this.state.activeSearch){
       case 0: //Buscamos canciones por X título
-        searchStatement = searchStatement+'&episode=false';
+        searchStatement = searchStatement+'&search_for=title&episode=false';
         break;
       case 1: //Buscamos canciones de X artista
         searchStatement = searchStatement+'&search_for=artist&episode=false';

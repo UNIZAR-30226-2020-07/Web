@@ -48,6 +48,10 @@ class Content extends Component {
       showAddSong: false,
       songToAdd:'',
 
+      showAddUser: this.props.showAddUser,
+
+      friend:this.props.friend,
+
       currentPL:this.props.currentPlaylist,
       loopingPL:this.props.loopingPlaylist,
       shuffledPL:this.props.shuffledPlaylist,
@@ -72,6 +76,8 @@ class Content extends Component {
         loopingPL:nextProps.loopingPlaylist,
         shuffledPL:nextProps.shuffledPlaylist,
         id_edited_playlist:nextProps.editing_playlist,
+        showAddUser: nextProps.showAddUser,
+        friend:nextProps.friend,
       });
       if(nextProps.tipo !== "playlists"){
         this.setState({
@@ -128,7 +134,7 @@ class Content extends Component {
     });
   }
 
-  selectDelPlaylist = () =>{
+  selectDel = () =>{
     this.setState({
       deleting:'0',
     });
@@ -151,16 +157,20 @@ class Content extends Component {
     });
   }
 
-  confirmDelPlaylist = () =>{
-    this.props.deletePlaylist(this.state.delList);
-    this.setState({
-      deleting:'',
-      delList:[],
-    });
-  }
-
-  confirmDelSongs = () =>{
-    this.props.deleteSongs(this.state.delList);
+  confirmDel = (typeDelete) =>{  //0=playlists, 1=playlistsSongs, 2=friends
+    switch(typeDelete){
+      case 0:
+        this.props.deletePlaylist(this.state.delList);
+        break;
+      case 1:
+        this.props.deleteSongs(this.state.delList);
+        break;
+      case 2:
+        this.props.deleteFriends(this.state.delList);
+        break;
+      default:
+        break;
+    }
     this.setState({
       deleting:'',
       delList:[],
@@ -242,7 +252,13 @@ class Content extends Component {
                       </>
                     : <div className="row readable-text">No se han encontrado resultados</div>
                   }
+                  <Modal open={this.state.showAddUser} onClose={this.closeModal} showCloseIcon={false} center>
+                    <div className="custom-modal2">
+                      <div className="row d-flex justify-content-center" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Adding user...</p></div>
+                    </div>
+                  </Modal>
               </div>
+              
             );
           default:
             return (
@@ -318,8 +334,8 @@ class Content extends Component {
             <div className="d-flex flex-row-reverse">
               <button className="button-control" onClick={this.addPlaylist}><FontAwesomeIcon icon={faPlus}/></button>
               {this.state.deleting
-                ?<><button className="button-control" onClick={this.confirmDelPlaylist}><FontAwesomeIcon icon={faCheck}/></button></>
-                :<button className="button-control" onClick={this.selectDelPlaylist}><FontAwesomeIcon icon={faMinus}/></button>
+                ?<><button className="button-control" onClick={() => this.confirmDel(0)}><FontAwesomeIcon icon={faCheck}/></button></>
+                :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
               }
               
             </div>
@@ -379,8 +395,8 @@ class Content extends Component {
               <div className="d-flex flex-row-reverse">
                 <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(-1,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.deleting
-                  ?<><button className="button-control" onClick={this.confirmDelSongs}><FontAwesomeIcon icon={faCheck}/></button></>
-                  :<button className="button-control" onClick={this.selectDelPlaylist}><FontAwesomeIcon icon={faMinus}/></button>
+                  ?<><button className="button-control" onClick={() => this.confirmDel(1)}><FontAwesomeIcon icon={faCheck}/></button></>
+                  :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
                 }
                 {this.state.currentPL === this.state.loopingPL
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
@@ -443,23 +459,23 @@ class Content extends Component {
           return(
             <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
               <div className="d-flex flex-row-reverse">
-                <button className="button-control" onClick={this.addPlaylist}><FontAwesomeIcon icon={faPlus}/></button>
                 {this.state.deleting
-                  ?<><button className="button-control" onClick={this.confirmDelPlaylist}><FontAwesomeIcon icon={faCheck}/></button></>
-                  :<button className="button-control" onClick={this.selectDelPlaylist}><FontAwesomeIcon icon={faMinus}/></button>
+                  ?<><button className="button-control" onClick={() => this.confirmDel(2)}><FontAwesomeIcon icon={faCheck}/></button></>
+                  :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
                 }
                 
               </div>
               <div className="row print-playlist" style={{marginBottom:35}}>
-                <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
-                <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
+                <div className="col-lg-1 list-element d-flex justify-content-center"></div>
+                <div className="col-lg-9 list-element d-flex justify-content-center">Username</div>
+                <div className="col-lg-2 list-element d-flex justify-content-center"></div>
               </div>
 
               {this.state.contenido
                 ?<>{this.state.contenido.map((item,index)=>(
                   <div className="row the-fine-printing" key={index} item={item}> 
-                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
-                  <div className="col-lg-4 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.username}</div>
+                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
+                  <div className="col-lg-9 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
                   {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
                       ?<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button>
@@ -467,7 +483,7 @@ class Content extends Component {
                       :<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button>
                       </>
                       }</>
-                    :<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(0,item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></>
+                    :<></>
                   }
                   </div>
                 ))}</>
@@ -476,6 +492,75 @@ class Content extends Component {
               
             </div>
           );
+      case "friendPlaylists":
+        return(
+          <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+            <div className="d-flex">              
+            <div className="readable-text" onClick={() => this.props.cambiaModo("friends",1)}>Go back</div>
+            </div>
+            <div className="row print-playlist" style={{marginBottom:35}}>
+              <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
+              <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
+            </div>
+            {this.state.contenido
+              ?<>{this.state.contenido.map((item,index)=>(
+                <div className="row the-fine-printing" key={index} item={item}> 
+                <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
+                <div className="col-lg-5 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylistContent",item.id)}>{item.name}</div>
+                <div className="col-lg-4 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylistContent",item.id)}>{this.props.friendName}</div>
+                <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(0,item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
+                </div>
+              ))}</>
+              :<div></div>
+            }
+            
+          </div>
+        );
+        break;
+      case "friendPlaylistContent":
+        return(
+          <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+            <div className="row d-flex justify-content-between" >
+              <div className="readable-text" onClick={() => this.props.cambiaModo("friendPlaylist",this.state.friend)}>Go back</div>
+              <div className="d-flex flex-row-reverse">
+                <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(0,-1)}><FontAwesomeIcon icon={faPlay}/></button>
+                {this.state.currentPL === this.state.loopingPL
+                  ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
+                  :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
+                }
+                <button className="button-control"><DropdownSort cambiaOrden={this.props.cambiaOrden}/></button>
+                
+                {this.state.currentPL === this.state.shuffledPL
+                  ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
+                  :<button className="button-control" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button>
+                }
+              </div>
+            </div>
+
+            <div className="row print-playlist" style={{marginBottom:35}}>
+              <div className="col-lg-1 list-element d-flex justify-content-center">Type</div>
+              <div className="col-lg-3 list-element manual-left-border d-flex justify-content-center">Title</div>
+              <div className="col-lg-2 list-element manual-left-border d-flex justify-content-center">Artist</div>
+              <div className="col-lg-1 list-element manual-left-border d-flex justify-content-center">Genre</div>
+              <div className="col-lg-3 list-element manual-left-border d-flex justify-content-center">Rating</div>
+              <div className="col-lg-2 list-element manual-left-border d-flex justify-content-center">Play</div>
+            </div>
+            {this.state.contenido.map((item,index)=>(
+              <div className="row the-fine-printing" key={index} item={item}>
+                {item.episode
+                  ?<><div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div></>
+                  :<div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
+                }           
+                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
+                <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
+                <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
+                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div> 
+                <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancionPlaylist(item,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button> 
+              </div>
+            ))}
+          </div>
+        );
+        break;
       case "settings":
           return(
             <div className="d-flex justify-content-center readable-text">Settings</div>

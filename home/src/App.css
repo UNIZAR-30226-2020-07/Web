@@ -32,6 +32,16 @@
   height: 100%;
 }
 
+.button-control{
+  margin-left: 5px;
+  background: #0a1a63;
+  border: solid black 3px;
+  padding: 2px 10px 2px 10px;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .flex-fill {
   flex:1;
 }

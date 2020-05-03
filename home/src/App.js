@@ -258,17 +258,11 @@ class App extends Component{
         sortedSongs = Songs.sort(function(a,b){
           return (a.title).localeCompare(b.title);
         });
-        this.setState({
-          openPlaylist:sortedSongs,
-        });
         break;
       case 1: //artist
         Songs = this.state.openPlaylist;
         sortedSongs = Songs.sort(function(a,b){
           return (a.album.artist.name).localeCompare(b.album.artist.name);
-        });
-        this.setState({
-          openPlaylist:sortedSongs,
         });
         break;
       case 2: //genre
@@ -276,12 +270,13 @@ class App extends Component{
         sortedSongs = Songs.sort(function(a,b){
           return (a.genre).localeCompare(b.genre);
         });
-        this.setState({
-          openPlaylist:sortedSongs,
-        });
         break;
       default:break;
     }
+    this.setState({
+      openPlaylist:sortedSongs,
+      playingPlaylistShuffled:'',
+    });
   }
 
   nextSong= () =>{
@@ -783,12 +778,13 @@ class App extends Component{
   }
 
   cambiaMode = (tipo,playlistId) =>{
+    var url;
     switch(tipo){
       case "playlists":
         this.fetchPlaylists(-1);
         break;
       case "playlistContent":
-        var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
         fetch(url, {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
           method: 'GET',
@@ -827,7 +823,7 @@ class App extends Component{
           this.fetchPlaylists(playlistId);
         break;
       case "friendPlaylistContent":
-        var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
         fetch(url, {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
           method: 'GET',

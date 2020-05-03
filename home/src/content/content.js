@@ -516,7 +516,6 @@ class Content extends Component {
             
           </div>
         );
-        break;
       case "friendPlaylistContent":
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
@@ -560,7 +559,6 @@ class Content extends Component {
             ))}
           </div>
         );
-        break;
       case "settings":
           return(
             <div className="d-flex justify-content-center readable-text">Settings</div>

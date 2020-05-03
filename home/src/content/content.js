@@ -393,7 +393,7 @@ class Content extends Component {
             <div className="row d-flex justify-content-between" >
               <div className="readable-text" onClick={() => this.props.cambiaModo("playlists",1)}>Go back</div>
               <div className="d-flex flex-row-reverse">
-                <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(-1,-1)}><FontAwesomeIcon icon={faPlay}/></button>
+                <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(0,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.deleting
                   ?<><button className="button-control" onClick={() => this.confirmDel(1)}><FontAwesomeIcon icon={faCheck}/></button></>
                   :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>

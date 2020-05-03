@@ -5,7 +5,7 @@ import './index.css';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import classnames from 'classnames';
 import Rating from 'react-rating';
-import 'react-h5-audio-player/lib/styles.css';
+import './audioPlayer.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { faMusic } from "@fortawesome/free-solid-svg-icons";
@@ -877,6 +877,7 @@ class App extends Component{
       sleep(5).then(() => {
         this.setState({
           idActiveSong:newSrc.id,
+          openPlaylistId:'',
           src: newSrc.stream_url,
           audioType:newSrc.episode,
           title: newSrc.title,
@@ -911,7 +912,7 @@ class App extends Component{
       if(newSrc.id){
         sleep(5).then(() => {
           this.setState({
-            idActiveSong:newSrc.id,
+            idActiveSong:'',
             audioType:newSrc.episode,
             src: newSrc.stream_url,
             title: newSrc.title,

@@ -46,6 +46,8 @@ class App extends Component{
       busquedaActive: '',
       busquedaSearch: '',
 
+      innerBusqueda:'',
+
       active: [1,'','',''],
       current_active: 0,
       audioType:'',
@@ -68,6 +70,7 @@ class App extends Component{
       userPlaylist:[],
       openPlaylist:[],
       openPlaylistId:'',
+      skipControls:false,
       openPlaylistName:'',
 
       idActiveSong:'',
@@ -150,7 +153,7 @@ class App extends Component{
               <div className="d-flex flex-row-reverse">
               <button className="button-control" onClick={() => this.createPlaylist("prueba",0)}>add prueba</button>
               </div>
-              <Content token={this.state.key} user={this.state.contentName} friend={this.state.friendId} friendName={this.state.friendName} tipo={this.state.tipoContent} tipoBusqueda={this.state.activeSearch} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} addUser={this.addUser} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} deleteFriends={this.deleteFriends} showAddUser={this.state.showAddUser} busqueda={this.state.busquedaSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} friend={this.state.friendId} friendName={this.state.friendName} tipo={this.state.tipoContent} tipoBusqueda={this.state.activeSearch} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} addUser={this.addUser} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} deleteFriends={this.deleteFriends} showAddUser={this.state.showAddUser} busqueda={this.state.busquedaSearch} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
             </div>
           </div>
         </div>
@@ -185,10 +188,7 @@ class App extends Component{
                 }
               </div>
               <div className="col-md-8">
-                {this.state.openPlaylistId
-                ?<><AudioPlayer className="full-height AudioPlayer" id="audioplayer" ref={this.player} customControlsSection={[<button className="stop-button" onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} showSkipControls={true} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
-                :<><AudioPlayer className="full-height AudioPlayer" id="audioplayer" ref={this.player} customControlsSection={[<button className="stop-button" onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
-                }
+                <AudioPlayer className="full-height AudioPlayer" id="audioplayer" ref={this.player} customControlsSection={[<button className="stop-button" onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} showSkipControls={this.state.skipControls} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
               </div>
             </div>
             <div className="darker-bar" style={{height:25}}></div>
@@ -325,6 +325,12 @@ class App extends Component{
   getSearch = (string) =>{
     this.setState({
       busqueda: string.target.value
+    });
+  }
+
+  getInnerSearch = (string) =>{
+    this.setState({
+      innerBusqueda: string.target.value
     });
   }
 
@@ -814,6 +820,7 @@ class App extends Component{
             this.setState({
               shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
+              skipControls:true,
               openPlaylistId:response.id,
               openPlaylistName:response.name,
               tipoContent:tipo,
@@ -854,6 +861,7 @@ class App extends Component{
               shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
               openPlaylistId:response.id,
+              skipControls:true,
               openPlaylistName:response.name,
               tipoContent:"friendPlaylistContent",
               contentList:response.songs,
@@ -878,6 +886,7 @@ class App extends Component{
         this.setState({
           idActiveSong:newSrc.id,
           openPlaylistId:'',
+          skipControls:false,
           src: newSrc.stream_url,
           audioType:newSrc.episode,
           title: newSrc.title,
@@ -961,6 +970,7 @@ class App extends Component{
             });
             this.setState({
               openPlaylistId:response.id,
+              skipControls:true,
               openPlaylist:sortedSongs,
               idActiveSong:sortedSongs[0].id,
               src: sortedSongs[0].stream_url,

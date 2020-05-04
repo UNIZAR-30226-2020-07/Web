@@ -301,7 +301,7 @@ class App extends Component{
     var idSongs = currentSongs.map(v=>v.id);
     var currentSong = idSongs.indexOf(this.state.idActiveSong);
     if(currentSongs[currentSong+1]!==undefined){
-      this.cambiaSource(currentSongs[currentSong+1],1);
+      this.cambiaSourcePlaylist(currentSongs[currentSong+1],-1);
     }
   }
 
@@ -310,7 +310,7 @@ class App extends Component{
     var idSongs = currentSongs.map(v=>v.id);
     var currentSong = idSongs.indexOf(this.state.idActiveSong);
     if(currentSong-1>=0){
-      this.cambiaSource(currentSongs[currentSong-1],1);
+      this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
     }
   }
 
@@ -877,11 +877,7 @@ class App extends Component{
     }
   }
 
-  cambiaSource = (newSrc,isPlaylist) => {
-    this.setState({
-      src: '',
-    });
-    if(isPlaylist<0){
+  cambiaSource = (newSrc) => {
       sleep(5).then(() => {
         this.setState({
           idActiveSong:newSrc.id,
@@ -892,45 +888,48 @@ class App extends Component{
           title: newSrc.title,
           author: newSrc.album.artist.name,
           album: newSrc.album.name,
-          rating: newSrc.avg_valoration,
-          userRated: newSrc.user_valoration,
           playingPlaylist:0,
-        })
-      })
-    }else{
-      sleep(5).then(() => {
-        this.setState({
-          idActiveSong:newSrc.id,
-          src: newSrc.stream_url,
-          audioType:newSrc.episode,
-          title: newSrc.title,
-          author: newSrc.album.artist.name,
-          album: newSrc.album.name,
-          rating: newSrc.avg_valoration,
-          userRated: newSrc.user_valoration,
         });
+        if(newSrc.user_valoration){
+          this.setState({
+            userRated: newSrc.user_valoration,
+          });
+        }else{
+          this.setState({
+            rating: newSrc.avg_valoration,
+          });
+        }
+        if(!this.state.firstLoad){
+          this.player.current.audio.current.currentTime=0;
+          this.player.current.audio.current.play();
+        }
       })
-    }
   }
 
   cambiaSourcePlaylist = (newSrc,idPL) =>{
     if(idPL<0){
-      this.setState({
-        src: '',
-      });
       if(newSrc.id){
         sleep(5).then(() => {
           this.setState({
-            idActiveSong:'',
+            idActiveSong:newSrc.id,
             audioType:newSrc.episode,
             src: newSrc.stream_url,
             title: newSrc.title,
             author: newSrc.album.artist.name,
             album: newSrc.album.name,
-            rating: newSrc.avg_valoration,
-            userRated: newSrc.user_valoration,
             playingPlaylist:1,
           });
+          if(newSrc.user_valoration){
+            this.setState({
+              userRated: newSrc.user_valoration,
+            });
+          }else{
+            this.setState({
+              rating: newSrc.avg_valoration,
+            });
+          }
+          this.player.current.audio.current.currentTime=0;
+          this.player.current.audio.current.play();
         });
       }else{
         if(newSrc<0){
@@ -944,10 +943,19 @@ class App extends Component{
               title: this.state.openPlaylist[0].title,
               author: this.state.openPlaylist[0].album.artist.name,
               album: this.state.openPlaylist[0].album.name,
-              rating: this.state.openPlaylist[0].avg_valoration,
-              userRated: this.state.openPlaylist[0].user_valoration,
               playingPlaylist:1,
             });
+            if(newSrc.user_valoration){
+              this.setState({
+                userRated: this.state.openPlaylist[0].user_valoration,
+              });
+            }else{
+              this.setState({
+                rating: this.state.openPlaylist[0].avg_valoration,
+              });
+            }
+            this.player.current.audio.current.currentTime=0;
+            this.player.current.audio.current.play();
           });
         }
       }
@@ -982,6 +990,17 @@ class App extends Component{
               userRated: sortedSongs[0].user_valoration,
               playingPlaylist:1,
             });
+            if(newSrc.user_valoration){
+              this.setState({
+                userRated: sortedSongs[0].user_valoration,
+              });
+            }else{
+              this.setState({
+                rating: sortedSongs[0].avg_valoration,
+              });
+            }
+            this.player.current.audio.current.currentTime=0;
+            this.player.current.audio.current.play();
           }
         }else{
           alert("There was an error");
@@ -1048,6 +1067,7 @@ class App extends Component{
         author: '',
         album: '',
         rating: '',
+        userRated: '',
       });
     })
   }

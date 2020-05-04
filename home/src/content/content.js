@@ -287,7 +287,7 @@ class Content extends Component {
                                 <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
                                 <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
                                 <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
-                                <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
+                                <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
                               </div>
                             ))}
                             <div className="d-flex justify-content-center">

@@ -89,3 +89,9 @@ html, body {
   flex: 0 1 40px;
   margin-top: auto;
 } 
+
+.stop-button{
+  background-color: transparent;
+  border:0;
+  color:white;
+}

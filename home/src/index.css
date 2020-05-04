@@ -46,10 +46,16 @@ body{
 .distance{
     padding-top: 10px;
     padding-bottom: 10px;
+    cursor:pointer;
 }
 .readable-text{
     color:white;
     font-weight: 900;
+}
+
+.center-icon{
+    position: relative;
+    top: 20px;
 }
 
 /*Define el tamaño de ambos formularios */

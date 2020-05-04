@@ -5,9 +5,11 @@ import './index.css';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import classnames from 'classnames';
 import Rating from 'react-rating';
-import 'react-h5-audio-player/lib/styles.css';
+import './audioPlayer.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { faStop } from "@fortawesome/free-solid-svg-icons";
+import { faMusic } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,6 +48,7 @@ class App extends Component{
 
       active: [1,'','',''],
       current_active: 0,
+      audioType:'',
       src: '',
       title: '',
       author: '',
@@ -108,13 +111,13 @@ class App extends Component{
     return(
       <div className="box">
         <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
-          <div className="col-xl-4 navbar-header">
+          <div className="col-xl-2 navbar-header">
             <img className="img-fluid mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
             <button className="navbar-toggler button-toggle" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
               <span className="navbar-toggler-icon"></span>
             </button>
           </div>
-          <div className="col-xl-8 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+          <div className="col-xl-10 collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
             <ul className="nav navbar-nav">
               <div className="form-inline">
                 <input className="form-control" type="search" placeholder="Search" value={this.state.busqueda} onChange={this.getSearch} aria-label="Search"></input>
@@ -154,7 +157,18 @@ class App extends Component{
         
         <footer className="footer custom-navbar">
             <div className="row">
-              <div className="col-md-1 readable-text d-none d-md-block">Aquí imagen</div>
+              <div className="col-md-1 readable-text d-none d-md-block justify-content-center text-center center-icon">
+                {this.state.src
+                ?
+                <>
+                {this.state.audioType===true
+                ?<><FontAwesomeIcon className="fa-4x" icon={faMicrophone}/></>
+                :<><FontAwesomeIcon className="fa-4x" icon={faMusic}/></>
+                }
+                </>
+                :<div></div>
+                }
+              </div>
               <div className="col-md-3 justify-content-center text-center">
                 <div className="readable-text">{this.state.title}</div>
                 <div className="readable-text">{this.state.author}</div>
@@ -171,7 +185,10 @@ class App extends Component{
                 }
               </div>
               <div className="col-md-8">
-                <AudioPlayer className="full-height" id="audioplayer" ref={this.player} customControlsSection={[<button onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} showSkipControls={true} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer>
+                {this.state.openPlaylistId
+                ?<><AudioPlayer className="full-height AudioPlayer" id="audioplayer" ref={this.player} customControlsSection={[<button className="stop-button" onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} showSkipControls={true} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
+                :<><AudioPlayer className="full-height AudioPlayer" id="audioplayer" ref={this.player} customControlsSection={[<button className="stop-button" onClick={this.emptySource}><FontAwesomeIcon icon={faStop}/></button>,this.state.ui_add,this.state.ui_main,this.state.ui_vol]} autoPlay src={this.state.src} listenInterval={30000} onListen={this.updatePausedSong} onCanPlay={this.setLastSong} onPause={this.updatePausedSong} onEnded={this.finishedSong} onClickPrevious={this.previousSong} onClickNext={this.nextSong}></AudioPlayer></>
+                }
               </div>
             </div>
             <div className="darker-bar" style={{height:25}}></div>
@@ -258,17 +275,11 @@ class App extends Component{
         sortedSongs = Songs.sort(function(a,b){
           return (a.title).localeCompare(b.title);
         });
-        this.setState({
-          openPlaylist:sortedSongs,
-        });
         break;
       case 1: //artist
         Songs = this.state.openPlaylist;
         sortedSongs = Songs.sort(function(a,b){
           return (a.album.artist.name).localeCompare(b.album.artist.name);
-        });
-        this.setState({
-          openPlaylist:sortedSongs,
         });
         break;
       case 2: //genre
@@ -276,12 +287,13 @@ class App extends Component{
         sortedSongs = Songs.sort(function(a,b){
           return (a.genre).localeCompare(b.genre);
         });
-        this.setState({
-          openPlaylist:sortedSongs,
-        });
         break;
       default:break;
     }
+    this.setState({
+      openPlaylist:sortedSongs,
+      playingPlaylistShuffled:'',
+    });
   }
 
   nextSong= () =>{
@@ -362,7 +374,6 @@ class App extends Component{
           busquedaSearch: this.state.busqueda,
           tipoContent: "search",
           modifyContent: '0',
-          openPlaylistId:'',
         });
       }else{
         alert("Error "+response.detail);
@@ -765,7 +776,6 @@ class App extends Component{
       current_active: posicion,
       active:actives,
       modifyContent: '0',
-      openPlaylistId:'',
     });
     switch(tipoEspecifico){
       case "playlists":
@@ -783,12 +793,13 @@ class App extends Component{
   }
 
   cambiaMode = (tipo,playlistId) =>{
+    var url;
     switch(tipo){
       case "playlists":
         this.fetchPlaylists(-1);
         break;
       case "playlistContent":
-        var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
         fetch(url, {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
           method: 'GET',
@@ -827,7 +838,7 @@ class App extends Component{
           this.fetchPlaylists(playlistId);
         break;
       case "friendPlaylistContent":
-        var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
+        url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+playlistId+'/';
         fetch(url, {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
           method: 'GET',
@@ -866,7 +877,9 @@ class App extends Component{
       sleep(5).then(() => {
         this.setState({
           idActiveSong:newSrc.id,
+          openPlaylistId:'',
           src: newSrc.stream_url,
+          audioType:newSrc.episode,
           title: newSrc.title,
           author: newSrc.album.artist.name,
           album: newSrc.album.name,
@@ -880,6 +893,7 @@ class App extends Component{
         this.setState({
           idActiveSong:newSrc.id,
           src: newSrc.stream_url,
+          audioType:newSrc.episode,
           title: newSrc.title,
           author: newSrc.album.artist.name,
           album: newSrc.album.name,
@@ -898,7 +912,8 @@ class App extends Component{
       if(newSrc.id){
         sleep(5).then(() => {
           this.setState({
-            idActiveSong:newSrc.id,
+            idActiveSong:'',
+            audioType:newSrc.episode,
             src: newSrc.stream_url,
             title: newSrc.title,
             author: newSrc.album.artist.name,
@@ -915,6 +930,7 @@ class App extends Component{
           sleep(5).then(() => {
             this.setState({
               idActiveSong:this.state.openPlaylist[0].id,
+              audioType:this.state.openPlaylist[0].episode,
               src: this.state.openPlaylist[0].stream_url,
               title: this.state.openPlaylist[0].title,
               author: this.state.openPlaylist[0].album.artist.name,
@@ -944,9 +960,11 @@ class App extends Component{
               return (a.title).localeCompare(b.title);
             });
             this.setState({
+              openPlaylistId:response.id,
               openPlaylist:sortedSongs,
               idActiveSong:sortedSongs[0].id,
               src: sortedSongs[0].stream_url,
+              audioType:sortedSongs[0].episode,
               title: sortedSongs[0].title,
               author: sortedSongs[0].album.artist.name,
               album: sortedSongs[0].album.name,
@@ -1015,6 +1033,7 @@ class App extends Component{
       this.setState({
         idActiveSong:'',
         src: '',
+        audioType:'',
         title: '',
         author: '',
         album: '',

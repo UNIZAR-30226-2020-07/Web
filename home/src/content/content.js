@@ -393,7 +393,7 @@ class Content extends Component {
             <div className="row d-flex justify-content-between" >
               <div className="readable-text" onClick={() => this.props.cambiaModo("playlists",1)}>Go back</div>
               <div className="d-flex flex-row-reverse">
-                <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(-1,-1)}><FontAwesomeIcon icon={faPlay}/></button>
+                <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(0,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.deleting
                   ?<><button className="button-control" onClick={() => this.confirmDel(1)}><FontAwesomeIcon icon={faCheck}/></button></>
                   :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
@@ -516,7 +516,6 @@ class Content extends Component {
             
           </div>
         );
-        break;
       case "friendPlaylistContent":
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
@@ -560,7 +559,6 @@ class Content extends Component {
             ))}
           </div>
         );
-        break;
       case "settings":
           return(
             <div className="d-flex justify-content-center readable-text">Settings</div>

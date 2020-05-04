@@ -458,20 +458,55 @@ class Content extends Component {
         case "friends":
           return(
             <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+              <div className="row d-flex justify-content-between" >
+              <input className="innerSearch" type="search" placeholder="Search" value={this.props.innerBusqueda} onChange={this.props.getInnerSearch} aria-label="Search"></input>
               <div className="d-flex flex-row-reverse">
                 {this.state.deleting
                   ?<><button className="button-control" onClick={() => this.confirmDel(2)}><FontAwesomeIcon icon={faCheck}/></button></>
                   :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
                 }
-                
+                </div>
               </div>
+
               <div className="row print-playlist" style={{marginBottom:35}}>
                 <div className="col-lg-1 list-element d-flex justify-content-center"></div>
                 <div className="col-lg-9 list-element d-flex justify-content-center">Username</div>
                 <div className="col-lg-2 list-element d-flex justify-content-center"></div>
               </div>
 
-              {this.state.contenido
+              {this.props.innerBusqueda
+              ?
+              <>
+                {this.state.contenido[0]
+                ?<>{this.state.contenido.map((item,index)=>(
+                  <div key={index} item={item}> 
+                  {item.username.indexOf(this.props.innerBusqueda)>-1
+                  ?<>
+                  <div className="row the-fine-printing" >
+                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
+                  <div className="col-lg-9 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                  {this.state.deleting
+                    ?<>{this.state.delList.includes(item.id)
+                      ?<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button>
+                      </>
+                      :<><button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button>
+                      </>
+                      }</>
+                    :<></>
+                  }
+                  </div>
+                  
+                  </>
+                  :<><div></div></>
+                  }
+                  </div>
+                ))}</>
+                :<div className="readable-text">You have no friends :(</div>
+              }
+              </>
+              :
+              <>
+                {this.state.contenido[0]
                 ?<>{this.state.contenido.map((item,index)=>(
                   <div className="row the-fine-printing" key={index} item={item}> 
                   <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
@@ -487,8 +522,11 @@ class Content extends Component {
                   }
                   </div>
                 ))}</>
-                :<div></div>
+                :<div className="readable-text">You have no friends :(</div>
               }
+              </>
+              }
+
               
             </div>
           );

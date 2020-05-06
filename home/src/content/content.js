@@ -225,14 +225,14 @@ class Content extends Component {
                           ? <><div className="d-flex justify-content-center readable-text">Results for search "{this.state.busqueda}"</div>
                               <div className="row the-fine-printing" style={{marginBottom:35}}>
                                   <div className="col-lg-1 list-element d-flex justify-content-center">Type</div>
-                                  <div className="col-lg-9 list-element manual-left-border d-flex justify-content-center">Title</div>
-                                  <div className="col-lg-2 list-element manual-left-border d-flex justify-content-center">Add</div>
+                                  <div className="col-lg-10 list-element manual-left-border d-flex justify-content-center">Title</div>
+                                  <div className="col-lg-1 list-element manual-left-border d-flex justify-content-center">Add</div>
                                 </div>
                               {this.state.contenido.map((item,index)=>(
-                                <div className="row the-fine-printing" key={index} item={item}>
-                                  <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
-                                  <div className="col-lg-9 manual-left-border list-element d-flex justify-content-center">{item.username}</div>
-                                  <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.addUser(item)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
+                                <div className="row the-fine-marging" key={index} item={item}>
+                                  <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
+                                  <div className="col-lg-10 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-end">{item.username}</div>
+                                  <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.addUser(item)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
                                 </div>
                               ))}
                               <div className="d-flex justify-content-center">

@@ -49,6 +49,7 @@ class Content extends Component {
       songToAdd:'',
 
       showAddUser: this.props.showAddUser,
+      showAddPodcast: this.props.showAddPodcast,
 
       friend:this.props.friend,
 
@@ -77,6 +78,7 @@ class Content extends Component {
         shuffledPL:nextProps.shuffledPlaylist,
         id_edited_playlist:nextProps.editing_playlist,
         showAddUser: nextProps.showAddUser,
+        showAddPodcast: nextProps.showAddPodcast,
         friend:nextProps.friend,
       });
       if(nextProps.tipo !== "playlists"){
@@ -157,7 +159,7 @@ class Content extends Component {
     });
   }
 
-  confirmDel = (typeDelete) =>{  //0=playlists, 1=playlistsSongs, 2=friends
+  confirmDel = (typeDelete) =>{  //0=playlists, 1=playlistsSongs, 2=friends, 3=podcast
     switch(typeDelete){
       case 0:
         this.props.deletePlaylist(this.state.delList);
@@ -167,6 +169,9 @@ class Content extends Component {
         break;
       case 2:
         this.props.deleteFriends(this.state.delList);
+        break;
+      case 3:
+        this.props.deletePodcasts(this.state.delList);
         break;
       default:
         break;
@@ -215,8 +220,50 @@ class Content extends Component {
     switch(this.state.tipo){
       case "search":
         switch(this.state.tipoBusqueda){
-          case 4:;
-            break;
+          case 4:
+            return (
+              <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+                  {this.state.show === '1'
+                    ? <>{this.state.cantidad > '0'
+                          ? <><div className="d-flex justify-content-center readable-text">Results for search "{this.state.busqueda}"</div>
+                              <div className="row the-fine-printing" style={{marginBottom:35}}>
+                                  <div className="col-lg-1 list-element d-flex justify-content-center">Type</div>
+                                  <div className="col-lg-10 list-element manual-left-border d-flex justify-content-center">Name</div>
+                                  <div className="col-lg-1 list-element manual-left-border d-flex justify-content-center">Add</div>
+                                </div>
+                              {this.state.contenido.map((item,index)=>(
+                                <div className="row the-fine-marging" key={index} item={item}>
+                                  <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div>
+                                  <div className="col-lg-7 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle">{item.name}</div>
+                                  <div className="col-lg-3 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-end">{item.artist.name}</div>
+                                  <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.addPodcast(item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
+                                </div>
+                              ))}
+                              <div className="d-flex justify-content-center">
+                                {this.state.previous === null
+                                    ?<><button className="button-control disabled-button" style={{marginRight:10}} onClick={this.props.prevPage} disabled><FontAwesomeIcon icon={faArrowLeft}/></button></>
+                                    :<button className="button-control"style={{marginRight:10}} onClick={this.props.prevPage}><FontAwesomeIcon icon={faArrowLeft}/></button>
+                                }
+                                
+                                {this.state.next === null
+                                    ?<> <button className="button-control disabled-button" style={{marginLeft:10}} onClick={this.props.nextPage} disabled><FontAwesomeIcon icon={faArrowRight}/></button></>
+                                    : <button className="button-control" style={{marginLeft:10}} onClick={this.props.nextPage}><FontAwesomeIcon icon={faArrowRight}/></button>
+                                }
+                              </div>
+                            </>
+                          : <div className="row readable-text">No se han encontrado resultados para {this.state.busqueda}.</div>
+                        }
+                      </>
+                    : <div className="row readable-text">No se han encontrado resultados</div>
+                  }
+                
+                <Modal open={this.state.showAddPodcast} onClose={this.closeModal} showCloseIcon={false} center>
+                  <div className="custom-modal2">
+                    <div className="row d-flex justify-content-center" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Adding podcast...</p></div>
+                  </div>
+                </Modal>
+              </div>
+            );
           case 5:
             return (
               <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
@@ -237,12 +284,12 @@ class Content extends Component {
                               ))}
                               <div className="d-flex justify-content-center">
                                 {this.state.previous === null
-                                    ?<><button className="button-control" style={{marginRight:10}} onClick={this.props.prevPage} disabled><FontAwesomeIcon icon={faArrowLeft}/></button></>
+                                    ?<><button className="button-control disabled-button" style={{marginRight:10}} onClick={this.props.prevPage} disabled><FontAwesomeIcon icon={faArrowLeft}/></button></>
                                     :<button className="button-control" style={{marginRight:10}} onClick={this.props.prevPage}><FontAwesomeIcon icon={faArrowLeft}/></button>
                                 }
                                 
                                 {this.state.next === null
-                                    ?<> <button className="button-control" style={{marginLeft:10}} onClick={this.props.nextPage} disabled><FontAwesomeIcon icon={faArrowRight}/></button></>
+                                    ?<> <button className="button-control disabled-button" style={{marginLeft:10}} onClick={this.props.nextPage} disabled><FontAwesomeIcon icon={faArrowRight}/></button></>
                                     : <button className="button-control" style={{marginLeft:10}} onClick={this.props.nextPage}><FontAwesomeIcon icon={faArrowRight}/></button>
                                 }
                               </div>
@@ -258,7 +305,6 @@ class Content extends Component {
                     </div>
                   </Modal>
               </div>
-              
             );
           default:
             return (
@@ -288,12 +334,12 @@ class Content extends Component {
                             ))}
                             <div className="d-flex justify-content-center">
                               {this.state.previous === null
-                                  ?<><button className="button-control" style={{marginRight:10}} onClick={this.props.prevPage} disabled><FontAwesomeIcon icon={faArrowLeft}/></button></>
+                                  ?<><button className="button-control disabled-button" style={{marginRight:10}} onClick={this.props.prevPage} disabled><FontAwesomeIcon icon={faArrowLeft}/></button></>
                                   :<button className="button-control"style={{marginRight:10}} onClick={this.props.prevPage}><FontAwesomeIcon icon={faArrowLeft}/></button>
                               }
                               
                               {this.state.next === null
-                                  ?<> <button className="button-control" style={{marginLeft:10}} onClick={this.props.nextPage} disabled><FontAwesomeIcon icon={faArrowRight}/></button></>
+                                  ?<> <button className="button-control disabled-button" style={{marginLeft:10}} onClick={this.props.nextPage} disabled><FontAwesomeIcon icon={faArrowRight}/></button></>
                                   : <button className="button-control" style={{marginLeft:10}} onClick={this.props.nextPage}><FontAwesomeIcon icon={faArrowRight}/></button>
                               }
                             </div>
@@ -322,8 +368,6 @@ class Content extends Component {
             </div>
           );
         }
-        break;
-
       case "playlists":
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
@@ -387,7 +431,7 @@ class Content extends Component {
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
             <div className="row d-flex justify-content-between" >
-              <div className="readable-text" onClick={() => this.props.cambiaModo("playlists",1)}>Go back</div>
+              <div className="readable-text pointer" onClick={() => this.props.cambiaModo("playlists",1)}><p>Go back</p></div>
               <div className="d-flex flex-row-reverse">
                 <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(0,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.deleting
@@ -398,7 +442,7 @@ class Content extends Component {
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
-                <button className="button-control"><DropdownSort cambiaOrden={this.props.cambiaOrden}/></button>
+                <button className="button-control"><DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/></button>
                 
                 {this.state.currentPL === this.state.shuffledPL
                   ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
@@ -442,13 +486,81 @@ class Content extends Component {
         );
       case "podcasts":
         return(
-          <div className="d-flex justify-content-center readable-text"><p>Podcast</p></div>
+          <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+            <div className="d-flex flex-row-reverse">
+              {this.state.deleting
+                ?<><button className="button-control" onClick={() => this.confirmDel(3)}><FontAwesomeIcon icon={faCheck}/></button></>
+                :<button className="button-control" onClick={this.selectDel}><FontAwesomeIcon icon={faMinus}/></button>
+              }
+              
+            </div>
+            <div className="row print-playlist" style={{marginBottom:35}}>
+              <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
+              <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
+            </div>
+            {this.state.contenido
+              ?<>{this.state.contenido.map((item,index)=>(
+                <div className="row the-fine-printing" key={index} item={item}> 
+                  <div className="col-lg-1 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("podcastContent",item)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
+                  <div className="col-lg-5 list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("podcastContent",item)}>{item.name}</div>              
+                  <div className="col-lg-5 manual-left-border list-element d-flex justify-content-center"  onClick={() => this.props.cambiaModo("podcastContent",item)}>{item.artist.name}</div>
+                  {this.state.deleting
+                    ?<>{this.state.delList.includes(item.id)
+                      ?<><button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button>
+                      </>
+                      :<><button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button>
+                      </>
+                      }</>
+                    :<><button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaSourcePodcast(0,item.artist.name,item)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></>
+                  }                                          
+                </div>
+              ))}</>
+              :<div></div>
+            }
+            
+          </div>
         );
       case "podcastContent":
         return(
-          <div className="d-flex justify-content-center readable-text">PodcastContent</div>
+          <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
+            <div className="row d-flex justify-content-between" >
+              <div className="readable-text pointer" onClick={() => this.props.cambiaModo("podcast",-1)}><p>Go back</p></div>
+              <div className="d-flex flex-row-reverse">
+                <button className="button-control" onClick={() => this.props.cambiaSourcePodcast(0,undefined,-1)}><FontAwesomeIcon icon={faPlay}/></button>
+                {this.state.currentPL === this.state.loopingPL
+                  ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
+                  :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
+                }
+                <button className="button-control"><DropdownSort type={"podcast"} cambiaOrden={this.props.cambiaOrden}/></button>
+                
+                {this.state.currentPL === this.state.shuffledPL
+                  ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
+                  :<button className="button-control" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button>
+                }
+              </div>
+            </div>
+
+            <div className="row print-playlist" style={{marginBottom:35}}>
+              <div className="col-lg-1 list-element d-flex justify-content-center">Type</div>
+              <div className="col-lg-3 list-element manual-left-border d-flex justify-content-center">Title</div>
+              <div className="col-lg-2 list-element manual-left-border d-flex justify-content-center">Artist</div>
+              <div className="col-lg-1 list-element manual-left-border d-flex justify-content-center">Genre</div>
+              <div className="col-lg-3 list-element manual-left-border d-flex justify-content-center">Rating</div>
+              <div className="col-lg-2 list-element manual-left-border d-flex justify-content-center">Play</div>
+            </div>
+            {this.state.contenido.map((item,index)=>(
+              <div className="row the-fine-printing" key={index} item={item}>
+                <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div>     
+                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
+                <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{this.props.podcastAuthor}</div>
+                <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
+                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div> 
+                <button className="col-lg-2 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaSourcePodcast(item,undefined,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
+              </div>
+            ))}
+          </div>
         );
-        case "friends":
+      case "friends":
           return(
             <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
               <div className="row d-flex justify-content-between" >
@@ -527,7 +639,7 @@ class Content extends Component {
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
             <div className="d-flex">              
-            <div className="readable-text" onClick={() => this.props.cambiaModo("friends",1)}>Go back</div>
+            <div className="readable-text pointer" onClick={() => this.props.cambiaModo("friends",1)}><p>Go back</p></div>
             </div>
             <div className="row print-playlist" style={{marginBottom:35}}>
               <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
@@ -551,14 +663,14 @@ class Content extends Component {
         return(
           <div className="container content-internal"style={{marginBottom:35,marginTop:5}}>
             <div className="row d-flex justify-content-between" >
-              <div className="readable-text" onClick={() => this.props.cambiaModo("friendPlaylist",this.state.friend)}>Go back</div>
+              <div className="readable-text pointer" onClick={() => this.props.cambiaModo("friendPlaylist",this.state.friend)}><p>Go back</p></div>
               <div className="d-flex flex-row-reverse">
                 <button className="button-control" onClick={() => this.props.cambiaCancionPlaylist(0,-1)}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.currentPL === this.state.loopingPL
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
-                <button className="button-control"><DropdownSort cambiaOrden={this.props.cambiaOrden}/></button>
+                <button className="button-control"><DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/></button>
                 
                 {this.state.currentPL === this.state.shuffledPL
                   ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>

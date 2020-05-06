@@ -64,6 +64,10 @@
 
 }
 
+.pointer{
+    cursor: pointer;
+}
+
 .visible-icon{
     color:white;
 }
@@ -137,6 +141,10 @@
 
 .toggled-button{
     background-color: #5272ff;
+}
+
+.disabled-button{
+    background: #4e5570;
 }
 
 .innerSearch{

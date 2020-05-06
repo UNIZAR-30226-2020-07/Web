@@ -276,16 +276,12 @@ class Content extends Component {
                                 <div className="col-lg-1 list-element manual-left-border d-flex justify-content-center">Play</div>
                               </div>
                             {this.state.contenido.map((item,index)=>(
-                              <div className="row the-fine-printing" key={index} item={item}>
-                                {item.episode
-                                  ?<><div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div></>
-                                  :<div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
-                                }
-                                
-                                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
-                                <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
-                                <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>
-                                <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
+                              <div className="row the-fine-marging" key={index} item={item}>
+                                <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
+                                <div className="col-lg-3 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle">{item.title}</div>
+                                <div className="col-lg-2 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle">{item.album.artist.name}</div>
+                                <div className="col-lg-1 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle">{item.genre}</div>
+                                <div className="col-lg-3 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-end"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div>
                                 <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.openModal(item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button>
                                 <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.props.cambiaCancion(item)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button>
                               </div>
@@ -421,10 +417,7 @@ class Content extends Component {
             </div>
             {this.state.contenido.map((item,index)=>(
               <div className="row the-fine-printing" key={index} item={item}>
-                {item.episode
-                  ?<><div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div></>
-                  :<div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>
-                }           
+                <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faMusic}/></div>     
                 <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center">{item.title}</div>
                 <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center">{item.album.artist.name}</div>
                 <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center">{item.genre}</div>

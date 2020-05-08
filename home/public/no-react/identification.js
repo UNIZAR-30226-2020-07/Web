@@ -6,7 +6,8 @@ const resetPass_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/res
 //Comprueba mediante una expresión regular que el mensaje por parámetro sea un email
 function ValidateEmail(inputText)
 {
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   // var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   var mailformat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     if(inputText.value.match(mailformat))
     {
         return true;

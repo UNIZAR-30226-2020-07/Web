@@ -576,8 +576,8 @@ class Content extends Component {
 
               <div className="row print-playlist" style={{marginBottom:35}}>
                 <div className="col-lg-1 list-element d-flex justify-content-center"></div>
-                <div className="col-lg-9 list-element d-flex justify-content-center">Username</div>
-                <div className="col-lg-2 list-element d-flex justify-content-center"></div>
+                <div className="col-lg-10 list-element d-flex justify-content-center">Username</div>
+                <div className="col-lg-1 list-element d-flex justify-content-center"></div>
               </div>
 
               {this.props.innerBusqueda
@@ -590,15 +590,21 @@ class Content extends Component {
                   ?<>
                   <div className="row the-fine-marging" >
                   <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
-                  <div className="col-lg-9 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
                   {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
-                      ?<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button></div>
+                      ?<>
+                      <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                      <div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button></div>
                       </>
-                      :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button></div>
+                      :<>
+                      <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                      <div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button></div>
                       </>
                       }</>
-                    :<></>
+                    :<>
+                    <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                    <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}></div>
+                    </>
                   }
                   </div>
                   
@@ -616,15 +622,21 @@ class Content extends Component {
                 ?<>{this.state.contenido.map((item,index)=>(
                   <div className="row the-fine-marging" key={index} item={item}> 
                   <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}><FontAwesomeIcon className="fa-2x" icon={faUser}/></div>
-                  <div className="col-lg-9 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
                   {this.state.deleting
                     ?<>{this.state.delList.includes(item.id)
-                      ?<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button></div>
+                      ?<>
+                      <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                      <div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.extractDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrashRestore}/></button></div>
                       </>
-                      :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button></div>
+                      :<>
+                      <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                      <div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button></div>
                       </>
                       }</>
-                    :<></>
+                    :<>
+                    <div className="col-lg-10 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}>{item.username}</div>
+                    <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("friendPlaylist",item.id)}></div>
+                    </>
                   }
                   </div>
                 ))}</>
@@ -632,8 +644,6 @@ class Content extends Component {
               }
               </>
               }
-
-              
             </div>
           );
       case "friendPlaylists":

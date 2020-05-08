@@ -1,5 +1,6 @@
 const register_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/';
 const login_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/';
+const resetPass_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/password/reset/';
 
 
 //Comprueba mediante una expresión regular que el mensaje por parámetro sea un email
@@ -187,6 +188,18 @@ function recover(){
         document.getElementById("recover-feedback").style.visibility="visible";
         return false;
     }else{
+
+        fetch(resetPass_path, {
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            method: 'POST',
+            body: JSON.stringify ({
+                "email": recEmail.value
+            })     
+        })
+
+
         //Funcion de recuperacion de email
         document.getElementById("recover-feedback").innerHTML="A recovery email has been successfully sent to the given email address";
         document.getElementById("recover-feedback").style.visibility="visible";

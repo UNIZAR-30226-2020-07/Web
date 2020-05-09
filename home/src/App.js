@@ -1070,6 +1070,8 @@ class App extends Component{
             title: newSrc.title,
             author: newSrc.album.artist.name,
             album: newSrc.album.name,
+            rating: newSrc.avg_valoration,
+            userRated: newSrc.user_valoration,
             playingPlaylist:1,
           });
           if(newSrc.user_valoration){
@@ -1174,6 +1176,8 @@ class App extends Component{
             title: newSrc.title,
             author: this.state.podcastAuthor,
             album: this.state.openPodcast,
+            rating: newSrc.avg_valoration,
+            userRated:  newSrc.user_valoration,
             playingPlaylist:1,
           });
           if(newSrc.user_valoration){
@@ -1217,6 +1221,8 @@ class App extends Component{
                 title: sortedSongs[0].title,
                 author: datosPd.artist.name,
                 album: response.name,
+                rating:  sortedSongs[0].avg_valoration,
+                userRated:   sortedSongs[0].user_valoration,
                 playingPlaylist:1,
               });
               if(newSrc.user_valoration){
@@ -1243,6 +1249,8 @@ class App extends Component{
               title: this.state.openPlaylist[0].title,
               author: this.state.podcastAuthor,
               album: this.state.openPodcast,
+              rating: this.state.avg_valoration,
+              userRated:  this.state.user_valoration,
               playingPlaylist:1,
             });
             if(newSrc.user_valoration){

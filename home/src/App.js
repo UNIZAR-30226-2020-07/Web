@@ -45,6 +45,7 @@ class App extends Component{
       busquedaList: '',
       busquedaActive: '',
       busquedaSearch: '',
+      page:1,
 
       innerBusqueda:'',
 
@@ -424,10 +425,65 @@ class App extends Component{
     })
   }
 
+  updateSearchSong = () =>{
+    var urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/songs/';
+    var searchStatement='?search='+this.state.busqueda;
+    switch(this.state.activeSearch){
+      case 0: //Buscamos canciones por X título
+        searchStatement = searchStatement+'&search_for=title&episode=false';
+        break;
+      case 1: //Buscamos canciones de X artista
+        searchStatement = searchStatement+'&search_for=artist&episode=false';
+        break;
+      case 2: //Buscamos canciones de X categoría
+        searchStatement = searchStatement+'&search_for=genre&episode=false';
+        break;
+      case 3: //Buscamos canciones de X álbum
+        searchStatement = searchStatement+'&search_for=album&episode=false';
+        break;
+      case 4: //Buscamos podcasts de X título
+        urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/albums/';
+        searchStatement = searchStatement+'&podcast=true';
+        break;
+      case 5: //Buscamos usuarios con X username
+        urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/users/';
+        break;
+      default:
+        return 0;
+    }
+    searchStatement=searchStatement+"&page="+this.state.page;
+    urlLocal=urlLocal+searchStatement;
+    searchStatement="";
+
+    fetch(urlLocal,{
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(response => {
+      if(response.results){
+        this.setState({
+          busquedaPreviousPage: response.previous,
+          busquedaNextPage: response.next,
+          busquedaCount: response.count,
+          busquedaList: response.results,
+          contentList: response.results,
+          busquedaActive: this.state.activeSearch,
+          busquedaSearch: this.state.busqueda,
+          tipoContent: "search",
+          modifyContent: '0',
+        });
+      }else{
+        alert("Error "+response.detail);
+      }
+    })
+  }
+
   cambiaPage = (page) =>{
     if(page === 0){//Previous page
 
       var urlLocal=this.state.busquedaPreviousPage;
+      var newPage=this.state.page-1;
 
       fetch(urlLocal,{
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
@@ -446,6 +502,7 @@ class App extends Component{
             busquedaSearch: this.state.busqueda,
             tipoContent: "search",
             modifyContent: '0',
+            page:newPage,
           });
         }else{
           alert("Error "+response.detail);
@@ -455,6 +512,7 @@ class App extends Component{
     }else{//Next page
 
       urlLocal=this.state.busquedaNextPage;
+      newPage=this.state.page+1;
 
       fetch(urlLocal,{
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
@@ -473,6 +531,7 @@ class App extends Component{
             busquedaSearch: this.state.busqueda,
             tipoContent: "search",
             modifyContent: '0',
+            page:newPage,
           });
         }else{
           alert("Error "+response.detail);
@@ -748,6 +807,9 @@ class App extends Component{
           rating: response.avg_valoration,
           userRated:rate,
         });
+        if(this.state.tipoContent==="search"){
+          this.updateSearchSong();
+        }
       }else{
         alert("There was an error");
       }

@@ -146,7 +146,7 @@ class App extends Component{
                 <li className={friendsClass} onClick={() => this.cambiaActive(2)}>Friends</li>
                 <li className="hr"></li>
                 <li className={settingsClass} onClick={() => this.cambiaActive(3)}>My account</li>
-                <li className="distance readable-text">Log out</li>
+                <li className="distance readable-text" onClick={this.logout}> Log out  </li>
                 {this.state.debug === '1'
                   ? <><button onClick={this.registerDebug}>Registro automático</button><button onClick={this.loginDebug}>Login automático</button></>
                   : <p></p>
@@ -822,6 +822,11 @@ class App extends Component{
         window.location.reload();
       }
     });
+  }
+
+  logout = () => {
+    this.response.key = "";
+    window.location.replace("/no-react/index.html");
   }
 
   addUser = (user) =>{

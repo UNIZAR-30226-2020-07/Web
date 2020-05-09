@@ -825,7 +825,7 @@ class App extends Component{
   }
 
   logout = () => {
-    this.response.key = "";
+    window.localStorage.removeItem("keyMusicApp");
     window.location.replace("/no-react/index.html");
   }
 

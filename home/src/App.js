@@ -1096,6 +1096,8 @@ class App extends Component{
               title: this.state.openPlaylist[0].title,
               author: this.state.openPlaylist[0].album.artist.name,
               album: this.state.openPlaylist[0].album.name,
+              rating: this.state.openPlaylist[0].avg_valoration,
+              userRated: this.state.openPlaylist[0].user_valoration,
               playingPlaylist:1,
             });
             if(newSrc.user_valoration){

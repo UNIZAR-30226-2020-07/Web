@@ -202,7 +202,7 @@ class App extends Component{
 
   //Funciones para el buscador de contenido
 
-  //Guarda el valor del campo de entrada de la búsqueda, y lo actualiza en vivo.
+  //Guarda el valor del tipo de búsqueda seleccionado en el dropdown.
   //Tipo codificado con números, 0=Songs, 1=Artists, 2=Categories, 3=Albums, 4=Podcasts, 5=Usernames
   cambiaSearch = (tipoSearch) => {
     this.setState({
@@ -210,7 +210,7 @@ class App extends Component{
     });
   }
 
-  //Guarda el valor de la búsqueda para poder navegar entre distintas páginas aunque se cambie el contenido de la búsqueda actual.
+  //Guarda el valor del campo de entrada de la búsqueda, y lo actualiza en vivo.
   getSearch = (string) =>{
     this.setState({
       busqueda: string.target.value
@@ -436,6 +436,9 @@ class App extends Component{
           .then(res => res.json())
           .then(response => {
             if (response.id) {
+              this.setState({
+                playlist_editar:'',
+              })
               this.fetchPlaylists(-1);
             }else{
               alert("There was an error");

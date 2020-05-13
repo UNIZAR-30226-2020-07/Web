@@ -42,6 +42,7 @@ class Content extends Component {
       username:this.props.user,
       showAddPlaylist:'',
       newTitle:'',
+      newModTitle:'',
       deleting:'',
       delList:[],
 
@@ -188,29 +189,42 @@ class Content extends Component {
     });
   }
 
-  confirmNewPlaylist = (create) =>{
+  getModTitle = (string) =>{
+    this.setState({
+      newModTitle: string.target.value,
+    });
+  }
+
+  confirmNewPlaylist = () =>{
     if(this.state.newTitle){
       //Create == 1 -> crear playlist // create == 0 -> editar playlist 
-      if(create === 1){
-        this.props.createPlaylist(this.state.newTitle,0);
-        this.setState({
-          showAddPlaylist:'',
-          newTitle:'',
-        });
-      }
-      else{
-        this.props.createPlaylist(this.state.newTitle,1);
-        this.props.editNamePlaylist('');
-        this.setState({
-          showAddPlaylist:'',
-          newTitle:'',
-        });
-      }
+      this.props.createPlaylist(this.state.newTitle,0);
+      this.setState({
+        showAddPlaylist:'',
+        newTitle:'',
+      });
     }else{
       this.props.editNamePlaylist('');
       this.setState({
         showAddPlaylist:'',
         newTitle:'',
+        newModTitle:'',
+      });
+    }
+  }
+
+  confirmModPlaylist = () =>{
+    if(this.state.newModTitle){
+      this.props.createPlaylist(this.state.newModTitle,1);
+      this.setState({
+        newModTitle:'',
+      });
+    }else{
+      this.props.editNamePlaylist('');
+      this.setState({
+        showAddPlaylist:'',
+        newTitle:'',
+        newModTitle:'',
       });
     }
   }
@@ -392,7 +406,7 @@ class Content extends Component {
                     <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                     <div className="col-lg-5 list-element d-flex justify-content-center">Insert new title:</div>
                     <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
-                    <div className="col-lg-2 list-element d-flex justify-content-center" onClick={()=>this.confirmNewPlaylist(1)}>Confirmar</div>
+                    <div className="col-lg-2 list-element d-flex justify-content-center" onClick={this.confirmNewPlaylist}>Confirmar</div>
                   </div>
               </>
               : <div></div>
@@ -404,8 +418,8 @@ class Content extends Component {
                 ? <>
                 <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                 <div className="col-lg-5 list-element d-flex justify-content-center the-fine-printing-middle">Insert new title:</div>
-                <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center the-fine-printing-middle"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
-                <div className="col-lg-2 list-element d-flex justify-content-center the-fine-printing-end" onClick={()=>this.confirmNewPlaylist(0)}>Confirmar</div>
+                <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center the-fine-printing-middle"><input className="form-control" type="search" placeholder="New title" value={this.state.newModTitle} onChange={this.getModTitle} aria-label="Search"></input></div>
+                <div className="col-lg-2 list-element d-flex justify-content-center the-fine-printing-end" onClick={this.confirmModPlaylist}>Confirmar</div>
               </>
                 :<> <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                   <div className="col-lg-4 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>

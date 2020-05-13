@@ -215,7 +215,6 @@ class Content extends Component {
     }
   }
 
-    
   render() {
     switch(this.state.tipo){
       case "search":
@@ -403,10 +402,10 @@ class Content extends Component {
                 <div className="row the-fine-marging" key={index} item={item}> 
                 {item.id===this.state.id_edited_playlist
                 ? <>
-                <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
-                <div className="col-lg-5 list-element d-flex justify-content-center">Insert new title:</div>
-                <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
-                <div className="col-lg-2 list-element d-flex justify-content-center" onClick={()=>this.confirmNewPlaylist(0)}>Confirmar</div>
+                <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
+                <div className="col-lg-5 list-element d-flex justify-content-center the-fine-printing-middle">Insert new title:</div>
+                <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center the-fine-printing-middle"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
+                <div className="col-lg-2 list-element d-flex justify-content-center the-fine-printing-end" onClick={()=>this.confirmNewPlaylist(0)}>Confirmar</div>
               </>
                 :<> <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                   <div className="col-lg-4 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>

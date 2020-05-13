@@ -152,14 +152,10 @@ class App extends Component{
                   ? <><button onClick={this.registerDebug}>Registro automático</button><button onClick={this.loginDebug}>Login automático</button></>
                   : <p></p>
                 }
-                <p>{this.state.username}</p>
               </ul>
             </div>
             <div className="col-md-10 full-height scrollable">
-              <div className="d-flex flex-row-reverse">
-              <button className="button-control" onClick={() => this.createPlaylist("prueba",0)}>add prueba</button>
-              </div>
-              <Content token={this.state.key} user={this.state.contentName} friend={this.state.friendId} friendName={this.state.friendName} podcastAuthor={this.state.podcastAuthor} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} playlists={this.state.userPlaylist} lista={this.state.contentList} cantidad={this.state.busquedaCount} currentPlaylist={this.state.openPlaylistId} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} shufflePlaylist={this.shufflePlaylist} loopPlaylist={this.setPlaylistLoop} addUser={this.addUser} playPlaylist={this.playPlaylist} cambiaOrden={this.sortPlaylist} editNamePlaylist={this.setEditingPlaylist} createPlaylist={this.createPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} deleteFriends={this.deleteFriends} deletePodcasts={this.deletePodcasts} showAddUser={this.state.showAddUser} showAddPodcast={this.state.showAddPodcast} addPodcast={this.addPodcast} cambiaSourcePodcast={this.cambiaSourcePodcast} busqueda={this.state.busquedaSearch} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} hayPrev={this.state.busquedaPreviousPage} editing_playlist={this.state.playlist_editar} hayNext={this.state.busquedaNextPage} change={this.state.modifyContent} cambiaModo={this.cambiaMode} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} prevPage={() => this.cambiaPage(0)} nextPage={() => this.cambiaPage(1)}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent}/>
             </div>
           </div>
         </div>
@@ -203,156 +199,10 @@ class App extends Component{
     );
   }
 
-  finishedSong = () =>{
-    var currentSongs,idSongs,finishedSong;
-    if(this.state.openPodcast){
-      if(this.state.playingPlaylist){
-        currentSongs = this.state.openPlaylist;
-        idSongs = currentSongs.map(v=>v.id);
-        finishedSong = idSongs.indexOf(this.state.idActiveSong);
-        if(currentSongs[finishedSong+1]===undefined){
-          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSourcePodcast(currentSongs[0],undefined,-1);
-        }else{
-          this.cambiaSourcePodcast(currentSongs[finishedSong+1],undefined,-1);
-        }
-      }
-    }else{
-      if(this.state.playingPlaylist){
-        currentSongs = this.state.openPlaylist;
-        idSongs = currentSongs.map(v=>v.id);
-        finishedSong = idSongs.indexOf(this.state.idActiveSong);
-        if(currentSongs[finishedSong+1]===undefined){
-          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSource(currentSongs[0],1);
-        }else{
-          this.cambiaSource(currentSongs[finishedSong+1],1);
-        }
-      }
-    }
-  }
 
-  setPlaylistLoop = () =>{
-    if(this.state.playingPlaylistLoop){
-      if(this.state.playingPlaylistLoop===this.state.openPlaylistId){
-        this.setState({
-          playingPlaylistLoop:'',
-        });
-      }else{
-        this.setState({
-          playingPlaylistLoop:this.state.openPlaylistId,
-        });
-      }
-    }else{
-      this.setState({
-        playingPlaylistLoop:this.state.openPlaylistId,
-      });
-    }
-  }
+  //Funciones para el buscador de contenido
 
-  shufflePlaylist = () =>{
-    var Songs,sortedSongs,oldPlaylist,newShuffledPlaylist;
-    if(this.state.playingPlaylistShuffled){
-      if(this.state.playingPlaylistShuffled===this.state.openPlaylistId){
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.title).localeCompare(b.title);
-        });
-        this.setState({
-          openPlaylist:sortedSongs,
-          playingPlaylistShuffled:'',
-        });
-      }else{
-        oldPlaylist = this.state.openPlaylist;
-        newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
-        this.setState({
-          playingPlaylistShuffled: this.state.openPlaylistId,
-          openPlaylist:newShuffledPlaylist,
-        });
-      }
-    }else{
-      oldPlaylist = this.state.openPlaylist;
-      newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
-      this.setState({
-        playingPlaylistShuffled:this.state.openPlaylistId,
-        openPlaylist:newShuffledPlaylist,
-      });
-    }
-  }
-
-  playPlaylist = () =>{
-    if(this.state.openPlaylist[0]!==undefined){
-      this.setState({
-        playingPlaylist:1,
-      });
-      this.cambiaSource(this.state.openPlaylist[0],1);
-    }
-  }
-
-  sortPlaylist = (mode) =>{
-    var Songs,sortedSongs;
-    switch(mode){
-      case 0: //title
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.title).localeCompare(b.title);
-        });
-        break;
-      case 1: //artist
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.album.artist.name).localeCompare(b.album.artist.name);
-        });
-        break;
-      case 2: //genre
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.genre).localeCompare(b.genre);
-        });
-        break;
-      case 3: //upload time on podcast only
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.created_at).localeCompare(b.created_at);
-        });
-        break;
-      default:break;
-    }
-    this.setState({
-      openPlaylist:sortedSongs,
-      playingPlaylistShuffled:'',
-    });
-  }
-
-  nextSong= () =>{
-    var currentSongs = this.state.openPlaylist;
-    var idSongs = currentSongs.map(v=>v.id);
-    var currentSong = idSongs.indexOf(this.state.idActiveSong);
-    if(this.state.openPodcast){
-      if(currentSongs[currentSong+1]!==undefined){
-        this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1);
-      }
-    }else{
-      if(currentSongs[currentSong+1]!==undefined){
-        this.cambiaSourcePlaylist(currentSongs[currentSong+1],-1);
-      }
-    }
-  }
-
-  previousSong = () =>{
-    var currentSongs = this.state.openPlaylist;
-    var idSongs = currentSongs.map(v=>v.id);
-    var currentSong = idSongs.indexOf(this.state.idActiveSong);
-    if(this.state.openPodcast){
-      if(currentSong-1>=0){
-        this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1);
-      }
-    }else{
-      if(currentSong-1>=0){
-        this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
-      }
-    }
-  }
-
-
+  //Guarda el valor del campo de entrada de la búsqueda, y lo actualiza en vivo.
   //Tipo codificado con números, 0=Songs, 1=Artists, 2=Categories, 3=Albums, 4=Podcasts, 5=Usernames
   cambiaSearch = (tipoSearch) => {
     this.setState({
@@ -360,18 +210,14 @@ class App extends Component{
     });
   }
 
+  //Guarda el valor de la búsqueda para poder navegar entre distintas páginas aunque se cambie el contenido de la búsqueda actual.
   getSearch = (string) =>{
     this.setState({
       busqueda: string.target.value
     });
   }
 
-  getInnerSearch = (string) =>{
-    this.setState({
-      innerBusqueda: string.target.value
-    });
-  }
-
+  //Función principal de búsqueda, detecta el tipo seleccionado y realiza la búsqueda en la dirección correcta.
   searchSong = () =>{
     var urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/songs/';
     var searchStatement='?search='+this.state.busqueda;
@@ -425,6 +271,7 @@ class App extends Component{
     })
   }
 
+  //Se utiliza para actualizar la información de la búsqueda al valorar una canción/podcast abierta desde el buscador.
   updateSearchSong = () =>{
     var urlLocal='https://ps-20-server-django-app.herokuapp.com/api/v1/songs/';
     var searchStatement='?search='+this.state.busqueda;
@@ -479,12 +326,11 @@ class App extends Component{
     })
   }
 
+  //Esta función permite el paso entre las páginas de los resultados de búsqueda, si es posible.
   cambiaPage = (page) =>{
     if(page === 0){//Previous page
-
       var urlLocal=this.state.busquedaPreviousPage;
       var newPage=this.state.page-1;
-
       fetch(urlLocal,{
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
         method: 'GET',
@@ -508,9 +354,7 @@ class App extends Component{
           alert("Error "+response.detail);
         }
       })
-
     }else{//Next page
-
       urlLocal=this.state.busquedaNextPage;
       newPage=this.state.page+1;
 
@@ -537,10 +381,13 @@ class App extends Component{
           alert("Error "+response.detail);
         }
       })
-
     }
   }
 
+
+  //Funciones para la pantalla de listado de playlists
+
+  //Se ejecuta al crear o modificar una lista, limita la longitud del nombre introducido
   checkLenghtString = (title) =>{
     if(title.length>40){
       alert("The new title is too large");
@@ -550,8 +397,8 @@ class App extends Component{
     }
   }
 
-  //  Option = 1 -> change name
-  //  Option = 0 -> create
+  //Crea una playlist o modifica el título de una, siempre que el nuevo título cumpla la condición de "checkLenghtString".
+  //Option 0 -> create, Option = 1 -> change name
   createPlaylist = (name,option) =>{
     if(this.checkLenghtString(name)){
       switch(option){
@@ -560,7 +407,6 @@ class App extends Component{
             "name":name,
             "songs":[],
           };
-      
           fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/', {
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
             method: 'POST',
@@ -577,7 +423,6 @@ class App extends Component{
             }
           })
           break;
-  
         case 1:
           var url = 'https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'
           url = url + this.state.playlist_editar+'/'
@@ -597,19 +442,43 @@ class App extends Component{
             }
           })
           break;
-  
         default:
           break;
       }
     }
   }
 
+  //Elimina las playlist indicadas dentro de la lista enviada (por Id).
+  deletePlaylists = (list) =>{
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/';
+    var i=0;
+    var countRefresh = 1;
+    while (list[i]!==undefined){
+      var Auxurl=url+list[i]+"/";
+      fetch(Auxurl, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'DELETE',
+      })// El comentario de abajo elimina un warning innecesario
+      // eslint-disable-next-line
+      .then(res => { 
+        if(list[countRefresh]===undefined){
+          this.fetchPlaylists(-1);
+        }else{
+          countRefresh++;
+        }
+      })
+      i++;
+    }
+  }
+
+  //Indica la id de la playlist a editar, de forma que cambia su apariencia y permite dicha edición.
   setEditingPlaylist = (p_editar) =>{
     this.setState({
       playlist_editar: p_editar,
     })
   }
 
+  //Obtiene las playlists del usuario indicado y las guarda en el estado.
   fetchPlaylists = (user) =>{
     if(user<0){
       fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
@@ -653,106 +522,96 @@ class App extends Component{
     }
   }
 
-  fetchPodcasts = () =>{
-      fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-        method: 'GET',
-      })
-      .then(res => res.json())
-      .then(response => {
-        if(response.id){
-          this.setState({
-            userPodcasts:response.albums,
-            contentList: response.albums,
-            
-            tipoContent:"podcasts",
-            modifyContent: '0',
-          })
-        }else{
-          alert("There was an error fetching");
-        }
-      });
-    
-  }
 
-  deletePlaylists = (list) =>{
-    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/';
-    var i=0;
-    var countRefresh = 1;
-    while (list[i]!==undefined){
-      var Auxurl=url+list[i]+"/";
-      fetch(Auxurl, {
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-        method: 'DELETE',
-      })// El comentario de abajo elimina un warning innecesario
-      // eslint-disable-next-line
-      .then(res => { 
-        if(list[countRefresh]===undefined){
-          this.fetchPlaylists(-1);
-        }else{
-          countRefresh++;
-        }
-      })
-      i++;
+  //Funciones para la pantalla de listado del contenido de una playlist
+
+  //Activa la opción bucle de la paylist abierta, iniciando la primera canción al acabar la última.
+  setPlaylistLoop = () =>{
+    if(this.state.playingPlaylistLoop){
+      if(this.state.playingPlaylistLoop===this.state.openPlaylistId){
+        this.setState({
+          playingPlaylistLoop:'',
+        });
+      }else{
+        this.setState({
+          playingPlaylistLoop:this.state.openPlaylistId,
+        });
+      }
+    }else{
+      this.setState({
+        playingPlaylistLoop:this.state.openPlaylistId,
+      });
     }
   }
 
-  deletePodcasts = (list) =>{
-    var currentPodcasts = this.state.userPodcasts;
-    var idPodcasts = currentPodcasts.map(v=>v.id);
-    list.forEach(element =>{
-      var posId = idPodcasts.indexOf(element);
-      idPodcasts.splice(posId,1);
-    });
-    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
-    fetch(url, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-      method: 'PATCH',
-      body: JSON.stringify ({
-        "albums":idPodcasts,
-      })     
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.id) {
-        this.setState({
-          userPodcasts:response.albums,
+  //Activa la opción reproducción aleatoria de la paylist abierta, provocando una ordenación aleatorio.
+  shufflePlaylist = () =>{
+    var Songs,sortedSongs,oldPlaylist,newShuffledPlaylist;
+    if(this.state.playingPlaylistShuffled){
+      if(this.state.playingPlaylistShuffled===this.state.openPlaylistId){
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.title).localeCompare(b.title);
         });
-        this.fetchPodcasts();
-      }else{
-        alert("There was an error");
-      }
-    })
-  }
-
-  deleteFriends = (list) =>{
-    var currentFriends = this.state.userFriends;
-    var idFriends = currentFriends.map(v=>v.id);
-    list.forEach(element =>{
-      var posId = idFriends.indexOf(element);
-      idFriends.splice(posId,1);
-    });
-    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
-    fetch(url, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-      method: 'PATCH',
-      body: JSON.stringify ({
-        "friends":idFriends,
-      })     
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.id) {
         this.setState({
-          userFriends:response.friends,
-        })
-        this.cambiaMode("friends",0);
+          openPlaylist:sortedSongs,
+          playingPlaylistShuffled:'',
+        });
       }else{
-        alert("There was an error");
+        oldPlaylist = this.state.openPlaylist;
+        newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+        this.setState({
+          playingPlaylistShuffled: this.state.openPlaylistId,
+          openPlaylist:newShuffledPlaylist,
+        });
       }
-    })
+    }else{
+      oldPlaylist = this.state.openPlaylist;
+      newShuffledPlaylist = oldPlaylist.sort(() => Math.random() - 0.5) //Shuffle function from "https://javascript.info/task/shuffle"
+      this.setState({
+        playingPlaylistShuffled:this.state.openPlaylistId,
+        openPlaylist:newShuffledPlaylist,
+      });
+    }
   }
 
+  //Ordena el contenido de la playlist abierta según el campo indicado en "mode".
+  sortPlaylist = (mode) =>{
+    var Songs,sortedSongs;
+    switch(mode){
+      case 0: //title
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.title).localeCompare(b.title);
+        });
+        break;
+      case 1: //artist
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.album.artist.name).localeCompare(b.album.artist.name);
+        });
+        break;
+      case 2: //genre
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.genre).localeCompare(b.genre);
+        });
+        break;
+      case 3: //upload time on podcast only
+        Songs = this.state.openPlaylist;
+        sortedSongs = Songs.sort(function(a,b){
+          return (a.created_at).localeCompare(b.created_at);
+        });
+        break;
+      default:break;
+    }
+    this.setState({
+      openPlaylist:sortedSongs,
+      playingPlaylistShuffled:'',
+    });
+  }
+
+  //Borra las canciones de la playlist abierta cuya Id aparece en la lista.
   deleteSongs = (list) =>{
     var currentSongs = this.state.openPlaylist;
     var idSongs = currentSongs.map(v=>v.id);
@@ -781,116 +640,103 @@ class App extends Component{
       }
     })
   }
+  
 
-  userRating = (rate) =>{
-    var song={
-      "user_valoration":rate,
-    };
+  //Funciones para listado de podcasts y de su contenido
 
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/songs/'+this.state.idActiveSong+'/', {
+  //Permite al ususario añadir el podcast cuya Id coincide con "podcastId".
+  addPodcast = (podcastId) =>{
+    var idPodcasts = this.state.userPodcasts.map(v=>v.id);
+    if(idPodcasts.indexOf(podcastId)<0){
+      this.setState({
+        showAddPodcast:true,
+      })
+      idPodcasts.push(podcastId);
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'PATCH',
+        body: JSON.stringify({
+          "albums":idPodcasts,
+        })
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.id) {
+          this.setState({
+            userPodcasts:response.albums,
+            showAddPodcast:false,
+          });
+        }
+      });
+    }else{
+      alert("You already have this podcast");
+    }
+  }
+
+  //Obtiene y guarda los podcasts guardados por el usuario.
+  fetchPodcasts = () =>{
+      fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(response => {
+        if(response.id){
+          this.setState({
+            userPodcasts:response.albums,
+            contentList: response.albums,
+            
+            tipoContent:"podcasts",
+            modifyContent: '0',
+          })
+        }else{
+          alert("There was an error fetching");
+        }
+      });
+    
+  }
+
+  //Borra los podcasts cuya Id aparece en la lista del usuario.
+  deletePodcasts = (list) =>{
+    var currentPodcasts = this.state.userPodcasts;
+    var idPodcasts = currentPodcasts.map(v=>v.id);
+    list.forEach(element =>{
+      var posId = idPodcasts.indexOf(element);
+      idPodcasts.splice(posId,1);
+    });
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+    fetch(url, {
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-      method: 'PUT',
-      body: JSON.stringify (
-        song
-      )     
+      method: 'PATCH',
+      body: JSON.stringify ({
+        "albums":idPodcasts,
+      })     
     })
     .then(res => res.json())
     .then(response => {
       if (response.id) {
-      
-        var currentSongs = this.state.openPlaylist;
-        var idSongs = currentSongs.map(v=>v.id);
-        var posId = idSongs.indexOf(response.id);
-        currentSongs[posId]=response;
         this.setState({
-          openPlaylist:currentSongs,
-          rating: response.avg_valoration,
-          userRated:rate,
+          userPodcasts:response.albums,
         });
-        if(this.state.tipoContent==="search"){
-          this.updateSearchSong();
-        }
+        this.fetchPodcasts();
       }else{
         alert("There was an error");
       }
     })
   }
 
-  getUser = () =>{
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token '+this.state.key
-      },
-      method: 'GET',
-    })
-    .then(res => res.json())
-    .then(response => {
-      if(response.id){
-        this.setState({
-          username:response.username,
-          contentName:response.username,
-          userId:response.id,
-          userPlaylist:response.playlists,
-          userFriends: response.friends,
-          userPodcasts:response.albums,
-        });
-        if(response.pause_song && this.state.firstLoad){
-          this.setState({
-            pausedSecond:response.pause_second,
-          });
-          this.cambiaSource(response.pause_song);
-        }
-      }else{
-        //alert("Error "+response.detail);
-      }
-    })
-  }
 
-  registerDebug = () =>{
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      body: JSON.stringify ({
-          "username": "prueba",
-          "email": "rogerjunior1999@yahoo.com",
-          "password1": "Contraseña1",
-          "password2": "Contraseña1"
-      })
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.key) {
-        window.localStorage.setItem('keyMusicApp',response.key);
-        window.location.reload();
-      }
+  //Funciones para el control de las pantallas de amigos
+
+  //Función que coge el valor de la búsqueda en el menú de amigos y hace que solo aparezcan aquellos cuyo nombre incluye la búsqueda.
+  getInnerSearch = (string) =>{
+    this.setState({
+      innerBusqueda: string.target.value
     });
   }
 
-  loginDebug = () =>{
-    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      body: JSON.stringify ({
-        "username": "prueba",
-        "email": '',
-        "password": "Contraseña1"
-      })  
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.key) {
-        window.localStorage.setItem('keyMusicApp',response.key);
-        window.location.reload();
-      }
-    });
-  }
-
-  logout = () => {
-    window.localStorage.removeItem("keyMusicApp");
-    window.location.replace("/no-react/index.html");
-  }
-
+  //Permite al usuario añadir como amigo a "user".
   addUser = (user) =>{
     if(user.id===this.state.userId){
       alert("You can't be your own friend");
@@ -927,35 +773,71 @@ class App extends Component{
     }
   }
 
-  addPodcast = (podcastId) =>{
-    var idPodcasts = this.state.userPodcasts.map(v=>v.id);
-    if(idPodcasts.indexOf(podcastId)<0){
-      this.setState({
-        showAddPodcast:true,
-      })
-      idPodcasts.push(podcastId);
-      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
-      fetch(url, {
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-        method: 'PATCH',
-        body: JSON.stringify({
-          "albums":idPodcasts,
+  //Elimina los amigos del usuario cuya Id aparece en la lista.
+  deleteFriends = (list) =>{
+    var currentFriends = this.state.userFriends;
+    var idFriends = currentFriends.map(v=>v.id);
+    list.forEach(element =>{
+      var posId = idFriends.indexOf(element);
+      idFriends.splice(posId,1);
+    });
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+    fetch(url, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'PATCH',
+      body: JSON.stringify ({
+        "friends":idFriends,
+      })     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.id) {
+        this.setState({
+          userFriends:response.friends,
         })
-      })
-      .then(res => res.json())
-      .then(response => {
-        if (response.id) {
-          this.setState({
-            userPodcasts:response.albums,
-            showAddPodcast:false,
-          });
-        }
-      });
-    }else{
-      alert("You already have this podcast");
-    }
+        this.cambiaMode("friends",0);
+      }else{
+        alert("There was an error");
+      }
+    })
   }
 
+  
+  //Funciones para la navegación de la página
+
+  //Obtiene los datos del usuario y los guarda para realizar el resto de funciones, incluida la opción de recordar los datos del usaurio logeado.
+  getUser = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+this.state.key
+      },
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(response => {
+      if(response.id){
+        this.setState({
+          username:response.username,
+          contentName:response.username,
+          userId:response.id,
+          userPlaylist:response.playlists,
+          userFriends: response.friends,
+          userPodcasts:response.albums,
+        });
+        if(response.pause_song && this.state.firstLoad){
+          this.setState({
+            pausedSecond:response.pause_second,
+          });
+          this.cambiaSource(response.pause_song);
+        }
+      }else{
+        //alert("Error "+response.detail);
+      }
+    })
+  }
+
+  //Cambia visualmente la pantalla en la que el usuario se encuentra.
   cambiaActive = (posicion) => {
     var tipos = ["playlists","podcasts","friends","settings"]
     var tipoEspecifico = tipos[posicion];
@@ -985,6 +867,7 @@ class App extends Component{
     }
   }
 
+  //Cambia a nivel funcional la pantalla en la que se encuentra el usaurio.
   cambiaMode = (tipo,Id) =>{
     var url;
     switch(tipo){
@@ -1096,41 +979,186 @@ class App extends Component{
         break;
     }
   }
-
-  cambiaSource = (newSrc) => {
-      sleep(5).then(() => {
-        this.setState({
-          idActiveSong:newSrc.id,
-          openPlaylistId:'',
-          skipControls:false,
-          src: newSrc.stream_url,
-          audioType:newSrc.episode,
-          title: newSrc.title,
-          author: newSrc.album.artist.name,
-          album: newSrc.album.name,
-          rating: newSrc.avg_valoration,
-          userRated: newSrc.user_valoration,
-          playingPlaylist:0,
-        });
-        if(newSrc.user_valoration){
-          this.setState({
-            userRated: newSrc.user_valoration,
-          });
-        }else{
-          this.setState({
-            rating: newSrc.avg_valoration,
-          });
-        }
-        if(!this.state.firstLoad){
-          this.player.current.audio.current.currentTime=0;
-          this.player.current.audio.current.play();
-        }
-      })
+  
+  //Permite al usuario salir de la página web y que se descarguen sus datos.
+  logout = () => {
+    window.localStorage.removeItem("keyMusicApp");
+    window.location.replace("/no-react/index.html");
   }
 
+
+  //Funciones para el reproductor de audio
+
+  //Inicia la siguiente canción de la playlist o episodio del podcast, si es posible.
+  nextSong= () =>{
+    var currentSongs = this.state.openPlaylist;
+    var idSongs = currentSongs.map(v=>v.id);
+    var currentSong = idSongs.indexOf(this.state.idActiveSong);
+    if(this.state.openPodcast){
+      if(currentSongs[currentSong+1]!==undefined){
+        this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1);
+      }
+    }else{
+      if(currentSongs[currentSong+1]!==undefined){
+        this.cambiaSourcePlaylist(currentSongs[currentSong+1],-1);
+      }
+    }
+  }
+
+  //Inicia la anterior canción de la playlist o episodio del podcast, si es posible.
+  previousSong = () =>{
+    var currentSongs = this.state.openPlaylist;
+    var idSongs = currentSongs.map(v=>v.id);
+    var currentSong = idSongs.indexOf(this.state.idActiveSong);
+    if(this.state.openPodcast){
+      if(currentSong-1>=0){
+        this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1);
+      }
+    }else{
+      if(currentSong-1>=0){
+        this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
+      }
+    }
+  }
+
+  //Se activa al acabar una canción si está en bucle pasará a la siguiente canción, sino no realiza ningún cambio
+  finishedSong = () =>{
+    var currentSongs,idSongs,finishedSong;
+    if(this.state.openPodcast){
+      if(this.state.playingPlaylist){
+        currentSongs = this.state.openPlaylist;
+        idSongs = currentSongs.map(v=>v.id);
+        finishedSong = idSongs.indexOf(this.state.idActiveSong);
+        if(currentSongs[finishedSong+1]===undefined){
+          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSourcePodcast(currentSongs[0],undefined,-1);
+        }else{
+          this.cambiaSourcePodcast(currentSongs[finishedSong+1],undefined,-1);
+        }
+      }
+    }else{
+      if(this.state.playingPlaylist){
+        currentSongs = this.state.openPlaylist;
+        idSongs = currentSongs.map(v=>v.id);
+        finishedSong = idSongs.indexOf(this.state.idActiveSong);
+        if(currentSongs[finishedSong+1]===undefined){
+          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSource(currentSongs[0],1);
+        }else{
+          this.cambiaSource(currentSongs[finishedSong+1],1);
+        }
+      }
+    }
+  }
+
+  //Guarda la valoración de la canción en el reproductor que ha realizado el usuario.
+  userRating = (rate) =>{
+    var song={
+      "user_valoration":rate,
+    };
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/songs/'+this.state.idActiveSong+'/', {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'PUT',
+      body: JSON.stringify (
+        song
+      )     
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.id) {
+        var currentSongs = this.state.openPlaylist;
+        var idSongs = currentSongs.map(v=>v.id);
+        var posId = idSongs.indexOf(response.id);
+        currentSongs[posId]=response;
+        this.setState({
+          openPlaylist:currentSongs,
+          rating: response.avg_valoration,
+          userRated:rate,
+        });
+        if(this.state.tipoContent==="search"){
+          this.updateSearchSong();
+        }
+      }else{
+        alert("There was an error");
+      }
+    })
+  }
+
+  //Actualiza la última canción que estaba escuchando el usuario.
+  updatePausedSong = () =>{
+    if(this.state.update){
+      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
+      var currentSecond= Math.trunc(this.player.current.audio.current.currentTime);
+      fetch(url, {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'PATCH',
+        body: JSON.stringify({
+          "pause_song":this.state.idActiveSong,
+          "pause_second":currentSecond,
+        })
+      });
+    }
+  }
+
+  //Se ejecuta al iniciar la pestaña, si el usuario estaba escuchándo una canción y cierra la aplicación o pestaña, ésta será cargada aquí.
+  setLastSong = () =>{
+    if(this.state.firstLoad){
+      if(this.state.pausedSecond!==null){
+        this.player.current.audio.current.pause();
+        this.player.current.audio.current.currentTime=this.state.pausedSecond;
+        this.setState({
+          firstLoad:'',
+          update:'',
+        });
+        sleep(40).then(() => {
+          this.setState({
+            update:'1',
+          });
+        });
+      }else{
+        this.player.current.audio.current.play();
+        this.setState({
+          firstLoad:'',
+          update:'1',
+        });
+      }
+    }
+  }  
+
+  //Carga una canción en el reproductor a partir solamente de la información de la canción, se usa desde el buscador solamente.
+  cambiaSource = (newSrc) => {
+    sleep(5).then(() => {
+      this.setState({
+        idActiveSong:newSrc.id,
+        openPlaylistId:'',
+        skipControls:false,
+        src: newSrc.stream_url,
+        audioType:newSrc.episode,
+        title: newSrc.title,
+        author: newSrc.album.artist.name,
+        album: newSrc.album.name,
+        rating: newSrc.avg_valoration,
+        userRated: newSrc.user_valoration,
+        playingPlaylist:0,
+      });
+      if(newSrc.user_valoration){
+        this.setState({
+          userRated: newSrc.user_valoration,
+        });
+      }else{
+        this.setState({
+          rating: newSrc.avg_valoration,
+        });
+      }
+      if(!this.state.firstLoad){
+        this.player.current.audio.current.currentTime=0;
+        this.player.current.audio.current.play();
+      }
+    })
+  }
+
+  //Carga una canción en el reproductor a partir de la información de la canción y de una Id de playlist, se usa desde los menús de playlists solamente.
   cambiaSourcePlaylist = (newSrc,idPL) =>{
-    if(idPL<0){
-      if(newSrc.id){
+    if(idPL<0){//Tenemos la playlist abierta, no se va a usar este valor
+      if(newSrc.id){//Si tenemos una fuente, hemos abierto una canción concreta de la playlist
         sleep(5).then(() => {
           this.setState({
             idActiveSong:newSrc.id,
@@ -1155,7 +1183,7 @@ class App extends Component{
           this.player.current.audio.current.currentTime=0;
           this.player.current.audio.current.play();
         });
-      }else{
+      }else{//Si no tenemos una fuente, hemos iniciado desde el principio la palylist
         if(newSrc<0){
           ;
         }else{
@@ -1185,7 +1213,7 @@ class App extends Component{
           });
         }
       }
-    }else{
+    }else{//No tenemos la playlist abierta, debemos cargarla y después abrirla desde la primera canción
       var url='https://ps-20-server-django-app.herokuapp.com/api/v1/playlists/'+idPL+'/';
       fetch(url, {
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
@@ -1235,8 +1263,9 @@ class App extends Component{
     }
   }
 
+  //Carga una canción en el reproductor a partir de la información de la canción y de una Id de podcast, se usa desde los menús de podcasts solamente.
   cambiaSourcePodcast = (newSrc,author,datosPd) =>{
-      if(newSrc.id){
+      if(newSrc.id){//Si tenemos una fuente, hemos iniciado un episodio concreto del podcast
         sleep(5).then(() => {
           this.setState({
             idActiveSong:newSrc.id,
@@ -1261,8 +1290,8 @@ class App extends Component{
           this.player.current.audio.current.currentTime=0;
           this.player.current.audio.current.play();
         });
-      }else{
-        if(author){
+      }else{//Si no tenemos una fuente, hemos iniciado el podcast desde el primer episodio
+        if(author){//Si tenemos un autor, hemos iniciado el podcast sin haberlo cargado primero
           var url='https://ps-20-server-django-app.herokuapp.com/api/v1/albums/'+datosPd.id+'/';
           fetch(url, {
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
@@ -1309,7 +1338,7 @@ class App extends Component{
               alert("There was an error");
             }
           });
-        }else{
+        }else{//Si no tenemos un autor, hemos iniciado el podcast después de cargarlo
           sleep(5).then(() => {
             this.setState({
               idActiveSong:this.state.openPlaylist[0].id,
@@ -1337,46 +1366,8 @@ class App extends Component{
         }
       }        
   }
-  
-  updatePausedSong = () =>{
-    if(this.state.update){
-      var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
-      var currentSecond= Math.trunc(this.player.current.audio.current.currentTime);
-      fetch(url, {
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
-        method: 'PATCH',
-        body: JSON.stringify({
-          "pause_song":this.state.idActiveSong,
-          "pause_second":currentSecond,
-        })
-      });
-    }
-  }
 
-  setLastSong = () =>{
-    if(this.state.firstLoad){
-      if(this.state.pausedSecond!==null){
-        this.player.current.audio.current.pause();
-        this.player.current.audio.current.currentTime=this.state.pausedSecond;
-        this.setState({
-          firstLoad:'',
-          update:'',
-        });
-        sleep(40).then(() => {
-          this.setState({
-            update:'1',
-          });
-        });
-      }else{
-        this.player.current.audio.current.play();
-        this.setState({
-          firstLoad:'',
-          update:'1',
-        });
-      }
-    }
-  }
-
+  //Vacía cualquier valor de canción del reproductor e indica que el usuario no tiene ninguna canción activa.
   emptySource = () => {
     var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/';
     fetch(url, {
@@ -1402,7 +1393,46 @@ class App extends Component{
   }
 
 
+  //Funciones para debug de la web, solo aparecen si está activo el estado debug.
 
+  registerDebug = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify ({
+          "username": "prueba",
+          "email": "rogerjunior1999@yahoo.com",
+          "password1": "Contraseña1",
+          "password2": "Contraseña1"
+      })
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.key) {
+        window.localStorage.setItem('keyMusicApp',response.key);
+        window.location.reload();
+      }
+    });
+  }
+
+  loginDebug = () =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify ({
+        "username": "prueba",
+        "email": '',
+        "password": "Contraseña1"
+      })  
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.key) {
+        window.localStorage.setItem('keyMusicApp',response.key);
+        window.location.reload();
+      }
+    });
+  }
   
 }
 

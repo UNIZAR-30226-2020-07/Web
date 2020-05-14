@@ -101,6 +101,7 @@ function validacionRegister() {
 
 //Función para comprobar que todos los campos del formulario son válidos, y para el login del usuario
 function validacionLogin() {
+    var checked = document.getElementById("checkbox").checked;
     var exito=0;
     document.getElementById("userError").style.visibility="hidden";
     document.getElementById("passLoginError").style.visibility="hidden";
@@ -135,6 +136,11 @@ function validacionLogin() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
+                if(checked){
+                    window.localStorage.setItem('rememberMusicApp',true);
+                }else{
+                    window.localStorage.setItem('rememberMusicApp',false);
+                }
                 window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
@@ -162,6 +168,11 @@ function validacionLogin() {
             if (response.key) {
                 if (typeof(localStorage) !== "undefined") {
                     window.localStorage.setItem('keyMusicApp',response.key);
+                    if(checked){
+                        window.localStorage.setItem('rememberMusicApp',true);
+                    }else{
+                        window.localStorage.setItem('rememberMusicApp',false);
+                    }
                     window.location.replace("/"); //redirige sin permitir retroceder
                     //window.location.href="home.html"; //redirige permitiendo retroceder
                 } else {

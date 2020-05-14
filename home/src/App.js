@@ -58,6 +58,7 @@ class App extends Component{
       album: '',
       rating: '',
       userRated: '',
+      playerSemaphore:'',
 
       friendId:'',
       friendName:'',
@@ -995,33 +996,55 @@ class App extends Component{
 
   //Inicia la siguiente canción de la playlist o episodio del podcast, si es posible.
   nextSong= () =>{
-    var currentSongs = this.state.openPlaylist;
-    var idSongs = currentSongs.map(v=>v.id);
-    var currentSong = idSongs.indexOf(this.state.idActiveSong);
-    if(this.state.openPodcast){
-      if(currentSongs[currentSong+1]!==undefined){
-        this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1);
+    if(!this.state.playerSemaphore){
+      this.setState({
+        playerSemaphore:"on",
+      })
+      var currentSongs = this.state.openPlaylist;
+      var idSongs = currentSongs.map(v=>v.id);
+      var currentSong = idSongs.indexOf(this.state.idActiveSong);
+      if(this.state.openPodcast){
+        if(currentSongs[currentSong+1]!==undefined){
+          this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1);
+        }
+      }else{
+        if(currentSongs[currentSong+1]!==undefined){
+          this.cambiaSourcePlaylist(currentSongs[currentSong+1],-1);
+        }
       }
     }else{
-      if(currentSongs[currentSong+1]!==undefined){
-        this.cambiaSourcePlaylist(currentSongs[currentSong+1],-1);
-      }
+      sleep(40).then(() => {
+        this.setState({
+          playerSemaphore:'',
+        });
+      });
     }
   }
 
   //Inicia la anterior canción de la playlist o episodio del podcast, si es posible.
   previousSong = () =>{
-    var currentSongs = this.state.openPlaylist;
-    var idSongs = currentSongs.map(v=>v.id);
-    var currentSong = idSongs.indexOf(this.state.idActiveSong);
-    if(this.state.openPodcast){
-      if(currentSong-1>=0){
-        this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1);
+    if(!this.state.playerSemaphore){
+      this.setState({
+        playerSemaphore:"on",
+      })
+      var currentSongs = this.state.openPlaylist;
+      var idSongs = currentSongs.map(v=>v.id);
+      var currentSong = idSongs.indexOf(this.state.idActiveSong);
+      if(this.state.openPodcast){
+        if(currentSong-1>=0){
+          this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1);
+        }
+      }else{
+        if(currentSong-1>=0){
+          this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
+        }
       }
     }else{
-      if(currentSong-1>=0){
-        this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
-      }
+      sleep(40).then(() => {
+        this.setState({
+          playerSemaphore:'',
+        });
+      });
     }
   }
 
@@ -1129,7 +1152,6 @@ class App extends Component{
 
   //Carga una canción en el reproductor a partir solamente de la información de la canción, se usa desde el buscador solamente.
   cambiaSource = (newSrc) => {
-    sleep(5).then(() => {
       this.setState({
         idActiveSong:newSrc.id,
         openPlaylistId:'',
@@ -1156,14 +1178,15 @@ class App extends Component{
         this.player.current.audio.current.currentTime=0;
         this.player.current.audio.current.play();
       }
-    })
+      this.setState({
+        playerSemaphore: '',
+      });
   }
 
   //Carga una canción en el reproductor a partir de la información de la canción y de una Id de playlist, se usa desde los menús de playlists solamente.
   cambiaSourcePlaylist = (newSrc,idPL) =>{
     if(idPL<0){//Tenemos la playlist abierta, no se va a usar este valor
       if(newSrc.id){//Si tenemos una fuente, hemos abierto una canción concreta de la playlist
-        sleep(5).then(() => {
           this.setState({
             idActiveSong:newSrc.id,
             audioType:newSrc.episode,
@@ -1186,12 +1209,13 @@ class App extends Component{
           }
           this.player.current.audio.current.currentTime=0;
           this.player.current.audio.current.play();
-        });
+          this.setState({
+            playerSemaphore: '',
+          });
       }else{//Si no tenemos una fuente, hemos iniciado desde el principio la palylist
         if(newSrc<0){
           ;
         }else{
-          sleep(5).then(() => {
             this.setState({
               idActiveSong:this.state.openPlaylist[0].id,
               audioType:this.state.openPlaylist[0].episode,
@@ -1214,7 +1238,9 @@ class App extends Component{
             }
             this.player.current.audio.current.currentTime=0;
             this.player.current.audio.current.play();
-          });
+            this.setState({
+              playerSemaphore: '',
+            });
         }
       }
     }else{//No tenemos la playlist abierta, debemos cargarla y después abrirla desde la primera canción
@@ -1259,6 +1285,9 @@ class App extends Component{
             }
             this.player.current.audio.current.currentTime=0;
             this.player.current.audio.current.play();
+            this.setState({
+              playerSemaphore: '',
+            });
           }
         }else{
           alert("There was an error");
@@ -1270,7 +1299,6 @@ class App extends Component{
   //Carga una canción en el reproductor a partir de la información de la canción y de una Id de podcast, se usa desde los menús de podcasts solamente.
   cambiaSourcePodcast = (newSrc,author,datosPd) =>{
       if(newSrc.id){//Si tenemos una fuente, hemos iniciado un episodio concreto del podcast
-        sleep(5).then(() => {
           this.setState({
             idActiveSong:newSrc.id,
             audioType:newSrc.episode,
@@ -1293,7 +1321,9 @@ class App extends Component{
           }
           this.player.current.audio.current.currentTime=0;
           this.player.current.audio.current.play();
-        });
+          this.setState({
+            playerSemaphore: '',
+          });
       }else{//Si no tenemos una fuente, hemos iniciado el podcast desde el primer episodio
         if(author){//Si tenemos un autor, hemos iniciado el podcast sin haberlo cargado primero
           var url='https://ps-20-server-django-app.herokuapp.com/api/v1/albums/'+datosPd.id+'/';
@@ -1338,12 +1368,14 @@ class App extends Component{
               }
               this.player.current.audio.current.currentTime=0;
               this.player.current.audio.current.play();
+              this.setState({
+                playerSemaphore: '',
+              });
             }else{
               alert("There was an error");
             }
           });
         }else{//Si no tenemos un autor, hemos iniciado el podcast después de cargarlo
-          sleep(5).then(() => {
             this.setState({
               idActiveSong:this.state.openPlaylist[0].id,
               audioType:this.state.openPlaylist[0].episode,
@@ -1366,7 +1398,9 @@ class App extends Component{
             }
             this.player.current.audio.current.currentTime=0;
             this.player.current.audio.current.play();
-          });
+            this.setState({
+              playerSemaphore: '',
+            });
         }
       }        
   }
@@ -1392,6 +1426,9 @@ class App extends Component{
         album: '',
         rating: '',
         userRated: '',
+      });
+      this.setState({
+        playerSemaphore: '',
       });
     })
   }

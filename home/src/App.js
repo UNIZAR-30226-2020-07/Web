@@ -986,6 +986,7 @@ class App extends Component{
   //Permite al usuario salir de la página web y que se descarguen sus datos.
   logout = () => {
     window.localStorage.removeItem("keyMusicApp");
+    window.localStorage.removeItem("rememberMusicApp");
     window.location.replace("/no-react/index.html");
   }
 

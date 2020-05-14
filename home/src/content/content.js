@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Rating from 'react-rating';
 import 'font-awesome/css/font-awesome.min.css';
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -57,6 +57,11 @@ class Content extends Component {
       loopingPL:this.props.loopingPlaylist,
       shuffledPL:this.props.shuffledPlaylist,
       id_edited_playlist:this.props.editing_playlist,
+
+      useremail: this.props.email,
+      usernameChange : false,
+      emailChange : false,
+      passwordChange : false,
     };
   };
 
@@ -213,6 +218,46 @@ class Content extends Component {
         newTitle:'',
       });
     }
+  }
+
+  cambiarUsername = () => {
+    this.setState({
+      usernameChange : true,
+    });
+  }
+
+  cambiarEmail = () => {
+    this.setState({
+      emailChange : true,
+    });
+  }
+
+  cambiarPassword = () => {
+    this.setState({
+      passwordChange : true,
+    });
+  }
+
+  fijarUsername = () => {
+    this.setState({
+      usernameChange : false,
+    });
+  }
+
+  fijarEmail = () => {
+    this.setState({
+      emailChange : false,
+    });
+  }
+
+  fijarPassword = () => {
+    this.setState({
+      passwordChange : false,
+    });
+  }
+
+  borrarCuenta = () => {
+    console.log("Noooooooooo")
   }
 
   render() {
@@ -711,7 +756,73 @@ class Content extends Component {
         );
       case "settings":
           return(
-            <div className="d-flex justify-content-center readable-text">Settings</div>
+            <div className="container content-internal">
+
+              {/* Fila con el icono y el nombre */}
+              <div class="row mt-4 mb-4">
+
+                  <div class="display-block float-left">
+                    <FontAwesomeIcon className="fa-4x" icon={faUserCircle}/>
+                  </div>
+
+                  <p class="ml-3 h2 display-block float-left">Hello {this.state.username}</p>
+
+              </div>
+
+              {/* Fila para username */}
+              <div className="row mt-2 mb-2">
+                  {this.state.usernameChange ? (<>
+                    <p className="col-sm-3 text-center">Username:</p>
+                    <input id="usernameInput" className="col-sm-5 text-center" type="text" placeholder={this.state.username} />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                  </>) : (<>
+                    <p className="col-sm-3 text-center">Username:</p>
+                    <input id="usernameInput" className="col-sm-5 text-center" type="text" value={this.state.username} readonly disabled />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.cambiarUsername}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
+                  </>)}
+              </div>
+
+              {/* Fila para email */}
+              <div className="row mt-2 mb-2">
+                  {this.state.emailChange ? (<>
+                    <p className="col-sm-3 text-center">Email:</p>
+                    <input id="emailInput" className="col-sm-5 text-center" type="text" placeholder={this.state.email} />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                  </>) : (<>
+                    <p className="col-sm-3 text-center">Email:</p>
+                    <input id="emailInput" className="col-sm-5 text-center" type="text" value={this.state.email} readonly disabled />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.cambiarEmail}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
+                  </>)}
+              </div>
+
+              {/* Fila(s) para password */}
+                {this.state.passwordChange ? (<>
+                  <div className="row mt-2 mb-2">
+                    <p className="col-sm-3 text-center">Password:</p>
+                    <input id="passwordInput" className="col-sm-5 text-center" type="password" placeholder="password" />
+                  </div>
+                  <div className="row mt-2 mb-2">
+                    <div className="col-sm-3">{/* empty */}</div>
+                    <input id="passwordInput1" className="col-sm-5 text-center" type="password" placeholder="password" />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                  </div>
+                </>) : (<>
+                  <div className="row mt-2 mb-2">
+                    <p className="col-sm-3 text-center">Password:</p>
+                    <input className="col-sm-5 text-center" type="password" value="password" readonly disabled />
+                    <button className="ml-2 display-block float-left button-control" onClick={this.cambiarPassword}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
+                  </div>
+                </>)}
+
+              {/* Fila de borrado de cuenta */}
+              <div class="row mt-5 mb-2">
+                <button class="btn btn-danger col-6 display-block float-left" onclick={this.borrarCuenta}>Delete my account</button>
+              </div>
+
+            </div>
           );
       default:
         return(

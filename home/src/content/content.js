@@ -86,6 +86,7 @@ class Content extends Component {
         showAddUser: nextProps.showAddUser,
         showAddPodcast: nextProps.showAddPodcast,
         friend:nextProps.friend,
+        useremail: nextProps.email,
       });
       if(nextProps.tipo !== "playlists"){
         this.setState({
@@ -801,12 +802,12 @@ class Content extends Component {
               <div className="row mt-2 mb-2">
                   {this.state.emailChange ? (<>
                     <p className="col-sm-3 text-center">Email:</p>
-                    <input id="emailInput" className="col-sm-5 text-center" type="text" placeholder={this.state.email} />
+                    <input id="emailInput" className="col-sm-5 text-center" type="text" placeholder={this.state.useremail} />
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
                     <p className="col-sm-3 text-center">Email:</p>
-                    <input id="emailInput" className="col-sm-5 text-center" type="text" value={this.state.email} readonly disabled />
+                    <input id="emailInput" className="col-sm-5 text-center" type="text" value={this.state.useremail} readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarEmail}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </>)}
               </div>
@@ -819,7 +820,7 @@ class Content extends Component {
                   </div>
                   <div className="row mt-2 mb-2">
                     <div className="col-sm-3">{/* empty */}</div>
-                    <input id="passwordInput1" className="col-sm-5 text-center" type="password" placeholder="password" />
+                    <input id="passwordInput1" className="col-sm-5 text-center" type="password" placeholder="rewrite new password" />
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </div>

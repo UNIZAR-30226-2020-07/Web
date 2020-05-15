@@ -776,23 +776,23 @@ class Content extends Component {
               {/* Fila con el icono y el nombre */}
               <div class="row mt-4 mb-4">
 
-                  <div class="display-block float-left">
+                  <div class="display-block float-left stop-button">
                     <FontAwesomeIcon className="fa-4x" icon={faUserCircle}/>
                   </div>
 
-                  <p class="ml-3 h2 display-block float-left">Hello {this.state.username}</p>
+                  <p class="ml-3 h2 display-block float-left readable-text">Hello {this.state.username}</p>
 
               </div>
 
               {/* Fila para username */}
               <div className="row mt-2 mb-2">
                   {this.state.usernameChange ? (<>
-                    <p className="col-sm-3 text-center">Username:</p>
+                    <p className="col-sm-3 text-center readable-text">Username:</p>
                     <input id="usernameInput" className="col-sm-5 text-center" type="text" placeholder={this.state.username} />
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
-                    <p className="col-sm-3 text-center">Username:</p>
+                    <p className="col-sm-3 text-center  readable-text">Username:</p>
                     <input id="usernameInput" className="col-sm-5 text-center" type="text" value={this.state.username} readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarUsername}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </>)}
@@ -801,12 +801,12 @@ class Content extends Component {
               {/* Fila para email */}
               <div className="row mt-2 mb-2">
                   {this.state.emailChange ? (<>
-                    <p className="col-sm-3 text-center">Email:</p>
+                    <p className="col-sm-3 text-center  readable-text">Email:</p>
                     <input id="emailInput" className="col-sm-5 text-center" type="text" placeholder={this.state.useremail} />
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
                     <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
-                    <p className="col-sm-3 text-center">Email:</p>
+                    <p className="col-sm-3 text-center  readable-text">Email:</p>
                     <input id="emailInput" className="col-sm-5 text-center" type="text" value={this.state.useremail} readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarEmail}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </>)}
@@ -815,7 +815,7 @@ class Content extends Component {
               {/* Fila(s) para password */}
                 {this.state.passwordChange ? (<>
                   <div className="row mt-2 mb-2">
-                    <p className="col-sm-3 text-center">Password:</p>
+                    <p className="col-sm-3 text-center  readable-text">Password:</p>
                     <input id="passwordInput" className="col-sm-5 text-center" type="password" placeholder="password" />
                   </div>
                   <div className="row mt-2 mb-2">
@@ -826,7 +826,7 @@ class Content extends Component {
                   </div>
                 </>) : (<>
                   <div className="row mt-2 mb-2">
-                    <p className="col-sm-3 text-center">Password:</p>
+                    <p className="col-sm-3 text-center  readable-text">Password:</p>
                     <input className="col-sm-5 text-center" type="password" value="password" readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarPassword}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </div>

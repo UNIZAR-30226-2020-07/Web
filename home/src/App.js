@@ -90,7 +90,7 @@ class App extends Component{
       update:'',
       showAddUser: false,
       showAddPodcast:false,
-      debug:'1',
+      debug:'',
 
       ui_main:RHAP_UI.MAIN_CONTROLS,
       ui_add:RHAP_UI.ADDITIONAL_CONTROLS,
@@ -123,7 +123,7 @@ class App extends Component{
       <div className="box">
         <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
           <div className="col-xl-2 navbar-header">
-            <img className="img-fluid mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
+            <img className="mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
             <button className="navbar-toggler button-toggle" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -156,7 +156,7 @@ class App extends Component{
                 }
               </ul>
             </div>
-            <div className="col-md-10 full-height scrollable">
+            <div className="col-md-10 full-height scrollable" style={{marginTop:20}}>
               <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent} email={this.state.userEmail}/>
             </div>
           </div>
@@ -501,7 +501,7 @@ class App extends Component{
             modifyContent: '0',
           })
         }else{
-          alert("There was an error fetching");
+          //alert("There was an error fetching");
         }
       });
     }else{
@@ -521,7 +521,7 @@ class App extends Component{
             modifyContent: '0',
           })
         }else{
-          alert("There was an error fetching");
+          //alert("There was an error fetching");
         }
       });
     }
@@ -837,8 +837,15 @@ class App extends Component{
           });
           this.cambiaSource(response.pause_song);
         }
+        if(window.localStorage.rememberMusicApp==="false"){
+          window.localStorage.removeItem("keyMusicApp");
+          window.localStorage.removeItem("rememberMusicApp");
+        }
       }else{
-        //alert("Error "+response.detail);
+        if(!this.state.debug){
+          alert("Unknown or not remembered user");
+          window.location.replace("/no-react/index.html");
+        }
       }
     })
   }

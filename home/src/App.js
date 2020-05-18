@@ -1218,10 +1218,12 @@ class App extends Component{
               rating: newSrc.avg_valoration,
             });
           }
-          this.player.current.audio.current.currentTime=0;
-          this.player.current.audio.current.play();
-          this.setState({
-            playerSemaphore: '',
+          sleep(40).then(() => {
+            this.player.current.audio.current.currentTime=0;
+            this.player.current.audio.current.play();
+            this.setState({
+              playerSemaphore: '',
+            });
           });
       }else{//Si no tenemos una fuente, hemos iniciado desde el principio la palylist
         if(newSrc<0){
@@ -1247,10 +1249,12 @@ class App extends Component{
                 rating: this.state.openPlaylist[0].avg_valoration,
               });
             }
-            this.player.current.audio.current.currentTime=0;
-            this.player.current.audio.current.play();
-            this.setState({
-              playerSemaphore: '',
+            sleep(40).then(() => {
+              this.player.current.audio.current.currentTime=0;
+              this.player.current.audio.current.play();
+              this.setState({
+                playerSemaphore: '',
+              });
             });
         }
       }
@@ -1294,10 +1298,12 @@ class App extends Component{
                 rating: sortedSongs[0].avg_valoration,
               });
             }
-            this.player.current.audio.current.currentTime=0;
-            this.player.current.audio.current.play();
-            this.setState({
-              playerSemaphore: '',
+            sleep(40).then(() => {
+              this.player.current.audio.current.currentTime=0;
+              this.player.current.audio.current.play();
+              this.setState({
+                playerSemaphore: '',
+              });
             });
           }
         }else{
@@ -1330,10 +1336,12 @@ class App extends Component{
               rating: newSrc.avg_valoration,
             });
           }
-          this.player.current.audio.current.currentTime=0;
-          this.player.current.audio.current.play();
-          this.setState({
-            playerSemaphore: '',
+          sleep(40).then(() => {
+            this.player.current.audio.current.currentTime=0;
+            this.player.current.audio.current.play();
+            this.setState({
+              playerSemaphore: '',
+            });
           });
       }else{//Si no tenemos una fuente, hemos iniciado el podcast desde el primer episodio
         if(author){//Si tenemos un autor, hemos iniciado el podcast sin haberlo cargado primero
@@ -1377,10 +1385,12 @@ class App extends Component{
                   rating: this.state.openPlaylist[0].avg_valoration,
                 });
               }
-              this.player.current.audio.current.currentTime=0;
-              this.player.current.audio.current.play();
-              this.setState({
-                playerSemaphore: '',
+              sleep(40).then(() => {
+                this.player.current.audio.current.currentTime=0;
+                this.player.current.audio.current.play();
+                this.setState({
+                  playerSemaphore: '',
+                });
               });
             }else{
               alert("There was an error");
@@ -1407,10 +1417,12 @@ class App extends Component{
                 rating: this.state.openPlaylist[0].avg_valoration,
               });
             }
-            this.player.current.audio.current.currentTime=0;
-            this.player.current.audio.current.play();
-            this.setState({
-              playerSemaphore: '',
+            sleep(40).then(() => {
+              this.player.current.audio.current.currentTime=0;
+              this.player.current.audio.current.play();
+              this.setState({
+                playerSemaphore: '',
+              });
             });
         }
       }        
@@ -1448,6 +1460,7 @@ class App extends Component{
   changeUsername = (newName) => {
     this.setState({
       "username" : newName,
+      "contentName" : newName,
     });
     // PROBLEMA: no cambia username en el estado
     alert(this.state.username);

@@ -1,11 +1,13 @@
 const register_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/registration/';
 const login_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/login/';
+const resetPass_path = 'https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/password/reset/';
 
 
 //Comprueba mediante una expresión regular que el mensaje por parámetro sea un email
 function ValidateEmail(inputText)
 {
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   // var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   var mailformat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     if(inputText.value.match(mailformat))
     {
         return true;
@@ -70,6 +72,7 @@ function validacionRegister() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
+                window.localStorage.setItem('rememberMusicApp',true);
                 window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
@@ -99,6 +102,7 @@ function validacionRegister() {
 
 //Función para comprobar que todos los campos del formulario son válidos, y para el login del usuario
 function validacionLogin() {
+    var checked = document.getElementById("checkbox").checked;
     var exito=0;
     document.getElementById("userError").style.visibility="hidden";
     document.getElementById("passLoginError").style.visibility="hidden";
@@ -133,6 +137,11 @@ function validacionLogin() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
+                if(checked){
+                    window.localStorage.setItem('rememberMusicApp',true);
+                }else{
+                    window.localStorage.setItem('rememberMusicApp',false);
+                }
                 window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{
@@ -160,6 +169,11 @@ function validacionLogin() {
             if (response.key) {
                 if (typeof(localStorage) !== "undefined") {
                     window.localStorage.setItem('keyMusicApp',response.key);
+                    if(checked){
+                        window.localStorage.setItem('rememberMusicApp',true);
+                    }else{
+                        window.localStorage.setItem('rememberMusicApp',false);
+                    }
                     window.location.replace("/"); //redirige sin permitir retroceder
                     //window.location.href="home.html"; //redirige permitiendo retroceder
                 } else {
@@ -187,6 +201,18 @@ function recover(){
         document.getElementById("recover-feedback").style.visibility="visible";
         return false;
     }else{
+
+        fetch(resetPass_path, {
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            method: 'POST',
+            body: JSON.stringify ({
+                "email": recEmail.value
+            })     
+        })
+
+
         //Funcion de recuperacion de email
         document.getElementById("recover-feedback").innerHTML="A recovery email has been successfully sent to the given email address";
         document.getElementById("recover-feedback").style.visibility="visible";

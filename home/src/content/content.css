@@ -15,6 +15,36 @@
     border-radius: 15px 15px 15px 15px;
 }
 
+.the-fine-marging{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.the-fine-printing-start{
+    background-color: #7f7a88;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    border-radius: 15px 0px 0px 15px;
+}
+
+
+.the-fine-printing-middle{
+    background-color: #7f7a88;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+
+.the-fine-printing-end{
+    background-color: #7f7a88;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-radius: 0px 15px 15px 0px;
+}
+
+
 .print-playlist{
     background-color: #c5c5c5;
     margin-top: 10px;
@@ -34,6 +64,10 @@
 
 }
 
+.pointer{
+    cursor: pointer;
+}
+
 .visible-icon{
     color:white;
 }
@@ -42,20 +76,55 @@
     border-left: 2px solid black;
 }
 
+.manual-left-border-2{
+    border-left: 2px solid black;
+}
+
 @media (max-width:992px){
+    .the-fine-printing-start{
+        background-color: #7f7a88;
+        border-top: 2px solid black;
+        border-left: 2px solid black;
+        border-right: 2px solid black;
+        border-radius: 15px 15px 0px 0px;
+        border-bottom:none
+    }
+    .the-fine-printing-middle{
+        background-color: #7f7a88;
+        border-right: 2px solid black;
+        border-left: 2px solid black;
+        border-bottom:none;
+        border-top:none;
+    }
+    .the-fine-printing-end{
+        background-color: #7f7a88;
+        border-left: 2px solid black;
+        border-right: 2px solid black;
+        border-bottom: 2px solid black;
+        border-radius: 0px 0px 15px 15px;
+        border-top:none
+    }
     .manual-left-border{
         border-top: 2px solid black;
-        border-left: none;
+        border-left:none
+    }
+    .manual-left-border-2{
+        border-top: 2px solid black;
     }
 }
 
 .disguised-button{
     min-width: 60px;
+    width:90%;
     background-color: #a5a2aa;
     border: solid;
     border-width: 3px;
     border-color: black;
     border-radius: 15px 15px 15px 15px;
+}
+
+.no-padding{
+    padding:0px;
 }
 
 .custom-modal{
@@ -77,6 +146,10 @@
 
 .toggled-button{
     background-color: #5272ff;
+}
+
+.disabled-button{
+    background: #4e5570;
 }
 
 .innerSearch{

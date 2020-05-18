@@ -58,7 +58,7 @@
         <input class="input" name="password" type="password" id="passwordLogin" placeholder="Password">
         <label class="error" id="passLoginError">Error</label>
         <br/>
-        <input class="form-check-input" type="checkbox" name="remember" style="margin-left: -15px;">
+        <input class="form-check-input" type="checkbox" name="remember" id="checkbox" value="checked" style="margin-left: -15px;">
         <label>Remember me</label>
         <br/>
         <button class="form_button btn-block" type="submit">Login</button>
@@ -68,7 +68,7 @@
 
       <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
       <form class="remember_form" method="POST" onsubmit="recover()" target="dummyframe">
-        <h2>We'll send you a password email reset</h2>
+        <h2>If the email is a valid one, we'll send you a password email reset !</h2>
         <input class="input" name="emailRecu" type="text" id="emailRecu" placeholder="Email">
         <label class="recover-feedback" id="recover-feedback">Error</label>
         <br/>

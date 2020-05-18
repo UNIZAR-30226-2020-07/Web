@@ -9,7 +9,8 @@ class DropdownSort extends Component {
     super(props);
     this.state = {
       displayMenu: false,
-      title: this.props.title
+      title: this.props.title,
+      type:this.props.type,
     };
     this.showDropdownMenu = this.showDropdownMenu.bind(this);
     this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
@@ -30,19 +31,38 @@ class DropdownSort extends Component {
 
     
   render() {
-    return (
-      <div>
-        <div onClick={this.showDropdownMenu}><FontAwesomeIcon icon={faSortAlphaDown}/></div>
-        {this.state.displayMenu ? (
-          <ul className="custom-ul-sort ">
-            <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
-            <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(1);}}>Artist</li>
-            <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(2);}}>Genre</li>
-            </ul>
-          ): (null)
-        }
-      </div>
-    );
+    switch(this.state.type){
+      case "playlist":
+        return (
+          <div>
+            <div onClick={this.showDropdownMenu}><FontAwesomeIcon icon={faSortAlphaDown}/></div>
+            {this.state.displayMenu ? (
+              <ul className="custom-ul-sort ">
+                <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
+                <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(1);}}>Artist</li>
+                <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(2);}}>Genre</li>
+                </ul>
+              ): (null)
+            }
+          </div>
+        );
+      case "podcast":
+        return (
+          <div>
+            <div onClick={this.showDropdownMenu}><FontAwesomeIcon icon={faSortAlphaDown}/></div>
+            {this.state.displayMenu ? (
+              <ul className="custom-ul-sort ">
+                <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
+                <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(3);}}>Upload time</li>
+                </ul>
+              ): (null)
+            }
+          </div>
+        );
+      default:
+        break;
+    }
+    
   }
 }
     

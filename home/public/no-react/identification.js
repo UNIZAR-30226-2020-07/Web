@@ -72,6 +72,7 @@ function validacionRegister() {
         .then(response => {
             if (response.key) {
                 window.localStorage.setItem('keyMusicApp',response.key);
+                window.localStorage.setItem('rememberMusicApp',true);
                 window.location.replace("/"); //redirige sin permitir retroceder
                 //window.location.href="home.html"; //redirige permitiendo retroceder
             }else{

@@ -257,12 +257,20 @@ class Content extends Component {
     });
   }
 
-  fijarUsername = (hasChange) => {
+  fijarUsername = () => {
     this.setState({
       usernameChange : false,
     });
-    if (hasChange){ // En caso de haber cambios
+    if (this.state.newUsername){ // En caso de haber cambios
       this.props.funcChangeUsername(this.state.newUsername);
+      this.setState({
+        newUsername : '',
+      });
+    }else{
+      alert("Username was not changed");
+      this.setState({
+        newUsername : '',
+      });
     }
   }
 
@@ -272,12 +280,20 @@ class Content extends Component {
     });
   }
 
-  fijarEmail = (hasChange) => {
+  fijarEmail = () => {
     this.setState({
       emailChange : false,
     });
-    if (hasChange){ // En caso de haber cambios
+    if (this.state.newEmail){ // En caso de haber cambios
       this.props.funcChangeEmail(this.state.newEmail);
+      this.setState({
+        newEmail : '',
+      });
+    }else{
+      alert("Email was not changed");
+      this.setState({
+        newEmail : '',
+      });
     }
   }
 
@@ -287,13 +303,27 @@ class Content extends Component {
     });
   }
 
-  fijarPassword = (hasChange) => {
+  fijarPassword = () => {
     this.setState({
       passwordChange : false,
     });
-    if (hasChange){ // En caso de haber cambios
+    if (!this.state.newRepassword || this.state.newRepassword!==this.state.newPassword){ // En caso de haber cambios
+      alert("Both fields need to change and be the same");
+      this.setState({
+        newPassword : '',
+        newRepassword : '',
+      });
+    }else if(this.state.newPassword && this.state.newRepassword && (this.state.newPassword===this.state.newRepassword)){
       this.props.funcChangePassword(this.state.newPassword,this.state.newRepassword);
+      this.setState({
+        newPassword : '',
+        newRepassword : '',
+      });
     }
+    this.setState({
+      newPassword : '',
+      newRepassword : '',
+    });
   }
 
   setPassword = (newValue) =>{
@@ -450,7 +480,7 @@ class Content extends Component {
                 <div className="custom-modal">
                 <div className="row d-flex justify-content-between" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Your playlists: </p><FontAwesomeIcon className="visible-icon fa-2x" icon={faTimes} onClick={this.closeModal}/></div>
                   {this.state.playlists
-                    ?<>{this.state.playlists.map((item,index)=>(
+                    ?<>{this.props.modalPlaylists.map((item,index)=>(
                         <div className="row d-flex justify-content-between print-modal" key={index} item={item}>
                           <div className="col-lg-9 list-element">{item.name}</div>
                           <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.addSongToPlaylist(item)}><FontAwesomeIcon icon={faPlus}/></button>                 
@@ -489,7 +519,7 @@ class Content extends Component {
                     <div className="col-lg-1 list-element d-flex justify-content-center"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                     <div className="col-lg-5 list-element d-flex justify-content-center">Insert new title:</div>
                     <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center"><input className="form-control" type="search" placeholder="New title" value={this.state.newTitle} onChange={this.getTitle} aria-label="Search"></input></div>
-                    <div className="col-lg-2 list-element d-flex justify-content-center" onClick={this.confirmNewPlaylist}>Confirmar</div>
+                    <div className="col-lg-2 list-element d-flex justify-content-center pointer" onClick={this.confirmNewPlaylist}>Confirmar</div>
                   </div>
               </>
               : <div></div>
@@ -502,7 +532,7 @@ class Content extends Component {
                 <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                 <div className="col-lg-5 list-element d-flex justify-content-center the-fine-printing-middle">Insert new title:</div>
                 <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center the-fine-printing-middle"><input className="form-control" type="search" placeholder="New title" value={this.state.newModTitle} onChange={this.getModTitle} aria-label="Search"></input></div>
-                <div className="col-lg-2 list-element d-flex justify-content-center the-fine-printing-end" onClick={this.confirmModPlaylist}>Confirmar</div>
+                <div className="col-lg-2 list-element d-flex justify-content-center the-fine-printing-end pointer" onClick={this.confirmModPlaylist}>Confirmar</div>
               </>
                 :<> <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                   <div className="col-lg-4 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("playlistContent",item.id)}>{item.name}</div>
@@ -825,12 +855,12 @@ class Content extends Component {
               <div className="row mt-2 mb-2">
                   {this.state.usernameChange ? (<>
 
-                    <p className="col-sm-3 text-center">Username:</p>
+                    <p className="col-sm-3 text-center readable-text">Username:</p>
                     <input onChange={this.setUsername} className="col-sm-5 text-center" type="text" placeholder={this.state.username} />
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername()}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername()}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
-                    <p className="col-sm-3 text-center">Username:</p>
+                    <p className="col-sm-3 text-center readable-text">Username:</p>
                     <input className="col-sm-5 text-center" type="text" value={this.state.username} readonly disabled />
 
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarUsername}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
@@ -841,12 +871,12 @@ class Content extends Component {
               <div className="row mt-2 mb-2">
                   {this.state.emailChange ? (<>
 
-                    <p className="col-sm-3 text-center">Email:</p>
+                    <p className="col-sm-3 text-center readable-text">Email:</p>
                     <input onChange={this.setEmail} className="col-sm-5 text-center" type="text" placeholder={this.state.useremail} />
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail()}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail()}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
-                    <p className="col-sm-3 text-center">Email:</p>
+                    <p className="col-sm-3 text-center readable-text">Email:</p>
                     <input className="col-sm-5 text-center" type="text" value={this.state.useremail} readonly disabled />
 
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarEmail}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
@@ -857,19 +887,19 @@ class Content extends Component {
                 {this.state.passwordChange ? (<>
                   <div className="row mt-2 mb-2">
 
-                    <p className="col-sm-3 text-center">Password:</p>
-                    <input onChange={this.setPassword} className="col-sm-5 text-center" type="password" placeholder="password" />
+                    <p className="col-sm-3 text-center readable-text">Password:</p>
+                    <input onChange={this.setPassword} className="col-sm-5 text-center" type="password" placeholder="password" value={this.state.newPassword}/>
 
                   </div>
                   <div className="row mt-2 mb-2">
                     <div className="col-sm-3">{/* empty */}</div>
                     <input onChange={this.setRepassword} className="col-sm-5 text-center" type="password" placeholder="rewrite new password" />
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword()}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword()}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </div>
                 </>) : (<>
                   <div className="row mt-2 mb-2">
-                    <p className="col-sm-3 text-center  readable-text">Password:</p>
+                    <p className="col-sm-3 text-center readable-text">Password:</p>
                     <input className="col-sm-5 text-center" type="password" value="password" readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarPassword}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </div>

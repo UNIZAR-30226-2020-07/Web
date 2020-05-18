@@ -71,6 +71,7 @@ class App extends Component{
       userId:'',
       userFriends:[],
       userPlaylist:[],
+      modalPlaylists:[],
       userPodcasts:[],
       openPlaylist:[],
       openPlaylistId:'',
@@ -158,7 +159,7 @@ class App extends Component{
             </div>
 
             <div className="col-md-10 full-height scrollable">
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent} email={this.state.userEmail} funcChangeUsername={this.changeUsername} funcChangeEmail={this.changeEmail} funcChangePassword={this.changePassword} funcDelAccount={this.deleteAccount} />
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} modalPlaylists={this.state.modalPlaylists} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent} email={this.state.userEmail} funcChangeUsername={this.changeUsername} funcChangeEmail={this.changeEmail} funcChangePassword={this.changePassword} funcDelAccount={this.deleteAccount} />
 
             </div>
           </div>
@@ -497,6 +498,7 @@ class App extends Component{
         if(response.id){
           this.setState({
             userPlaylist:response.playlists,
+            modalPlaylists:response.playlists,
             contentList: response.playlists,
             
             tipoContent:"playlists",
@@ -830,6 +832,7 @@ class App extends Component{
           userEmail:response.email,
           userId:response.id,
           userPlaylist:response.playlists,
+          modalPlaylists:response.playlists,
           userFriends: response.friends,
           userPodcasts:response.albums,
         });
@@ -1449,6 +1452,7 @@ class App extends Component{
         album: '',
         rating: '',
         userRated: '',
+        skipControls: false,
       });
       this.setState({
         playerSemaphore: '',
@@ -1458,12 +1462,6 @@ class App extends Component{
 
   // Cambia nombre de usuario con el dado como parámetro
   changeUsername = (newName) => {
-    this.setState({
-      "username" : newName,
-      "contentName" : newName,
-    });
-    // PROBLEMA: no cambia username en el estado
-    alert(this.state.username);
     // PROBLEMA: no cambia username en el estado
     fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
       headers: {
@@ -1472,12 +1470,16 @@ class App extends Component{
       },
       method: 'PATCH',
       body: JSON.stringify({
-        "username": this.state.username, 
+        "username": newName, 
       })
     })
     .then(response => {
       if(response.ok){
         alert("User name changed successfully");
+        this.setState({
+          "username" : newName,
+          "contentName" : newName,
+        });
       }else{
         alert("An error ocurred while trying to change your user name, try again");
       }
@@ -1486,9 +1488,6 @@ class App extends Component{
 
   // Cambia email de usuario con el dado como parámetro
   changeEmail = (newEmail) => {
-    this.setState({
-      "userEmail" : newEmail,
-    });
     fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
       headers: {
         'Content-Type': 'application/json',
@@ -1496,12 +1495,15 @@ class App extends Component{
       },
       method: 'PATCH',
       body: JSON.stringify({
-        "email": this.state.userEmail, 
+        "email": newEmail, 
       })
     })
     .then(response => {
       if(response.ok){
         alert("Email changed successfully");
+        this.setState({
+          "userEmail" : newEmail,
+        });
       }else{
         alert("An error ocurred while trying to change your email, try again");
       }
@@ -1523,7 +1525,7 @@ class App extends Component{
       if (response.ok) {
         alert("Password changed successfully");
       } else {
-        alert("An error ocurred while trying to change password, try again");
+        alert("The new password isn't valid, please try again");
       }
     })
   }

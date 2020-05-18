@@ -63,6 +63,10 @@ class Content extends Component {
       usernameChange : false,
       emailChange : false,
       passwordChange : false,
+      newUsername : '',
+      newEmail : '',
+      newPassword : '',
+      newRepassword : '',
     };
   };
 
@@ -253,26 +257,59 @@ class Content extends Component {
     });
   }
 
-  fijarUsername = () => {
+  fijarUsername = (hasChange) => {
     this.setState({
       usernameChange : false,
     });
+    if (hasChange){ // En caso de haber cambios
+      this.props.funcChangeUsername(this.state.newUsername);
+    }
   }
 
-  fijarEmail = () => {
+  setUsername = (newValue) =>{
     this.setState({
-      emailChange : false,
+      newUsername: newValue.target.value,
     });
   }
 
-  fijarPassword = () => {
+  fijarEmail = (hasChange) => {
+    this.setState({
+      emailChange : false,
+    });
+    if (hasChange){ // En caso de haber cambios
+      this.props.funcChangeEmail(this.state.newEmail);
+    }
+  }
+
+  setEmail = (newValue) =>{
+    this.setState({
+      newEmail: newValue.target.value,
+    });
+  }
+
+  fijarPassword = (hasChange) => {
     this.setState({
       passwordChange : false,
+    });
+    if (hasChange){ // En caso de haber cambios
+      this.props.funcChangePassword(this.state.newPassword,this.state.newRepassword);
+    }
+  }
+
+  setPassword = (newValue) =>{
+    this.setState({
+      newPassword: newValue.target.value,
+    });
+  }
+
+  setRepassword = (newValue) =>{
+    this.setState({
+      newRepassword: newValue.target.value,
     });
   }
 
   borrarCuenta = () => {
-    console.log("Noooooooooo")
+    this.props.funcDelAccount();
   }
 
   render() {
@@ -788,12 +825,12 @@ class Content extends Component {
               <div className="row mt-2 mb-2">
                   {this.state.usernameChange ? (<>
                     <p className="col-sm-3 text-center">Username:</p>
-                    <input id="usernameInput" className="col-sm-5 text-center" type="text" placeholder={this.state.username} />
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarUsername}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <input onChange={this.setUsername} className="col-sm-5 text-center" type="text" placeholder={this.state.username} />
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarUsername(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
                     <p className="col-sm-3 text-center">Username:</p>
-                    <input id="usernameInput" className="col-sm-5 text-center" type="text" value={this.state.username} readonly disabled />
+                    <input className="col-sm-5 text-center" type="text" value={this.state.username} readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarUsername}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </>)}
               </div>
@@ -802,12 +839,12 @@ class Content extends Component {
               <div className="row mt-2 mb-2">
                   {this.state.emailChange ? (<>
                     <p className="col-sm-3 text-center">Email:</p>
-                    <input id="emailInput" className="col-sm-5 text-center" type="text" placeholder={this.state.useremail} />
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarEmail}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <input onChange={this.setEmail} className="col-sm-5 text-center" type="text" placeholder={this.state.useremail} />
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarEmail(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </>) : (<>
                     <p className="col-sm-3 text-center">Email:</p>
-                    <input id="emailInput" className="col-sm-5 text-center" type="text" value={this.state.useremail} readonly disabled />
+                    <input className="col-sm-5 text-center" type="text" value={this.state.useremail} readonly disabled />
                     <button className="ml-2 display-block float-left button-control" onClick={this.cambiarEmail}><FontAwesomeIcon className="fa-2x" icon={faEdit}/></button>
                   </>)}
               </div>
@@ -816,13 +853,13 @@ class Content extends Component {
                 {this.state.passwordChange ? (<>
                   <div className="row mt-2 mb-2">
                     <p className="col-sm-3 text-center">Password:</p>
-                    <input id="passwordInput" className="col-sm-5 text-center" type="password" placeholder="password" />
+                    <input onChange={this.setPassword} className="col-sm-5 text-center" type="password" placeholder="password" />
                   </div>
                   <div className="row mt-2 mb-2">
                     <div className="col-sm-3">{/* empty */}</div>
-                    <input id="passwordInput1" className="col-sm-5 text-center" type="password" placeholder="rewrite new password" />
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
-                    <button className="ml-2 display-block float-left button-control" onClick={this.fijarPassword}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
+                    <input onChange={this.setRepassword} className="col-sm-5 text-center" type="password" placeholder="rewrite new password" />
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword(true)}><FontAwesomeIcon className="fa-2x" icon={faCheck}/></button>
+                    <button className="ml-2 display-block float-left button-control" onClick={() => this.fijarPassword(false)}><FontAwesomeIcon className="fa-2x" icon={faTimes}/></button>
                   </div>
                 </>) : (<>
                   <div className="row mt-2 mb-2">
@@ -834,7 +871,7 @@ class Content extends Component {
 
               {/* Fila de borrado de cuenta */}
               <div class="row mt-5 mb-2">
-                <button class="btn btn-danger col-6 display-block float-left" onclick={this.borrarCuenta}>Delete my account</button>
+                <button class="btn btn-danger col-6 display-block float-left" onClick={this.borrarCuenta}>Delete my account</button>
               </div>
 
             </div>

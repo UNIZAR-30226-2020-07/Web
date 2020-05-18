@@ -157,7 +157,7 @@ class App extends Component{
               </ul>
             </div>
             <div className="col-md-10 full-height scrollable">
-              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent} email={this.state.userEmail}/>
+              <Content token={this.state.key} user={this.state.contentName} tipo={this.state.tipoContent} tipoBusqueda={this.state.busquedaActive} lista={this.state.contentList} cantidad={this.state.busquedaCount} busqueda={this.state.busquedaSearch} cambiaCancion={this.cambiaSource} cambiaCancionPlaylist={this.cambiaSourcePlaylist} cambiaSourcePodcast={this.cambiaSourcePodcast} hayPrev={this.state.busquedaPreviousPage} prevPage={() => this.cambiaPage(0)} hayNext={this.state.busquedaNextPage} nextPage={() => this.cambiaPage(1)} playlists={this.state.userPlaylist} currentPlaylist={this.state.openPlaylistId} editing_playlist={this.state.playlist_editar} loopingPlaylist={this.state.playingPlaylistLoop} shuffledPlaylist={this.state.playingPlaylistShuffled} loopPlaylist={this.setPlaylistLoop} shufflePlaylist={this.shufflePlaylist} createPlaylist={this.createPlaylist} editNamePlaylist={this.setEditingPlaylist} deletePlaylist={this.deletePlaylists} deleteSongs={this.deleteSongs} cambiaOrden={this.sortPlaylist} friend={this.state.friendId} friendName={this.state.friendName} addUser={this.addUser} showAddUser={this.state.showAddUser} innerBusqueda={this.state.innerBusqueda} getInnerSearch={this.getInnerSearch} deleteFriends={this.deleteFriends} podcastAuthor={this.state.podcastAuthor} addPodcast={this.addPodcast} showAddPodcast={this.state.showAddPodcast} deletePodcasts={this.deletePodcasts} cambiaModo={this.cambiaMode} change={this.state.modifyContent} email={this.state.userEmail} funcChangeUsername={this.changeUsername} funcChangeEmail={this.changeEmail} funcChangePassword={this.changePassword} funcDelAccount={this.deleteAccount} />
             </div>
           </div>
         </div>
@@ -1435,6 +1435,94 @@ class App extends Component{
     })
   }
 
+  // Cambia nombre de usuario con el dado como parámetro
+  changeUsername = (newName) => {
+    this.setState({
+      "username" : newName,
+    });
+    // PROBLEMA: no cambia username en el estado
+    alert(this.state.username);
+    // PROBLEMA: no cambia username en el estado
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+this.state.key
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        "username": this.state.username, 
+      })
+    })
+    .then(response => {
+      if(response.ok){
+        alert("User name changed successfully");
+      }else{
+        alert("An error ocurred while trying to change your user name, try again");
+      }
+    })
+  }
+
+  // Cambia email de usuario con el dado como parámetro
+  changeEmail = (newEmail) => {
+    this.setState({
+      "userEmail" : newEmail,
+    });
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+this.state.key
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        "email": this.state.userEmail, 
+      })
+    })
+    .then(response => {
+      if(response.ok){
+        alert("Email changed successfully");
+      }else{
+        alert("An error ocurred while trying to change your email, try again");
+      }
+    })
+  }
+
+  // Cambia password de usuario con las dadas como parámetros
+  changePassword = (newPassword,newRepassword) => {
+    var url='https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/password/change/';
+    fetch(url, {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+      method: 'POST',
+      body: JSON.stringify({
+        "new_password1": newPassword, 
+        "new_password2": newRepassword, 
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Password changed successfully");
+      } else {
+        alert("An error ocurred while trying to change password, try again");
+      }
+    })
+  }
+
+  deleteAccount = () => {
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/rest-auth/user/', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+this.state.key
+      },
+      method: 'DELETE',
+    })
+    .then(response => {
+      if(response.ok){
+        alert("Account deleted successfully, you'll be redirected to main page");
+        this.logout();
+      }else{
+        alert("An error ocurred while trying to delete your account, try again");
+      }
+    })
+  }
 
   //Funciones para debug de la web, solo aparecen si está activo el estado debug.
 

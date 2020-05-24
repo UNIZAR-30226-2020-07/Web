@@ -13,6 +13,7 @@ import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Helmet } from 'react-helmet';
 
 //Sleep function from "https://flaviocopes.com/javascript-sleep/"
 const sleep = (milliseconds) => {

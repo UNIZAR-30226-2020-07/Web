@@ -123,6 +123,12 @@ class App extends Component{
     });
     return(
       <div className="box">
+        <Helmet htmlAttributes={{ lang: 'en' }}>
+          <title>Instant Music - Home</title>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <link rel="icon" href="https://ps-20-client-react-app.herokuapp.com/no-react/home/icon.ico"></link>
+        </Helmet>
         <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
           <div className="col-xl-2 navbar-header">
             <img className="mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>

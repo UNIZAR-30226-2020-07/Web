@@ -388,10 +388,10 @@ class Content extends Component {
                                 }
                               </div>
                             </>
-                          : <div className="row readable-text">No se han encontrado resultados para {this.state.busqueda}.</div>
+                          : <div className="row readable-text">No results found for {this.state.busqueda}.</div>
                         }
                       </>
-                    : <div className="row readable-text">No se han encontrado resultados</div>
+                    : <div className="row readable-text">No results found</div>
                   }
                 
                 <Modal open={this.state.showAddPodcast} onClose={this.closeModal} showCloseIcon={false} center>
@@ -431,10 +431,10 @@ class Content extends Component {
                                 }
                               </div>
                             </>
-                          : <div className="row readable-text">No se han encontrado resultados para {this.state.busqueda}.</div>
+                          : <div className="row readable-text">No results found for {this.state.busqueda}.</div>
                         }
                       </>
-                    : <div className="row readable-text">No se han encontrado resultados</div>
+                    : <div className="row readable-text">No results founds</div>
                   }
                   <Modal open={this.state.showAddUser} onClose={this.closeModal} showCloseIcon={false} center>
                     <div className="custom-modal2">
@@ -480,10 +480,10 @@ class Content extends Component {
                               }
                             </div>
                           </>
-                        : <div className="row readable-text">No se han encontrado resultados para {this.state.busqueda}.</div>
+                        : <div className="row readable-text">No results found for {this.state.busqueda}.</div>
                       }
                     </>
-                  : <div className="row readable-text">No se han encontrado resultados</div>
+                  : <div className="row readable-text">No results found</div>
                 }
               
               <Modal open={this.state.showAddSong} onClose={this.closeModal} showCloseIcon={false} center>

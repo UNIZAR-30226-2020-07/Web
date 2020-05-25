@@ -259,7 +259,7 @@ class Content extends Component {
           this.setState({
             podCastName:response.name,
             podcastAuthor:response.artist.name,
-            showEpisodes:response.songs,
+            showEpisodes:sortedSongs,
           });
           this.setState({
             showPlayPD: true,

@@ -449,7 +449,7 @@ class Content extends Component {
                     ?<>{this.state.showEpisodes.map((item,index)=>(
                         <div className="row d-flex justify-content-between print-modal" key={index} item={item}>
                           <div className="col-lg-9 list-element">{item.title}</div>
-                          <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.playPodcast(item)}><FontAwesomeIcon icon={faPlus}/></button>                 
+                          <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.playPodcast(item)}><FontAwesomeIcon icon={faPlay}/></button>                 
                         </div>
                       ))}
                       <div id="textoError" className="readable-text d-flex justify-content-center"></div></>

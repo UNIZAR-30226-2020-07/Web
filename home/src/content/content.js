@@ -46,6 +46,11 @@ class Content extends Component {
       deleting:'',
       delList:[],
 
+      showPlayPD:false,
+      podCastName:'',
+      podcastAuthor:'',
+      showEpisodes:[],
+
       showAddSong: false,
       songToAdd:'',
 
@@ -239,6 +244,44 @@ class Content extends Component {
     }
   }
 
+  openModalPD = (id) =>{
+    fetch('https://ps-20-server-django-app.herokuapp.com/api/v1/albums/'+id+'/', {
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token '+this.state.key },
+        method: 'GET',
+      })
+      .then(res => res.json())
+      .then(response => {
+        if(response.id){
+          var Songs = response.songs;
+          var sortedSongs = Songs.sort(function(a,b){
+            return (a.title).localeCompare(b.title);
+          });
+          this.setState({
+            podCastName:response.name,
+            podcastAuthor:response.artist.name,
+            showEpisodes:response.songs,
+          });
+          this.setState({
+            showPlayPD: true,
+          });
+        }else{
+          alert("There was an error fetching");
+        }
+      });
+  }
+
+  playPodcast = (item) =>{
+    this.props.cambiaSourcePodcast(item,this.state.podcastAuthor,this.state.podCastName,1);
+    this.closeModalPD();
+  }
+
+  closeModalPD = () =>{
+    this.setState({
+      showPlayPD: false,
+    });
+  }
+
+
   cambiarUsername = () => {
     this.setState({
       usernameChange : true,
@@ -370,9 +413,9 @@ class Content extends Component {
                                 </div>
                               {this.state.contenido.map((item,index)=>(
                                 <div className="row the-fine-marging" key={index} item={item}>
-                                  <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div>
-                                  <div className="col-lg-7 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle">{item.name}</div>
-                                  <div className="col-lg-3 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-end">{item.artist.name}</div>
+                                  <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start" onClick={() => this.openModalPD(item.id)}><FontAwesomeIcon className="fa-2x" icon={faMicrophone}/></div>
+                                  <div className="col-lg-7 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-middle" onClick={() => this.openModalPD(item.id)}>{item.name}</div>
+                                  <div className="col-lg-3 manual-left-border-2 list-element d-flex justify-content-center the-fine-printing-end" onClick={() => this.openModalPD(item.id)}>{item.artist.name}</div>
                                   <div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.addPodcast(item.id)}><FontAwesomeIcon className="fa-2x" icon={faPlus}/></button></div>
                                 </div>
                               ))}
@@ -399,6 +442,21 @@ class Content extends Component {
                     <div className="row d-flex justify-content-center" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Adding podcast...</p></div>
                   </div>
                 </Modal>
+                <Modal open={this.state.showPlayPD} onClose={this.closeModalPD} showCloseIcon={false} center>
+                <div className="custom-modal">
+                <div className="row d-flex justify-content-between" style={{paddingLeft:10,paddingRight:10}}><p className="readable-text">Episodes: </p><FontAwesomeIcon className="visible-icon fa-2x" icon={faTimes} onClick={this.closeModalPD}/></div>
+                  {this.state.playlists
+                    ?<>{this.state.showEpisodes.map((item,index)=>(
+                        <div className="row d-flex justify-content-between print-modal" key={index} item={item}>
+                          <div className="col-lg-9 list-element">{item.title}</div>
+                          <button className="col-lg-1 list-element disguised-button d-flex justify-content-center" onClick={() => this.playPodcast(item)}><FontAwesomeIcon icon={faPlus}/></button>                 
+                        </div>
+                      ))}
+                      <div id="textoError" className="readable-text d-flex justify-content-center"></div></>
+                      :<div></div>
+                  }
+                </div>
+              </Modal>
               </div>
             );
           case 5:
@@ -648,7 +706,7 @@ class Content extends Component {
                       :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.addDelList(item.id)}><FontAwesomeIcon className="fa-2x" icon={faTrash}/></button></div>
                       </>
                       }</>
-                    :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.cambiaSourcePodcast(0,item.artist.name,item)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></div></>
+                    :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.cambiaSourcePodcast(0,item.artist.name,item,'')}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></div></>
                   }                                          
                 </div>
               ))}</>
@@ -663,7 +721,7 @@ class Content extends Component {
             <div className="row d-flex justify-content-between" >
               <div className="readable-text pointer" onClick={() => this.props.cambiaModo("podcast",-1)}><p>Go back</p></div>
               <div className="d-flex flex-row-reverse">
-                <button className="button-control" onClick={() => this.props.cambiaSourcePodcast(0,undefined,-1)}><FontAwesomeIcon icon={faPlay}/></button>
+                <button className="button-control" onClick={() => this.props.cambiaSourcePodcast(0,undefined,-1,'')}><FontAwesomeIcon icon={faPlay}/></button>
                 {this.state.currentPL === this.state.loopingPL
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
@@ -692,7 +750,7 @@ class Content extends Component {
                 <div className="col-lg-2 manual-left-border list-element d-flex justify-content-center the-fine-printing-middle">{this.props.podcastAuthor}</div>
                 <div className="col-lg-1 manual-left-border list-element d-flex justify-content-center the-fine-printing-middle">{item.genre}</div>
                 <div className="col-lg-3 manual-left-border list-element d-flex justify-content-center the-fine-printing-end"><Rating emptySymbol="fa fa-star-o fa-2x" fullSymbol="fa fa-star fa-2x" initialRating={item.avg_valoration} readonly/></div> 
-                <div className="col-lg-2 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.cambiaSourcePodcast(item,undefined,-1)}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></div> 
+                <div className="col-lg-2 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.cambiaSourcePodcast(item,undefined,-1,'')}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></div> 
               </div>
             ))}
           </div>

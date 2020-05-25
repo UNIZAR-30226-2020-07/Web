@@ -13,6 +13,7 @@ import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from './dropdownMenu/dropdown';
 import Content from './content/content';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Helmet } from 'react-helmet';
 
 //Sleep function from "https://flaviocopes.com/javascript-sleep/"
 const sleep = (milliseconds) => {
@@ -79,6 +80,7 @@ class App extends Component{
       openPlaylistName:'',
 
       podcastAuthor:'',
+      podcastOrder:'title',
       openPodcast:'',
 
       idActiveSong:'',
@@ -122,6 +124,12 @@ class App extends Component{
     });
     return(
       <div className="box">
+        <Helmet htmlAttributes={{ lang: 'en' }}>
+          <title>Instant Music - Home</title>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <link rel="icon" href="https://ps-20-client-react-app.herokuapp.com/no-react/home/icon.ico"></link>
+        </Helmet>
         <nav className="navbar navbar-expand-md navbar-dark custom-navbar">
           <div className="col-xl-2 navbar-header">
             <img className="mx-auto" src={logo} alt="logo" style={{maxHeight: 75}}></img>
@@ -593,6 +601,9 @@ class App extends Component{
         sortedSongs = Songs.sort(function(a,b){
           return (a.title).localeCompare(b.title);
         });
+        this.setState({
+          podcastOrder:'title',
+        })
         break;
       case 1: //artist
         Songs = this.state.openPlaylist;
@@ -607,10 +618,27 @@ class App extends Component{
         });
         break;
       case 3: //upload time on podcast only
-        Songs = this.state.openPlaylist;
-        sortedSongs = Songs.sort(function(a,b){
-          return (a.created_at).localeCompare(b.created_at);
-        });
+        if(this.state.podcastOrder==='title'){
+          Songs = this.state.openPlaylist;
+          sortedSongs = Songs.sort(function(a,b){
+            return (a.created_at).localeCompare(b.created_at);
+          });
+          this.setState({
+            podcastOrder: 'timeDesc',
+          })
+        }else if(this.state.podcastOrder==='timeDesc'){
+          Songs = this.state.openPlaylist;
+          sortedSongs=Songs.reverse();
+          this.setState({
+            podcastOrder: 'timeAsc',
+          })
+        }else{
+          Songs = this.state.openPlaylist;
+          sortedSongs=Songs.reverse();
+          this.setState({
+            podcastOrder: 'timeDesc',
+          })
+        }
         break;
       default:break;
     }
@@ -703,7 +731,6 @@ class App extends Component{
           alert("There was an error fetching");
         }
       });
-    
   }
 
   //Borra los podcasts cuya Id aparece en la lista del usuario.
@@ -908,7 +935,6 @@ class App extends Component{
             this.setState({
               shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
-              skipControls:true,
               openPlaylistId:response.id,
               openPlaylistName:response.name,
               tipoContent:tipo,
@@ -949,7 +975,6 @@ class App extends Component{
               shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
               openPlaylistId:response.id,
-              skipControls:true,
               openPlaylistName:response.name,
               tipoContent:"friendPlaylistContent",
               contentList:response.songs,
@@ -981,7 +1006,6 @@ class App extends Component{
               shuffledPlaylist:sortedSongs,
               openPlaylist:sortedSongs,
               openPlaylistId:response.id,
-              skipControls:true,
               openPlaylistName:response.name,
               tipoContent:"podcastContent",
               podcastAuthor:Id.artist.name,
@@ -1019,7 +1043,7 @@ class App extends Component{
       var currentSong = idSongs.indexOf(this.state.idActiveSong);
       if(this.state.openPodcast){
         if(currentSongs[currentSong+1]!==undefined){
-          this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1);
+          this.cambiaSourcePodcast(currentSongs[currentSong+1],undefined,-1,'');
         }
       }else{
         if(currentSongs[currentSong+1]!==undefined){
@@ -1046,11 +1070,11 @@ class App extends Component{
       var currentSong = idSongs.indexOf(this.state.idActiveSong);
       if(this.state.openPodcast){
         if(currentSong-1>=0){
-          this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1);
+          this.cambiaSourcePodcast(currentSongs[currentSong-1],undefined,-1,'');
         }
       }else{
         if(currentSong-1>=0){
-          this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1);
+          this.cambiaSourcePlaylist(currentSongs[currentSong-1],-1,'');
         }
       }
     }else{
@@ -1071,9 +1095,9 @@ class App extends Component{
         idSongs = currentSongs.map(v=>v.id);
         finishedSong = idSongs.indexOf(this.state.idActiveSong);
         if(currentSongs[finishedSong+1]===undefined){
-          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSourcePodcast(currentSongs[0],undefined,-1);
+          if(this.state.playingPlaylistLoop||this.state.playingPlaylistShuffled)this.cambiaSourcePodcast(currentSongs[0],undefined,-1,'');
         }else{
-          this.cambiaSourcePodcast(currentSongs[finishedSong+1],undefined,-1);
+          this.cambiaSourcePodcast(currentSongs[finishedSong+1],undefined,-1,'');
         }
       }
     }else{
@@ -1211,6 +1235,7 @@ class App extends Component{
             rating: newSrc.avg_valoration,
             userRated: newSrc.user_valoration,
             playingPlaylist:1,
+            skipControls:true,
           });
           if(newSrc.user_valoration){
             this.setState({
@@ -1242,6 +1267,7 @@ class App extends Component{
               rating: this.state.openPlaylist[0].avg_valoration,
               userRated: this.state.openPlaylist[0].user_valoration,
               playingPlaylist:1,
+              skipControls:true,
             });
             if(newSrc.user_valoration){
               this.setState({
@@ -1317,8 +1343,37 @@ class App extends Component{
   }
 
   //Carga una canción en el reproductor a partir de la información de la canción y de una Id de podcast, se usa desde los menús de podcasts solamente.
-  cambiaSourcePodcast = (newSrc,author,datosPd) =>{
-      if(newSrc.id){//Si tenemos una fuente, hemos iniciado un episodio concreto del podcast
+  cambiaSourcePodcast = (newSrc,author,datosPd,searched) =>{
+      if(searched){//Abrimos desde el buscador
+        this.setState({
+          idActiveSong:newSrc.id,
+          audioType:newSrc.episode,
+          src: newSrc.stream_url,
+          title: newSrc.title,
+          author: author,
+          album: datosPd,
+          rating: newSrc.avg_valoration,
+          userRated:  newSrc.user_valoration,
+          playingPlaylist:'',
+          skipControls:false,
+        });
+        if(newSrc.user_valoration){
+          this.setState({
+            userRated: newSrc.user_valoration,
+          });
+        }else{
+          this.setState({
+            rating: newSrc.avg_valoration,
+          });
+        }
+        sleep(40).then(() => {
+          this.player.current.audio.current.currentTime=0;
+          this.player.current.audio.current.play();
+          this.setState({
+            playerSemaphore: '',
+          });
+        });
+      }else if(newSrc.id){//Si tenemos una fuente, hemos iniciado un episodio concreto del podcast
           this.setState({
             idActiveSong:newSrc.id,
             audioType:newSrc.episode,
@@ -1329,6 +1384,7 @@ class App extends Component{
             rating: newSrc.avg_valoration,
             userRated:  newSrc.user_valoration,
             playingPlaylist:1,
+            skipControls:true,
           });
           if(newSrc.user_valoration){
             this.setState({
@@ -1410,6 +1466,7 @@ class App extends Component{
               rating: this.state.openPlaylist[0].avg_valoration,
               userRated:  this.state.openPlaylist[0].user_valoration,
               playingPlaylist:1,
+              skipControls:true,
             });
             if(newSrc.user_valoration){
               this.setState({

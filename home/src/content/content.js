@@ -695,7 +695,9 @@ class Content extends Component {
             </div>
             {this.state.contenido
               ?<>{this.state.contenido.map((item,index)=>(
-                <div className="row the-fine-marging" key={index} item={item}> 
+                <div>
+                {item.podcast===true
+                ?<><div className="row the-fine-marging" key={index} item={item}> 
                   <div className="col-lg-1 list-element d-flex justify-content-center the-fine-printing-start"  onClick={() => this.props.cambiaModo("podcastContent",item)}><FontAwesomeIcon className="fa-2x" icon={faList}/></div>
                   <div className="col-lg-5 list-element d-flex justify-content-center the-fine-printing-middle"  onClick={() => this.props.cambiaModo("podcastContent",item)}>{item.name}</div>              
                   <div className="col-lg-5 manual-left-border list-element d-flex justify-content-center the-fine-printing-end"  onClick={() => this.props.cambiaModo("podcastContent",item)}>{item.artist.name}</div>
@@ -708,7 +710,9 @@ class Content extends Component {
                       }</>
                     :<><div className="col-lg-1 list-element d-flex justify-content-center no-padding"><button className="disguised-button" onClick={() => this.props.cambiaSourcePodcast(0,item.artist.name,item,'')}><FontAwesomeIcon className="fa-2x" icon={faPlay}/></button></div></>
                   }                                          
-                </div>
+                </div></>
+                :<></>
+                }</div>
               ))}</>
               :<div></div>
             }

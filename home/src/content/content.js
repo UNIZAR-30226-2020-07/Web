@@ -575,7 +575,7 @@ class Content extends Component {
             </div>
             <div className="row print-playlist" style={{marginBottom:35}}>
               <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
-              <div className="col-lg-4 list-element manual-left-border d-flex justify-content-center">Author</div>
+              <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
             </div>
 
             {/* ESTA FUNCION LO QUE HACE ES VER SI TENEMOS EN EL ESTADO "showAddPlaylist" Y SI ES ASI
@@ -637,7 +637,7 @@ class Content extends Component {
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
-                <button className="button-control"><DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/></button>
+                <DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/>
                 
                 {this.state.currentPL === this.state.shuffledPL
                   ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
@@ -691,7 +691,7 @@ class Content extends Component {
             </div>
             <div className="row print-playlist" style={{marginBottom:35}}>
               <div className="col-lg-6 list-element d-flex justify-content-center">Title</div>
-              <div className="col-lg-5 list-element manual-left-border d-flex justify-content-center">Author</div>
+              <div className="col-lg-6 list-element manual-left-border d-flex justify-content-center">Author</div>
             </div>
             {this.state.contenido
               ?<>{this.state.contenido.map((item,index)=>(
@@ -730,7 +730,7 @@ class Content extends Component {
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
-                <button className="button-control"><DropdownSort type={"podcast"} cambiaOrden={this.props.cambiaOrden}/></button>
+                <DropdownSort type={"podcast"} cambiaOrden={this.props.cambiaOrden}/>
                 
                 {this.state.currentPL === this.state.shuffledPL
                   ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>
@@ -879,7 +879,7 @@ class Content extends Component {
                   ?<><button className="button-control toggled-button" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button></>
                   :<button className="button-control" onClick={this.props.loopPlaylist}><FontAwesomeIcon icon={faRedoAlt}/></button>
                 }
-                <button className="button-control"><DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/></button>
+                <DropdownSort type={"playlist"} cambiaOrden={this.props.cambiaOrden}/>
                 
                 {this.state.currentPL === this.state.shuffledPL
                   ?<><button className="button-control toggled-button" onClick={this.props.shufflePlaylist}><FontAwesomeIcon icon={faRandom}/></button></>

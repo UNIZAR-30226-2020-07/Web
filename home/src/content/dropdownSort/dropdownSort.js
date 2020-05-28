@@ -37,7 +37,7 @@ class DropdownSort extends Component {
           <button className="button-control" onClick={this.showDropdownMenu}>
             <FontAwesomeIcon icon={faSortAlphaDown}/>
             {this.state.displayMenu ? (
-              <ul className="custom-ul-sort ">
+              <ul className="custom-ul-sort margin-list-top">
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(1);}}>Artist</li>
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(2);}}>Genre</li>
@@ -51,7 +51,7 @@ class DropdownSort extends Component {
           <button className="button-control" onClick={this.showDropdownMenu}>
             <FontAwesomeIcon icon={faSortAlphaDown}/>
             {this.state.displayMenu ? (
-              <ul className="custom-ul-sort ">
+              <ul className="custom-ul-sort margin-list-top">
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(3);}}>Upload time</li>
                 </ul>

@@ -34,8 +34,8 @@ class DropdownSort extends Component {
     switch(this.state.type){
       case "playlist":
         return (
-          <div>
-            <div onClick={this.showDropdownMenu}><FontAwesomeIcon icon={faSortAlphaDown}/></div>
+          <button className="button-control" onClick={this.showDropdownMenu}>
+            <FontAwesomeIcon icon={faSortAlphaDown}/>
             {this.state.displayMenu ? (
               <ul className="custom-ul-sort ">
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
@@ -44,12 +44,12 @@ class DropdownSort extends Component {
                 </ul>
               ): (null)
             }
-          </div>
+          </button>
         );
       case "podcast":
         return (
-          <div>
-            <div onClick={this.showDropdownMenu}><FontAwesomeIcon icon={faSortAlphaDown}/></div>
+          <button className="button-control" onClick={this.showDropdownMenu}>
+            <FontAwesomeIcon icon={faSortAlphaDown}/>
             {this.state.displayMenu ? (
               <ul className="custom-ul-sort ">
                 <li className="readable-text custom-li" onClick={() => {this.props.cambiaOrden(0);}}>Title</li>
@@ -57,7 +57,7 @@ class DropdownSort extends Component {
                 </ul>
               ): (null)
             }
-          </div>
+          </button>
         );
       default:
         break;
